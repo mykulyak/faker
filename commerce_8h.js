@@ -1,0 +1,25 @@
+var commerce_8h =
+[
+    [ "department", "commerce_8h.html#ad82d35d974f7c505ea154b563fed6e30", null ],
+    [ "discount_amount", "commerce_8h.html#ab4e8531f76a9b97cf911ea03a6dcf845", null ],
+    [ "discount_code", "commerce_8h.html#aea4b074edc0a618087aa639dec89ce51", null ],
+    [ "discount_percentage", "commerce_8h.html#a0e300d3235db87e26f1027279017e340", null ],
+    [ "discount_type", "commerce_8h.html#a36b24da6de5b28ffe24d546bd34f7d16", null ],
+    [ "ean13", "commerce_8h.html#a5cfea0230bed2e4e588e3cb7508d9264", null ],
+    [ "ean8", "commerce_8h.html#a70cfa394364b8c336b6d6139c26f6d0e", null ],
+    [ "isbn10", "commerce_8h.html#ad849d886c9533a86e1863f28a23d1b13", null ],
+    [ "isbn13", "commerce_8h.html#a8c25b4e3273deb9369e9e94ea4e881bb", null ],
+    [ "payment_provider", "commerce_8h.html#a376c83e8ad9cf10cca81eafad4cc1722", null ],
+    [ "payment_type", "commerce_8h.html#a74dac7f48f8fed8c9bd4e06342b046fb", null ],
+    [ "price", "commerce_8h.html#a9f9da20c521b4871132cdb0405038a4a", null ],
+    [ "product_adjective", "commerce_8h.html#af2467a4ce49f2c9abdcd27c27f47fe17", null ],
+    [ "product_category", "commerce_8h.html#ac59333fd6e3aa889834de53f3016138f", null ],
+    [ "product_description", "commerce_8h.html#aca5d6e7376244a9c79ef660380a678fa", null ],
+    [ "product_full_name", "commerce_8h.html#a88f7eda28caefe8c1ea7e71c43d40c99", null ],
+    [ "product_id", "commerce_8h.html#aa4750b05872230ea7f7d892da363559f", null ],
+    [ "product_material", "commerce_8h.html#ab7b3aad61f7f49f573f3f446a58bc7e7", null ],
+    [ "product_name", "commerce_8h.html#a2a3b773511f05e625b5f2262fb2bc74a", null ],
+    [ "product_rating", "commerce_8h.html#a6d0cbfdc5ba63020100389aa472d42be", null ],
+    [ "product_review", "commerce_8h.html#af52df3778299cfee903dd183fcd0db58", null ],
+    [ "sku", "commerce_8h.html#a9413d659f705402cba84ece0c5ec879c", null ]
+];
