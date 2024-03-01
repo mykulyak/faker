@@ -480,7 +480,7 @@ std::string moduleFunction(StructureToken token)
     case StructureToken::SystemFileName:
         return system::filename();
     case StructureToken::SystemFileExtension:
-        return system::file_ext();
+        return std::string(system::file_ext());
     case StructureToken::SystemCommonFileName:
         return system::common_filename();
     case StructureToken::SystemCommonFileExtension:
