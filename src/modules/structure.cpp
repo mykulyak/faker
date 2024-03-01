@@ -421,17 +421,17 @@ std::string moduleFunction(StructureToken token)
         return std::string(music::song_name());
     // Person module
     case StructureToken::PersonFirstName:
-        return person::first_name();
+        return std::string(person::first_name());
     case StructureToken::PersonLastName:
-        return person::last_name();
+        return std::string(person::last_name());
     case StructureToken::PersonMiddleName:
-        return person::middle_name();
+        return std::string(person::middle_name());
     case StructureToken::PersonFullName:
         return person::full_name();
     case StructureToken::PersonPrefix:
-        return person::prefix();
+        return std::string(person::prefix());
     case StructureToken::PersonSuffix:
-        return person::suffix();
+        return std::string(person::suffix());
     case StructureToken::PersonSex:
         return std::string(person::sex());
     case StructureToken::PersonGender:

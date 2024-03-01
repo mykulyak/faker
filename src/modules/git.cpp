@@ -62,8 +62,8 @@ std::string commit_entry(
     std::optional<unsigned> max_years_ago, std::optional<unsigned> sha_length, country_t country)
 {
     auto sha = sha_length ? commit_sha(*sha_length) : commit_sha();
-    auto first_name = person::first_name(country);
-    auto last_name = person::last_name(country);
+    auto first_name = std::string(person::first_name(country));
+    auto last_name = std::string(person::last_name(country));
     auto email = internet::email(first_name, last_name);
     auto date_str = max_years_ago ? commit_date(*max_years_ago) : commit_date();
     auto message = commit_message();
@@ -94,8 +94,8 @@ std::string commit_sha(unsigned length)
 
 author_info author()
 {
-    auto first_name = person::first_name();
-    auto last_name = person::last_name();
+    auto first_name = std::string(person::first_name());
+    auto last_name = std::string(person::last_name());
     auto name = first_name + " " + last_name;
     auto email = internet::email(first_name, last_name);
 

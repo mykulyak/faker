@@ -107,9 +107,9 @@ std::string city(address_country country)
 
     return utils::fill_token_values(city_format, [country, &addresses](std::string_view token) {
         if (token == "firstName") {
-            return person::first_name(get_country(country));
+            return std::string(person::first_name(get_country(country)));
         } else if (token == "lastName") {
-            return person::last_name(get_country(country));
+            return std::string(person::last_name(get_country(country)));
         } else if (token == "cityName") {
             return std::string(random::element(addresses.cities));
         } else if (token == "cityPrefix") {
@@ -153,9 +153,9 @@ std::string street(address_country country)
 
     return utils::fill_token_values(street_format, [country, &addresses](std::string_view token) {
         if (token == "firstName") {
-            return person::first_name(get_country(country));
+            return std::string(person::first_name(get_country(country)));
         } else if (token == "lastName") {
-            return person::last_name(get_country(country));
+            return std::string(person::last_name(get_country(country)));
         } else if (token == "streetName") {
             return std::string(random::element(addresses.street_names));
         } else if (token == "streetPrefix") {

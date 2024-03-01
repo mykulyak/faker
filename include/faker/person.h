@@ -75,7 +75,7 @@ enum class ssn_country_t {
  * person::first_name(country_t::england, sex_t::male) // "Arthur"
  * @endcode
  */
-std::string first_name(
+std::string_view first_name(
     country_t country = country_t::england, std::optional<sex_t> sex = std::nullopt);
 
 /**
@@ -90,7 +90,7 @@ std::string first_name(
  * person::last_name() // "Peterson"
  * @endcode
  */
-std::string last_name(
+std::string_view last_name(
     country_t country = country_t::england, std::optional<sex_t> sex = std::nullopt);
 
 /**
@@ -104,7 +104,7 @@ std::string last_name(
  * person::middle_name() // "Васильевич"
  * @endcode
  */
-std::string middle_name(std::optional<sex_t> sex = std::nullopt);
+std::string_view middle_name(std::optional<sex_t> sex = std::nullopt);
 
 /**
  * @brief Returns a random full name.
@@ -136,7 +136,7 @@ std::string full_name(
  * person::prefix(sex_t::male) // "Mr."
  * @endcode
  */
-std::string prefix(std::optional<sex_t> sex = std::nullopt);
+std::string_view prefix(std::optional<sex_t> sex = std::nullopt);
 
 /**
  * @brief Returns a random name suffix.
@@ -147,7 +147,7 @@ std::string prefix(std::optional<sex_t> sex = std::nullopt);
  * person::suffix() // "Jr."
  * @endcode
  */
-std::string suffix();
+std::string_view suffix();
 
 /**
  * @brief Returns a random bio.
