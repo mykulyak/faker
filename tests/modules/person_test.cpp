@@ -605,7 +605,7 @@ INSTANTIATE_TEST_SUITE_P(TestPersonSexTranslation, PersonSexSuite, ValuesIn(lang
         return result;
     });
 
-class PersonSsnSuite : public TestWithParam<person::ssn_country> { };
+class PersonSsnSuite : public TestWithParam<person::ssn_country_t> { };
 
 // TODO: add more precise tests
 TEST_P(PersonSsnSuite, shouldGenerateSsn)
@@ -619,24 +619,24 @@ TEST_P(PersonSsnSuite, shouldGenerateSsn)
     ASSERT_EQ(ssn.size(), expectedSsnLength);
 }
 
-std::string_view toString(person::ssn_country country)
+std::string_view toString(person::ssn_country_t country)
 {
     switch (country) {
-    case person::ssn_country::usa:
+    case person::ssn_country_t::usa:
         return "UnitedStates";
-    case person::ssn_country::england:
+    case person::ssn_country_t::england:
         return "UnitedKingdom";
-    case person::ssn_country::poland:
+    case person::ssn_country_t::poland:
         return "Poland";
-    case person::ssn_country::italy:
+    case person::ssn_country_t::italy:
         return "Italy";
-    case person::ssn_country::france:
+    case person::ssn_country_t::france:
         return "France";
-    case person::ssn_country::germany:
+    case person::ssn_country_t::germany:
         return "Germany";
-    case person::ssn_country::india:
+    case person::ssn_country_t::india:
         return "India";
-    case person::ssn_country::spain:
+    case person::ssn_country_t::spain:
         return "Spain";
     default:
         throw std::invalid_argument("Invalid country");

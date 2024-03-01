@@ -50,7 +50,7 @@ enum class language_t {
 
 std::string_view to_string(sex_t sex, language_t lang = language_t::english);
 
-enum class ssn_country {
+enum class ssn_country_t {
     poland,
     usa,
     england,
@@ -265,10 +265,10 @@ std::string_view nationality();
  *
  * @code
  * person::ssn() // "437-12-6854"
- * person::ssn(ssn_country::polish) // "95111901567"
+ * person::ssn(ssn_country_t::polish) // "95111901567"
  * @endcode
  */
-std::string ssn(std::optional<ssn_country> country);
+std::string ssn(std::optional<ssn_country_t> country);
 
 /**
  * @brief Returns a random Western Zodiac

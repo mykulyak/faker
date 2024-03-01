@@ -253,7 +253,7 @@ std::string_view language() { return random::element(data::languages); }
 
 std::string_view nationality() { return random::element(data::nationalities); }
 
-std::string ssn(std::optional<ssn_country> country)
+std::string ssn(std::optional<ssn_country_t> country)
 {
     const auto ssnCountry = country ? *country : random::element(data::supportedSsnCountries);
 

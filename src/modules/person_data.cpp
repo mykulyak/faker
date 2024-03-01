@@ -308,18 +308,18 @@ const std::array<std::string_view, 62> nationalities = { {
     "Guatemalan",
 } };
 
-const std::unordered_map<ssn_country, std::string_view> ssnFormats {
-    { ssn_country::poland, "##[0-1][0-2][0-2]######" },
-    { ssn_country::usa, "###-##-####" },
+const std::unordered_map<ssn_country_t, std::string_view> ssnFormats {
+    { ssn_country_t::poland, "##[0-1][0-2][0-2]######" },
+    { ssn_country_t::usa, "###-##-####" },
     // TODO: handle letters
-    { ssn_country::england, "LL ## ## ## L" },
+    { ssn_country_t::england, "LL ## ## ## L" },
     // TODO: handle conditional values like if year starts with 2 then second number must be 0-3
-    { ssn_country::germany, "####[0-2]#[0-1][0-2][1-2][5-9]##" },
-    { ssn_country::france, "## [0-1][0-2] [0-2]# ### ### ##" },
+    { ssn_country_t::germany, "####[0-2]#[0-1][0-2][1-2][5-9]##" },
+    { ssn_country_t::france, "## [0-1][0-2] [0-2]# ### ### ##" },
     // TODO: add alfa-numeric support
-    { ssn_country::italy, "FFFF FFFF FFFF FFFF" },
-    { ssn_country::spain, "X########L" },
-    { ssn_country::india, "LLLLL####L" },
+    { ssn_country_t::italy, "FFFF FFFF FFFF FFFF" },
+    { ssn_country_t::spain, "X########L" },
+    { ssn_country_t::india, "LLLLL####L" },
 };
 
 const std::array<std::string_view, 12> westernZodiacs = { "Aries", "Taurus", "Gemini", "Cancer",
@@ -369,26 +369,26 @@ const std::unordered_map<language_t, std::unordered_map<sex_t, std::string_view>
           { language_t::estonian, { { sex_t::male, "Mees" }, { sex_t::female, "Naine" } } },
           { language_t::irish, { { sex_t::male, "fireannach" }, { sex_t::female, "baineann" } } } };
 
-const std::array<ssn_country, 8> supportedSsnCountries {
-    ssn_country::poland,
-    ssn_country::usa,
-    ssn_country::england,
-    ssn_country::germany,
-    ssn_country::france,
-    ssn_country::italy,
-    ssn_country::spain,
-    ssn_country::india,
+const std::array<ssn_country_t, 8> supportedSsnCountries {
+    ssn_country_t::poland,
+    ssn_country_t::usa,
+    ssn_country_t::england,
+    ssn_country_t::germany,
+    ssn_country_t::france,
+    ssn_country_t::italy,
+    ssn_country_t::spain,
+    ssn_country_t::india,
 };
 
-const std::unordered_map<ssn_country, unsigned> ssnLengths {
-    { ssn_country::poland, 11 },
-    { ssn_country::usa, 11 },
-    { ssn_country::england, 13 },
-    { ssn_country::germany, 12 },
-    { ssn_country::france, 19 },
-    { ssn_country::italy, 19 },
-    { ssn_country::spain, 10 },
-    { ssn_country::india, 10 },
+const std::unordered_map<ssn_country_t, unsigned> ssnLengths {
+    { ssn_country_t::poland, 11 },
+    { ssn_country_t::usa, 11 },
+    { ssn_country_t::england, 13 },
+    { ssn_country_t::germany, 12 },
+    { ssn_country_t::france, 19 },
+    { ssn_country_t::italy, 19 },
+    { ssn_country_t::spain, 10 },
+    { ssn_country_t::india, 10 },
 };
 
 // Albania
