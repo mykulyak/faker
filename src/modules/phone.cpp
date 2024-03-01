@@ -6,19 +6,19 @@
 
 namespace faker::phone {
 namespace {
-    std::unordered_map<PhoneNumberCountryFormat, std::string_view> make_phone_number_format_map()
+    std::unordered_map<phone_number_format_t, std::string_view> make_phone_number_format_map()
     {
-        std::unordered_map<PhoneNumberCountryFormat, std::string_view> result;
+        std::unordered_map<phone_number_format_t, std::string_view> result;
         // TODO this is brittle, because it depends on the assumption that order of elements in
         // PhoneNumberCountryFormat is the same as the one in data::number_formats
-        for (auto i = static_cast<unsigned long>(PhoneNumberCountryFormat::Default);
-             i <= static_cast<unsigned long>(PhoneNumberCountryFormat::Zimbabwe); i++) {
-            result[static_cast<PhoneNumberCountryFormat>(i)] = data::number_formats[i];
+        for (auto i = static_cast<unsigned long>(phone_number_format_t::Default);
+             i <= static_cast<unsigned long>(phone_number_format_t::Zimbabwe); i++) {
+            result[static_cast<phone_number_format_t>(i)] = data::number_formats[i];
         }
         return result;
     }
 
-    const std::unordered_map<PhoneNumberCountryFormat, std::string_view> phone_number_format_map
+    const std::unordered_map<phone_number_format_t, std::string_view> phone_number_format_map
         = make_phone_number_format_map();
 }
 
@@ -29,12 +29,12 @@ std::string number(std::optional<std::string> format)
     return random::replace_symbol_with_number(final_format);
 }
 
-std::string number(PhoneNumberCountryFormat format)
+std::string number(phone_number_format_t format)
 {
     std::string result { phone_number_format_map.at(
         phone_number_format_map.find(format) != phone_number_format_map.end()
             ? format
-            : PhoneNumberCountryFormat::Default) };
+            : phone_number_format_t::Default) };
     return random::replace_symbol_with_number(result);
 }
 

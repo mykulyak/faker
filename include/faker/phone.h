@@ -5,7 +5,7 @@
 #include <string>
 
 namespace faker::phone {
-enum class PhoneNumberCountryFormat {
+enum class phone_number_format_t {
     Default,
     Afghanistan,
     AlandIslands,
@@ -289,15 +289,15 @@ std::string_view manufacturer();
 /**
  * @brief Returns a random phone number based on country phone number template.
  *
- * @param format Enum country format, more details in PhoneNumberCountryFormat.h.
+ * @param format Enum country format, more details in phone_number_format_t.h.
  *
  * @returns Random phone number based on country phone number template.
  *
  * @code
- * phone::number(PhoneNumberCountryFormat::Usa) // "+1 (395) 714-1494"
+ * phone::number(phone_number_format_t::Usa) // "+1 (395) 714-1494"
  * @endcode
  */
-std::string number(PhoneNumberCountryFormat format);
+std::string number(phone_number_format_t format);
 
 /**
  * @brief Returns IMEI number.

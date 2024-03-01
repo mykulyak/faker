@@ -668,7 +668,7 @@ TEST_F(InternetTest, shouldGenerateIpv6)
         generatedIpv6Parts, [](auto generatedIpv6Part) { return generatedIpv6Part.size() == 4; }));
     ASSERT_TRUE(faker::testing::all_of(generatedIpv6Parts, [](auto generatedIpv6Part) {
         return faker::testing::all_of(generatedIpv6Part, [](char hexCharacter) {
-            return string::data::hexLowerCharacters.find(hexCharacter) != std::string::npos;
+            return string::data::hex_lower_digits.find(hexCharacter) != std::string::npos;
         });
     }));
 }

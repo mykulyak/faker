@@ -101,7 +101,7 @@ public:
     {
         return faker::testing::all_of(data, [](char dataCharacter) {
             return faker::testing::any_of(
-                string::data::numericCharacters, [dataCharacter](char numericCharacter) {
+                string::data::digits, [dataCharacter](char numericCharacter) {
                     return numericCharacter == dataCharacter;
                 });
         });
@@ -109,7 +109,7 @@ public:
 
     static bool checkIfCharacterIsNumeric(char character)
     {
-        return faker::testing::contains(string::data::numericCharacters, character);
+        return faker::testing::contains(string::data::digits, character);
     }
 };
 
