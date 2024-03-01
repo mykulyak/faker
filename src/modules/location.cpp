@@ -46,39 +46,39 @@ namespace {
         }
     }
 
-    Country get_country(address_country country)
+    country_t get_country(address_country country)
     {
         switch (country) {
         case address_country::usa:
-            return Country::Usa;
+            return country_t::usa;
         case address_country::poland:
-            return Country::Poland;
+            return country_t::poland;
         case address_country::russia:
-            return Country::Russia;
+            return country_t::russia;
         case address_country::france:
-            return Country::France;
+            return country_t::france;
         case address_country::ukraine:
-            return Country::Ukraine;
+            return country_t::ukraine;
         case address_country::italy:
-            return Country::Italy;
+            return country_t::italy;
         case address_country::germany:
-            return Country::Germany;
+            return country_t::germany;
         case address_country::czechia:
-            return Country::Czech;
+            return country_t::czech;
         case address_country::australia:
-            return Country::Australia;
+            return country_t::australia;
         case address_country::india:
-            return Country::India;
+            return country_t::india;
         case address_country::denmark:
-            return Country::Denmark;
+            return country_t::denmark;
         case address_country::spain:
-            return Country::Spain;
+            return country_t::spain;
         case address_country::brazil:
-            return Country::Brazil;
+            return country_t::brazil;
         case address_country::finland:
-            return Country::Finland;
+            return country_t::finland;
         case address_country::estonia:
-            return Country::Estonia;
+            return country_t::estonia;
         default:
             throw std::invalid_argument("Invalid country");
         }

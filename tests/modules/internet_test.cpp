@@ -155,7 +155,7 @@ TEST_F(InternetTest, shouldGenerateInternationalUsernames)
         person::data::romanianFemalesFirstNames.begin(),
         person::data::romanianFemalesFirstNames.end());
 
-    const auto username = internet::username(std::nullopt, std::nullopt, Country::Romania);
+    const auto username = internet::username(std::nullopt, std::nullopt, country_t::romania);
 
     ASSERT_TRUE(faker::testing::any_of(romanianFirstNames, [username](auto romanianFirstName) {
         return username.find(romanianFirstName) != std::string::npos;

@@ -11,9 +11,9 @@
 
 namespace faker::person {
 namespace {
-    std::string middleNameForCountry(Country country, std::optional<sex_t> sex);
-    std::string prefixForCountry(Country country, std::optional<sex_t> sex);
-    std::string suffixForCountry(Country country, std::optional<sex_t> sex);
+    std::string middleNameForCountry(country_t country, std::optional<sex_t> sex);
+    std::string prefixForCountry(country_t country, std::optional<sex_t> sex);
+    std::string suffixForCountry(country_t country, std::optional<sex_t> sex);
 }
 
 std::string_view to_string(sex_t sex, language_t language)
@@ -27,7 +27,7 @@ std::string_view to_string(sex_t sex, language_t language)
     return sexTranslation->second.at(sex);
 }
 
-std::string first_name(Country country, std::optional<sex_t> sex)
+std::string first_name(country_t country, std::optional<sex_t> sex)
 {
     const auto& peopleNames = data::countryToPeopleNamesMapping.at(country);
 
@@ -52,7 +52,7 @@ std::string first_name(Country country, std::optional<sex_t> sex)
     return random::element<std::string>(firstNames);
 }
 
-std::string last_name(Country country, std::optional<sex_t> sex)
+std::string last_name(country_t country, std::optional<sex_t> sex)
 {
     const auto& peopleNames = data::countryToPeopleNamesMapping.at(country);
 
@@ -117,7 +117,7 @@ std::string middle_name(std::optional<sex_t> sex)
     return random::element<std::string>(allMiddleNames);
 }
 
-std::string full_name(Country country, std::optional<sex_t> sex)
+std::string full_name(country_t country, std::optional<sex_t> sex)
 {
     const auto& peopleNames = data::countryToPeopleNamesMapping.at(country);
 
@@ -283,7 +283,7 @@ std::string_view western_zodiac() { return random::element(data::westernZodiacs)
 std::string_view chinese_zodiac() { return random::element(data::chineseZodiacs); }
 
 namespace {
-    std::string middleNameForCountry(Country country, std::optional<sex_t> sex)
+    std::string middleNameForCountry(country_t country, std::optional<sex_t> sex)
     {
         const auto& peopleNames = data::countryToPeopleNamesMapping.at(country);
 
@@ -310,7 +310,7 @@ namespace {
         return random::element<std::string>(middleNames);
     }
 
-    std::string prefixForCountry(Country country, std::optional<sex_t> sex)
+    std::string prefixForCountry(country_t country, std::optional<sex_t> sex)
     {
         const auto& peopleNames = data::countryToPeopleNamesMapping.at(country);
 
@@ -335,7 +335,7 @@ namespace {
         return random::element<std::string>(prefixes);
     }
 
-    std::string suffixForCountry(Country country, std::optional<sex_t> sex)
+    std::string suffixForCountry(country_t country, std::optional<sex_t> sex)
     {
         const auto& peopleNames = data::countryToPeopleNamesMapping.at(country);
 

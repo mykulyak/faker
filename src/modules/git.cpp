@@ -59,7 +59,7 @@ std::string commit_date(unsigned max_years_ago)
 }
 
 std::string commit_entry(
-    std::optional<unsigned> max_years_ago, std::optional<unsigned> sha_length, Country country)
+    std::optional<unsigned> max_years_ago, std::optional<unsigned> sha_length, country_t country)
 {
     auto sha = sha_length ? commit_sha(*sha_length) : commit_sha();
     auto first_name = person::first_name(country);

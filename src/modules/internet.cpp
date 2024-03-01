@@ -84,7 +84,7 @@ namespace {
 }
 
 std::string username(
-    std::optional<std::string> first_name, std::optional<std::string> last_name, Country country)
+    std::optional<std::string> first_name, std::optional<std::string> last_name, country_t country)
 {
     static const std::array<std::string_view, 3> name_separators;
 

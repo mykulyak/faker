@@ -49,7 +49,7 @@ std::string_view country_code();
 /**
  * @brief Returns a random state for a given country.
  *
- * @param country The country to generate state from. Defaults to `Country::Usa`.
+ * @param country The country to generate state from. Defaults to `country_t::usa`.
  *
  * @returns State.
  *
@@ -62,7 +62,7 @@ std::string_view state(address_country country = address_country::usa);
 /**
  * @brief Returns a random county for a given country.
  *
- * @param country The country to generate county from. Defaults to `Country::Usa`.
+ * @param country The country to generate county from. Defaults to `country_t::usa`.
  *
  * @returns County.
  *
@@ -75,7 +75,7 @@ std::string_view county(address_country country = address_country::usa);
 /**
  * @brief Returns a random city for given country.
  *
- * @param country The country to generate city from. Defaults to `Country::Usa`.
+ * @param country The country to generate city from. Defaults to `country_t::usa`.
  *
  * @returns City.
  *
@@ -88,13 +88,13 @@ std::string city(address_country country = address_country::usa);
 /**
  * @brief Returns a random zip code for given country.
  *
- * @param country The country to generate zip code from. Defaults to `Country::Usa`.
+ * @param country The country to generate zip code from. Defaults to `country_t::usa`.
  *
  * @returns Zip code.
  *
  * @code
  * location::zip_code() // "47683-9880"
- * location::zip_code(Country::Poland) // "31-881"
+ * location::zip_code(country_t::poland) // "31-881"
  * @endcode
  */
 std::string zip_code(address_country country = address_country::usa);
@@ -102,7 +102,7 @@ std::string zip_code(address_country country = address_country::usa);
 /**
  * @brief Returns a random street address for given country.
  *
- * @param country The country to generate street address from. Defaults to `Country::Usa`.
+ * @param country The country to generate street address from. Defaults to `country_t::usa`.
  *
  * @returns Street address including building number and street name.
  *
@@ -115,7 +115,7 @@ std::string street_address(address_country country = address_country::usa);
 /**
  * @brief Returns a random street for given country.
  *
- * @param country The country to generate street from. Defaults to `Country::Usa`.
+ * @param country The country to generate street from. Defaults to `country_t::usa`.
  *
  * @returns Street name.
  *
@@ -128,7 +128,7 @@ std::string street(address_country country = address_country::usa);
 /**
  * @brief Returns a random building number for given country.
  *
- * @param country The country to generate building number from. Defaults to `Country::Usa`.
+ * @param country The country to generate building number from. Defaults to `country_t::usa`.
  *
  * @returns Building number.
  *
@@ -142,7 +142,7 @@ std::string building_number(address_country country = address_country::usa);
  * @brief Returns a random secondary address number for given country.
  * This refers to a specific location at a given address such as an apartment or room number
  *
- * @param country The country to generate building number from. Defaults to `Country::Usa`.
+ * @param country The country to generate building number from. Defaults to `country_t::Usa`.
  *
  * @returns Secondary address.
  *

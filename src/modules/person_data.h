@@ -616,7 +616,7 @@ extern const PeopleNames vietnamesePeopleNames;
 
 // Mapping
 
-extern const std::unordered_map<Country, PeopleNames> countryToPeopleNamesMapping;
+extern const std::unordered_map<country_t, PeopleNames> countryToPeopleNamesMapping;
 
 }
 
