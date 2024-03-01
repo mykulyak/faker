@@ -211,7 +211,7 @@ TEST_F(FinanceTest, shouldGenerateAmountWithSymbol)
 {
     const auto min = 150;
     const auto max = 450;
-    const auto precision = precision::four_dp;
+    const auto precision = precision_t::four_dp;
     const std::string currencySymbol = "$";
 
     const auto generatedAmount = finance::amount(150, 450, precision, currencySymbol);

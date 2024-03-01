@@ -185,13 +185,13 @@ std::string secondary_address(address_country country)
     return random::replace_symbol_with_number(secondary_address_format);
 }
 
-std::string latitude(precision prec)
+std::string latitude(precision_t prec)
 {
     auto latitude = number::decimal(-90.0, 90.0);
     return utils::format(utils::precision_format_str(prec), latitude);
 }
 
-std::string longitude(precision prec)
+std::string longitude(precision_t prec)
 {
     auto longitude = number::decimal(-180.0, 180.0);
     return utils::format(utils::precision_format_str(prec), longitude);

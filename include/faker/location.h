@@ -156,7 +156,7 @@ std::string secondary_address(address_country country = address_country::usa);
  * @brief Generates a random latitude.
  *
  * @param prec The number of decimal points of precision for the latitude. Defaults to
- * `precision::four_dp`.
+ * `precision_t::four_dp`.
  *
  * @returns Latitude within -90 to 90 range.
  *
@@ -164,13 +164,13 @@ std::string secondary_address(address_country country = address_country::usa);
  * location::latitude() // "-30.9501"
  * @endcode
  */
-std::string latitude(precision prec = precision::four_dp);
+std::string latitude(precision_t prec = precision_t::four_dp);
 
 /**
  * @brief Generates a random longitude.
  *
  * @param prec The number of decimal points of precision for the longitude. Defaults to
- * `precision::four_dp`.
+ * `precision_t::four_dp`.
  *
  * @returns Longitude within -180 to 180 range.
  *
@@ -178,7 +178,7 @@ std::string latitude(precision prec = precision::four_dp);
  * location::longitude() // "-30.9501"
  * @endcode
  */
-std::string longitude(precision prec = precision::four_dp);
+std::string longitude(precision_t prec = precision_t::four_dp);
 
 /**
  * @brief Generates a random direction from cardinal and ordinal directions.
