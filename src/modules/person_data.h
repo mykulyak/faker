@@ -46,7 +46,7 @@ struct PeopleNames {
 extern const std::unordered_map<ssn_country, std::string_view> ssnFormats;
 extern const std::array<std::string_view, 12> westernZodiacs;
 extern const std::array<std::string_view, 11> chineseZodiacs;
-extern const std::unordered_map<Language, std::unordered_map<sex_t, std::string_view>>
+extern const std::unordered_map<language_t, std::unordered_map<sex_t, std::string_view>>
     sexTranslations;
 extern const std::array<ssn_country, 8> supportedSsnCountries;
 extern const std::unordered_map<ssn_country, unsigned> ssnLengths;

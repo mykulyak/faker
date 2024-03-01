@@ -437,7 +437,7 @@ TEST_F(PersonTest, shouldGenerateChineseZodiacs)
     FAKER_EXPECT_CONTAINER_CONTAINS(person::data::chineseZodiacs, generatedChineseZodiacs);
 }
 
-class PersonSexSuite : public TestWithParam<std::pair<person::Language, person::sex_t>> { };
+class PersonSexSuite : public TestWithParam<std::pair<person::language_t, person::sex_t>> { };
 
 TEST_P(PersonSexSuite, shouldTranslateSexCorrectly)
 {
@@ -450,146 +450,146 @@ TEST_P(PersonSexSuite, shouldTranslateSexCorrectly)
     ASSERT_EQ(expectedTranslation, actualTranslation);
 }
 
-std::vector<std::pair<person::Language, person::sex_t>> languageSexPairs
-    = { { person::Language::English, person::sex_t::male },
-          { person::Language::English, person::sex_t::female },
-          { person::Language::Polish, person::sex_t::male },
-          { person::Language::Polish, person::sex_t::female },
-          { person::Language::Italian, person::sex_t::male },
-          { person::Language::Italian, person::sex_t::female },
-          { person::Language::French, person::sex_t::male },
-          { person::Language::French, person::sex_t::female },
-          { person::Language::German, person::sex_t::male },
-          { person::Language::German, person::sex_t::female },
-          { person::Language::Russian, person::sex_t::male },
-          { person::Language::Russian, person::sex_t::female },
-          { person::Language::Romanian, person::sex_t::male },
-          { person::Language::Romanian, person::sex_t::female },
-          { person::Language::Hindi, person::sex_t::male },
-          { person::Language::Hindi, person::sex_t::female },
-          { person::Language::Finnish, person::sex_t::male },
-          { person::Language::Finnish, person::sex_t::female },
-          { person::Language::Nepali, person::sex_t::male },
-          { person::Language::Nepali, person::sex_t::female },
-          { person::Language::Spanish, person::sex_t::male },
-          { person::Language::Spanish, person::sex_t::female },
-          { person::Language::Turkish, person::sex_t::male },
-          { person::Language::Turkish, person::sex_t::female },
-          { person::Language::Czech, person::sex_t::male },
-          { person::Language::Czech, person::sex_t::female },
-          { person::Language::Slovak, person::sex_t::male },
-          { person::Language::Slovak, person::sex_t::female },
-          { person::Language::Ukrainian, person::sex_t::male },
-          { person::Language::Ukrainian, person::sex_t::female },
-          { person::Language::Danish, person::sex_t::male },
-          { person::Language::Danish, person::sex_t::female },
-          { person::Language::Swedish, person::sex_t::male },
-          { person::Language::Swedish, person::sex_t::female },
-          { person::Language::Portuguese, person::sex_t::male },
-          { person::Language::Portuguese, person::sex_t::female },
-          { person::Language::Norwegian, person::sex_t::male },
-          { person::Language::Norwegian, person::sex_t::female },
-          { person::Language::Japanese, person::sex_t::male },
-          { person::Language::Japanese, person::sex_t::female },
-          { person::Language::Hungarian, person::sex_t::male },
-          { person::Language::Hungarian, person::sex_t::female },
-          { person::Language::Croatian, person::sex_t::male },
-          { person::Language::Croatian, person::sex_t::female },
-          { person::Language::Greek, person::sex_t::male },
-          { person::Language::Greek, person::sex_t::female },
-          { person::Language::Slovene, person::sex_t::male },
-          { person::Language::Slovene, person::sex_t::female },
-          { person::Language::Dutch, person::sex_t::male },
-          { person::Language::Dutch, person::sex_t::female },
-          { person::Language::Mandarin, person::sex_t::male },
-          { person::Language::Mandarin, person::sex_t::female },
-          { person::Language::Korean, person::sex_t::male },
-          { person::Language::Korean, person::sex_t::female },
-          { person::Language::Serbian, person::sex_t::male },
-          { person::Language::Serbian, person::sex_t::female },
-          { person::Language::Macedonian, person::sex_t::male },
-          { person::Language::Macedonian, person::sex_t::female },
-          { person::Language::Albanian, person::sex_t::male },
-          { person::Language::Albanian, person::sex_t::female },
-          { person::Language::Latvian, person::sex_t::male },
-          { person::Language::Latvian, person::sex_t::female },
-          { person::Language::Irish, person::sex_t::male },
-          { person::Language::Irish, person::sex_t::female },
-          { person::Language::Belarusian, person::sex_t::male },
-          { person::Language::Belarusian, person::sex_t::female },
-          { person::Language::Estonian, person::sex_t::male },
-          { person::Language::Estonian, person::sex_t::female } };
+std::vector<std::pair<person::language_t, person::sex_t>> languageSexPairs
+    = { { person::language_t::english, person::sex_t::male },
+          { person::language_t::english, person::sex_t::female },
+          { person::language_t::polish, person::sex_t::male },
+          { person::language_t::polish, person::sex_t::female },
+          { person::language_t::italian, person::sex_t::male },
+          { person::language_t::italian, person::sex_t::female },
+          { person::language_t::french, person::sex_t::male },
+          { person::language_t::french, person::sex_t::female },
+          { person::language_t::german, person::sex_t::male },
+          { person::language_t::german, person::sex_t::female },
+          { person::language_t::russian, person::sex_t::male },
+          { person::language_t::russian, person::sex_t::female },
+          { person::language_t::romanian, person::sex_t::male },
+          { person::language_t::romanian, person::sex_t::female },
+          { person::language_t::hindi, person::sex_t::male },
+          { person::language_t::hindi, person::sex_t::female },
+          { person::language_t::finnish, person::sex_t::male },
+          { person::language_t::finnish, person::sex_t::female },
+          { person::language_t::nepali, person::sex_t::male },
+          { person::language_t::nepali, person::sex_t::female },
+          { person::language_t::spanish, person::sex_t::male },
+          { person::language_t::spanish, person::sex_t::female },
+          { person::language_t::turkish, person::sex_t::male },
+          { person::language_t::turkish, person::sex_t::female },
+          { person::language_t::czech, person::sex_t::male },
+          { person::language_t::czech, person::sex_t::female },
+          { person::language_t::slovak, person::sex_t::male },
+          { person::language_t::slovak, person::sex_t::female },
+          { person::language_t::ukrainian, person::sex_t::male },
+          { person::language_t::ukrainian, person::sex_t::female },
+          { person::language_t::danish, person::sex_t::male },
+          { person::language_t::danish, person::sex_t::female },
+          { person::language_t::swedish, person::sex_t::male },
+          { person::language_t::swedish, person::sex_t::female },
+          { person::language_t::portuguese, person::sex_t::male },
+          { person::language_t::portuguese, person::sex_t::female },
+          { person::language_t::norwegian, person::sex_t::male },
+          { person::language_t::norwegian, person::sex_t::female },
+          { person::language_t::japanese, person::sex_t::male },
+          { person::language_t::japanese, person::sex_t::female },
+          { person::language_t::hungarian, person::sex_t::male },
+          { person::language_t::hungarian, person::sex_t::female },
+          { person::language_t::croatian, person::sex_t::male },
+          { person::language_t::croatian, person::sex_t::female },
+          { person::language_t::greek, person::sex_t::male },
+          { person::language_t::greek, person::sex_t::female },
+          { person::language_t::slovene, person::sex_t::male },
+          { person::language_t::slovene, person::sex_t::female },
+          { person::language_t::dutch, person::sex_t::male },
+          { person::language_t::dutch, person::sex_t::female },
+          { person::language_t::mandarin, person::sex_t::male },
+          { person::language_t::mandarin, person::sex_t::female },
+          { person::language_t::korean, person::sex_t::male },
+          { person::language_t::korean, person::sex_t::female },
+          { person::language_t::serbian, person::sex_t::male },
+          { person::language_t::serbian, person::sex_t::female },
+          { person::language_t::macedonian, person::sex_t::male },
+          { person::language_t::macedonian, person::sex_t::female },
+          { person::language_t::albanian, person::sex_t::male },
+          { person::language_t::albanian, person::sex_t::female },
+          { person::language_t::latvian, person::sex_t::male },
+          { person::language_t::latvian, person::sex_t::female },
+          { person::language_t::irish, person::sex_t::male },
+          { person::language_t::irish, person::sex_t::female },
+          { person::language_t::belarusian, person::sex_t::male },
+          { person::language_t::belarusian, person::sex_t::female },
+          { person::language_t::estonian, person::sex_t::male },
+          { person::language_t::estonian, person::sex_t::female } };
 
-std::string_view toString(person::Language language)
+std::string_view toString(person::language_t language)
 {
     switch (language) {
-    case person::Language::English:
+    case person::language_t::english:
         return "English";
-    case person::Language::Polish:
+    case person::language_t::polish:
         return "Polish";
-    case person::Language::Italian:
+    case person::language_t::italian:
         return "Italian";
-    case person::Language::French:
+    case person::language_t::french:
         return "French";
-    case person::Language::German:
+    case person::language_t::german:
         return "German";
-    case person::Language::Russian:
+    case person::language_t::russian:
         return "Russian";
-    case person::Language::Romanian:
+    case person::language_t::romanian:
         return "Romanian";
-    case person::Language::Hindi:
+    case person::language_t::hindi:
         return "Hindi";
-    case person::Language::Finnish:
+    case person::language_t::finnish:
         return "Finnish";
-    case person::Language::Nepali:
+    case person::language_t::nepali:
         return "Nepali";
-    case person::Language::Spanish:
+    case person::language_t::spanish:
         return "Spanish";
-    case person::Language::Turkish:
+    case person::language_t::turkish:
         return "Turkish";
-    case person::Language::Czech:
+    case person::language_t::czech:
         return "Czech";
-    case person::Language::Slovak:
+    case person::language_t::slovak:
         return "Slovak";
-    case person::Language::Ukrainian:
+    case person::language_t::ukrainian:
         return "Ukrainian";
-    case person::Language::Danish:
+    case person::language_t::danish:
         return "Danish";
-    case person::Language::Swedish:
+    case person::language_t::swedish:
         return "Swedish";
-    case person::Language::Portuguese:
+    case person::language_t::portuguese:
         return "Portuguese";
-    case person::Language::Norwegian:
+    case person::language_t::norwegian:
         return "Norwegian";
-    case person::Language::Japanese:
+    case person::language_t::japanese:
         return "Japanese";
-    case person::Language::Hungarian:
+    case person::language_t::hungarian:
         return "Hungarian";
-    case person::Language::Croatian:
+    case person::language_t::croatian:
         return "Croatian";
-    case person::Language::Greek:
+    case person::language_t::greek:
         return "Greek";
-    case person::Language::Slovene:
+    case person::language_t::slovene:
         return "Slovene";
-    case person::Language::Dutch:
+    case person::language_t::dutch:
         return "Dutch";
-    case person::Language::Mandarin:
+    case person::language_t::mandarin:
         return "Mandarin";
-    case person::Language::Korean:
+    case person::language_t::korean:
         return "Korean";
-    case person::Language::Serbian:
+    case person::language_t::serbian:
         return "Serbian";
-    case person::Language::Macedonian:
+    case person::language_t::macedonian:
         return "Macedonian";
-    case person::Language::Albanian:
+    case person::language_t::albanian:
         return "Albanian";
-    case person::Language::Latvian:
+    case person::language_t::latvian:
         return "Latvian";
-    case person::Language::Irish:
+    case person::language_t::irish:
         return "Irish";
-    case person::Language::Belarusian:
+    case person::language_t::belarusian:
         return "Belarusian";
-    case person::Language::Estonian:
+    case person::language_t::estonian:
         return "Estonian";
     default:
         throw std::invalid_argument("Invalid language");

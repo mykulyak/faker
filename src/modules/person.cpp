@@ -16,7 +16,7 @@ namespace {
     std::string suffixForCountry(Country country, std::optional<sex_t> sex);
 }
 
-std::string_view to_string(sex_t sex, Language language)
+std::string_view to_string(sex_t sex, language_t language)
 {
     const auto& sexTranslation = data::sexTranslations.find(language);
 
@@ -225,7 +225,7 @@ std::string suffix()
     return random::element<std::string>(allSuffixes);
 }
 
-std::string_view sex(Language language)
+std::string_view sex(language_t language)
 {
     static const std::array<sex_t, 2> sexes { sex_t::male, sex_t::female };
 

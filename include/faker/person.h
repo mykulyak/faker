@@ -11,44 +11,44 @@ enum class sex_t {
     female,
 };
 
-enum class Language {
-    English,
-    Polish,
-    French,
-    German,
-    Italian,
-    Russian,
-    Romanian,
-    Hindi,
-    Finnish,
-    Nepali,
-    Spanish,
-    Turkish,
-    Czech,
-    Slovak,
-    Ukrainian,
-    Danish,
-    Swedish,
-    Portuguese,
-    Norwegian,
-    Japanese,
-    Hungarian,
-    Croatian,
-    Greek,
-    Slovene,
-    Dutch,
-    Mandarin,
-    Korean,
-    Serbian,
-    Macedonian,
-    Albanian,
-    Latvian,
-    Irish,
-    Belarusian,
-    Estonian
+enum class language_t {
+    english,
+    polish,
+    french,
+    german,
+    italian,
+    russian,
+    romanian,
+    hindi,
+    finnish,
+    nepali,
+    spanish,
+    turkish,
+    czech,
+    slovak,
+    ukrainian,
+    danish,
+    swedish,
+    portuguese,
+    norwegian,
+    japanese,
+    hungarian,
+    croatian,
+    greek,
+    slovene,
+    dutch,
+    mandarin,
+    korean,
+    serbian,
+    macedonian,
+    albanian,
+    latvian,
+    irish,
+    belarusian,
+    estonian
 };
 
-std::string_view to_string(sex_t sex, Language lang = Language::English);
+std::string_view to_string(sex_t sex, language_t lang = language_t::english);
 
 enum class ssn_country {
     poland,
@@ -166,7 +166,7 @@ std::string bio();
  * person::sex() // "male"
  * @endcode
  */
-std::string_view sex(Language lang = Language::English);
+std::string_view sex(language_t lang = language_t::english);
 
 /**
  * @brief Returns a random gender.
@@ -265,7 +265,7 @@ std::string_view nationality();
  *
  * @code
  * person::ssn() // "437-12-6854"
- * person::ssn(ssn_country::Polish) // "95111901567"
+ * person::ssn(ssn_country::polish) // "95111901567"
  * @endcode
  */
 std::string ssn(std::optional<ssn_country> country);
