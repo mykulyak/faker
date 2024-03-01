@@ -251,19 +251,19 @@ std::string numeric(GuaranteeMap&& guarantee, unsigned length = 1, bool allowLea
  * @code
  * string::hexadecimal() // "0xb"
  * string::hexadecimal(10) // "0xae13d044cb"
- * string::hexadecimal(6, hex_case::upper, hex_prefix::hash) // "#E3F380"
- * string::hexadecimal(6, hex_case::lower, hex_prefix::none) // "e3f380"
+ * string::hexadecimal(6, hex_case_t::upper, hex_prefix_t::hash) // "#E3F380"
+ * string::hexadecimal(6, hex_case_t::lower, hex_prefix_t::none) // "e3f380"
  * @endcode
  */
-std::string hexadecimal(
-    unsigned length = 1, hex_case casing = hex_case::lower, hex_prefix prefix = hex_prefix::zero_x);
+std::string hexadecimal(unsigned length = 1, hex_case_t casing = hex_case_t::lower,
+    hex_prefix_t prefix = hex_prefix_t::zero_x);
 
 /**
  * @brief Generates a hexadecimal string.
  *
  * @param guarantee A map specifying char count constraints if any
  * @param length The number of digits to generate. Defaults to `1`.
- * @param casing Casing of the generated string. Defaults to `hex_case::lower`.
+ * @param casing Casing of the generated string. Defaults to `hex_case_t::lower`.
  * @param prefix Prefix for the generated string. Defaults to `0x`.
  *
  * @returns Hexadecimal string.
@@ -271,13 +271,13 @@ std::string hexadecimal(
  * @code
  * string::hexadecimal({}) // "0xb"
  * string::hexadecimal({'a',{2,2}}, 10) // "0xae13d04acb"
- * string::hexadecimal({'F', {2,4}}, 6, hex_case::upper, hex_prefix::hash) // "#E3FFF0"
- * string::hexadecimal({'1', {1,4}, {'2', {1, 4}, {'c', {1,1}}, 6, hex_case::lower,
- * hex_prefix::none) // "121a1c"
+ * string::hexadecimal({'F', {2,4}}, 6, hex_case_t::upper, hex_prefix_t::hash) // "#E3FFF0"
+ * string::hexadecimal({'1', {1,4}, {'2', {1, 4}, {'c', {1,1}}, 6, hex_case_t::lower,
+ * hex_prefix_t::none) // "121a1c"
  * @endcode
  */
 std::string hexadecimal(GuaranteeMap&& guarantee, unsigned length = 1,
-    hex_case casing = hex_case::lower, hex_prefix prefix = hex_prefix::zero_x);
+    hex_case_t casing = hex_case_t::lower, hex_prefix_t prefix = hex_prefix_t::zero_x);
 
 /**
  * @brief Generates a binary string.

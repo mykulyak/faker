@@ -89,7 +89,7 @@ std::string commit_message()
 
 std::string commit_sha(unsigned length)
 {
-    return faker::string::hexadecimal(length, hex_case::lower, hex_prefix::none);
+    return faker::string::hexadecimal(length, hex_case_t::lower, hex_prefix_t::none);
 }
 
 author_info author()

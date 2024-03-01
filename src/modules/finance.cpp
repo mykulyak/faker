@@ -103,7 +103,7 @@ std::string litecoin_address()
     return result;
 }
 
-std::string ethereum_address() { return string::hexadecimal(40, hex_case::lower); }
+std::string ethereum_address() { return string::hexadecimal(40, hex_case_t::lower); }
 
 std::string credit_card_expiration_date()
 {

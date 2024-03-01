@@ -1068,7 +1068,7 @@ TEST_F(StringTest, shouldGenerateHexadecimalWithHashPrefix)
     const auto hexadecimalLength = 8;
 
     const auto hexadecimal
-        = string::hexadecimal(hexadecimalLength, hex_case::upper, hex_prefix::hash);
+        = string::hexadecimal(hexadecimalLength, hex_case_t::upper, hex_prefix_t::hash);
 
     const auto prefix = hexadecimal.substr(0, 1);
     const auto hexNumber = hexadecimal.substr(1);
@@ -1085,7 +1085,7 @@ TEST_F(StringTest, shouldGenerateHexadecimalWithoutPrefix)
     const auto hexadecimalLength = 8;
 
     const auto hexadecimal
-        = string::hexadecimal(hexadecimalLength, hex_case::upper, hex_prefix::none);
+        = string::hexadecimal(hexadecimalLength, hex_case_t::upper, hex_prefix_t::none);
 
     ASSERT_EQ(hexadecimal.size(), hexadecimalLength);
     ASSERT_TRUE(faker::testing::any_of(hexadecimal, [](char hexNumberCharacter) {
@@ -1131,7 +1131,7 @@ TEST_F(StringTest, shouldGenerateHexadecimalWithGuarantee2)
     for (int i = 0; i < runCount; ++i) {
         auto copyGuarantee = guarantee;
         const auto hexadecimal
-            = string::hexadecimal(std::move(copyGuarantee), hexadecimalLength, hex_case::upper);
+            = string::hexadecimal(std::move(copyGuarantee), hexadecimalLength, hex_case_t::upper);
         const auto prefix = hexadecimal.substr(0, 2);
         const auto hexNumber = hexadecimal.substr(2);
 
@@ -1168,7 +1168,7 @@ TEST_F(StringTest, shouldGenerateHexadecimalWithGuarantee3)
     for (int i = 0; i < runCount; ++i) {
         auto copyGuarantee = guarantee;
         const auto hexadecimal
-            = string::hexadecimal(std::move(copyGuarantee), hexadecimalLength, hex_case::upper);
+            = string::hexadecimal(std::move(copyGuarantee), hexadecimalLength, hex_case_t::upper);
         const auto prefix = hexadecimal.substr(0, 2);
         const auto hexNumber = hexadecimal.substr(2);
 
@@ -1203,7 +1203,7 @@ TEST_F(StringTest, invalidGuaranteeForHexadecimal1)
     // atleast 5 'G' // invalid // 'G' is not a valid char for hexadecimal numbers
     faker::string::GuaranteeMap guarantee { { 'A', { 0, 0 } }, { 'F', { 10, 10 } },
         { 'G', { 5 } } };
-    ASSERT_THROW(string::hexadecimal(std::move(guarantee), hexadecimalLength, hex_case::upper),
+    ASSERT_THROW(string::hexadecimal(std::move(guarantee), hexadecimalLength, hex_case_t::upper),
         std::invalid_argument);
 }
 

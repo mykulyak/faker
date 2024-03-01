@@ -71,7 +71,7 @@ TEST(ColorTest, shouldGenerateHexColorWithoutAlpha)
 
 TEST(ColorTest, shouldGenerateHexColorWithAlpha)
 {
-    auto hexadecimal = color::hex(hex_case::upper, hex_prefix::zero_x, true);
+    auto hexadecimal = color::hex(hex_case_t::upper, hex_prefix_t::zero_x, true);
 
     auto prefix = hexadecimal.substr(0, 2);
     auto hexNumber = hexadecimal.substr(2);
