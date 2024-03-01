@@ -11,12 +11,12 @@
 
 namespace faker::person {
 namespace {
-    std::string middleNameForCountry(Country country, std::optional<Sex> sex);
-    std::string prefixForCountry(Country country, std::optional<Sex> sex);
-    std::string suffixForCountry(Country country, std::optional<Sex> sex);
+    std::string middleNameForCountry(Country country, std::optional<sex_t> sex);
+    std::string prefixForCountry(Country country, std::optional<sex_t> sex);
+    std::string suffixForCountry(Country country, std::optional<sex_t> sex);
 }
 
-std::string_view to_string(Sex sex, Language language)
+std::string_view to_string(sex_t sex, Language language)
 {
     const auto& sexTranslation = data::sexTranslations.find(language);
 
@@ -27,17 +27,17 @@ std::string_view to_string(Sex sex, Language language)
     return sexTranslation->second.at(sex);
 }
 
-std::string first_name(Country country, std::optional<Sex> sex)
+std::string first_name(Country country, std::optional<sex_t> sex)
 {
     const auto& peopleNames = data::countryToPeopleNamesMapping.at(country);
 
     std::vector<std::string> firstNames;
 
-    if (sex == Sex::male) {
+    if (sex == sex_t::male) {
         const auto& malesFirstNames = peopleNames.malesNames.firstNames;
 
         firstNames.insert(firstNames.end(), malesFirstNames.begin(), malesFirstNames.end());
-    } else if (sex == Sex::female) {
+    } else if (sex == sex_t::female) {
         const auto& femalesFirstNames = peopleNames.femalesNames.firstNames;
 
         firstNames.insert(firstNames.end(), femalesFirstNames.begin(), femalesFirstNames.end());
@@ -52,17 +52,17 @@ std::string first_name(Country country, std::optional<Sex> sex)
     return random::element<std::string>(firstNames);
 }
 
-std::string last_name(Country country, std::optional<Sex> sex)
+std::string last_name(Country country, std::optional<sex_t> sex)
 {
     const auto& peopleNames = data::countryToPeopleNamesMapping.at(country);
 
     std::vector<std::string> lastNames;
 
-    if (sex == Sex::male) {
+    if (sex == sex_t::male) {
         const auto& malesLastNames = peopleNames.malesNames.lastNames;
 
         lastNames.insert(lastNames.end(), malesLastNames.begin(), malesLastNames.end());
-    } else if (sex == Sex::female) {
+    } else if (sex == sex_t::female) {
         const auto& femalesLastNames = peopleNames.femalesNames.lastNames;
 
         lastNames.insert(lastNames.end(), femalesLastNames.begin(), femalesLastNames.end());
@@ -77,18 +77,18 @@ std::string last_name(Country country, std::optional<Sex> sex)
     return random::element<std::string>(lastNames);
 }
 
-std::string middle_name(std::optional<Sex> sex)
+std::string middle_name(std::optional<sex_t> sex)
 {
     std::vector<std::string> allMiddleNames;
 
     for (const auto& [_, peopleNames] : data::countryToPeopleNamesMapping) {
         std::vector<std::string> middleNames;
 
-        if (sex == Sex::male) {
+        if (sex == sex_t::male) {
             const auto& malesMiddleNames = peopleNames.malesNames.middleNames;
 
             middleNames.insert(middleNames.end(), malesMiddleNames.begin(), malesMiddleNames.end());
-        } else if (sex == Sex::female) {
+        } else if (sex == sex_t::female) {
             const auto& femalesMiddleNames = peopleNames.femalesNames.middleNames;
 
             middleNames.insert(
@@ -117,7 +117,7 @@ std::string middle_name(std::optional<Sex> sex)
     return random::element<std::string>(allMiddleNames);
 }
 
-std::string full_name(Country country, std::optional<Sex> sex)
+std::string full_name(Country country, std::optional<sex_t> sex)
 {
     const auto& peopleNames = data::countryToPeopleNamesMapping.at(country);
 
@@ -145,18 +145,18 @@ std::string full_name(Country country, std::optional<Sex> sex)
     });
 }
 
-std::string prefix(std::optional<Sex> sex)
+std::string prefix(std::optional<sex_t> sex)
 {
     std::vector<std::string> allPrefixes;
 
     for (const auto& [_, peopleNames] : data::countryToPeopleNamesMapping) {
         std::vector<std::string> prefixes;
 
-        if (sex == Sex::male) {
+        if (sex == sex_t::male) {
             const auto& malesPrefixes = peopleNames.malesNames.prefixes;
 
             prefixes.insert(prefixes.end(), malesPrefixes.begin(), malesPrefixes.end());
-        } else if (sex == Sex::female) {
+        } else if (sex == sex_t::female) {
             const auto& femalesPrefixes = peopleNames.femalesNames.prefixes;
 
             prefixes.insert(prefixes.end(), femalesPrefixes.begin(), femalesPrefixes.end());
@@ -227,7 +227,7 @@ std::string suffix()
 
 std::string_view sex(Language language)
 {
-    static const std::array<Sex, 2> sexes { Sex::male, Sex::female };
+    static const std::array<sex_t, 2> sexes { sex_t::male, sex_t::female };
 
     const auto chosenSex = random::element(sexes);
 
@@ -283,17 +283,17 @@ std::string_view western_zodiac() { return random::element(data::westernZodiacs)
 std::string_view chinese_zodiac() { return random::element(data::chineseZodiacs); }
 
 namespace {
-    std::string middleNameForCountry(Country country, std::optional<Sex> sex)
+    std::string middleNameForCountry(Country country, std::optional<sex_t> sex)
     {
         const auto& peopleNames = data::countryToPeopleNamesMapping.at(country);
 
         std::vector<std::string> middleNames;
 
-        if (sex == Sex::male) {
+        if (sex == sex_t::male) {
             const auto& malesMiddleNames = peopleNames.malesNames.middleNames;
 
             middleNames.insert(middleNames.end(), malesMiddleNames.begin(), malesMiddleNames.end());
-        } else if (sex == Sex::female) {
+        } else if (sex == sex_t::female) {
             const auto& femalesMiddleNames = peopleNames.femalesNames.middleNames;
 
             middleNames.insert(
@@ -310,17 +310,17 @@ namespace {
         return random::element<std::string>(middleNames);
     }
 
-    std::string prefixForCountry(Country country, std::optional<Sex> sex)
+    std::string prefixForCountry(Country country, std::optional<sex_t> sex)
     {
         const auto& peopleNames = data::countryToPeopleNamesMapping.at(country);
 
         std::vector<std::string> prefixes;
 
-        if (sex == Sex::male) {
+        if (sex == sex_t::male) {
             const auto& malesPrefixes = peopleNames.malesNames.prefixes;
 
             prefixes.insert(prefixes.end(), malesPrefixes.begin(), malesPrefixes.end());
-        } else if (sex == Sex::female) {
+        } else if (sex == sex_t::female) {
             const auto& femalesPrefixes = peopleNames.femalesNames.prefixes;
 
             prefixes.insert(prefixes.end(), femalesPrefixes.begin(), femalesPrefixes.end());
@@ -335,17 +335,17 @@ namespace {
         return random::element<std::string>(prefixes);
     }
 
-    std::string suffixForCountry(Country country, std::optional<Sex> sex)
+    std::string suffixForCountry(Country country, std::optional<sex_t> sex)
     {
         const auto& peopleNames = data::countryToPeopleNamesMapping.at(country);
 
         std::vector<std::string> suffixes;
 
-        if (sex == Sex::male) {
+        if (sex == sex_t::male) {
             const auto& malesSuffixes = peopleNames.malesNames.suffixes;
 
             suffixes.insert(suffixes.end(), malesSuffixes.begin(), malesSuffixes.end());
-        } else if (sex == Sex::female) {
+        } else if (sex == sex_t::female) {
             const auto& femalesSuffixes = peopleNames.femalesNames.suffixes;
 
             suffixes.insert(suffixes.end(), femalesSuffixes.begin(), femalesSuffixes.end());

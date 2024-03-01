@@ -168,7 +168,7 @@ TEST_P(PersonTest, shouldGenerateMaleFirstName)
     const auto& malesFirstNames
         = person::data::countryToPeopleNamesMapping.at(country).malesNames.firstNames;
 
-    const auto generatedFirstName = person::first_name(country, person::Sex::male);
+    const auto generatedFirstName = person::first_name(country, person::sex_t::male);
 
     FAKER_EXPECT_CONTAINER_CONTAINS(malesFirstNames, generatedFirstName);
 }
@@ -179,7 +179,7 @@ TEST_P(PersonTest, shouldGenerateFemaleFirstName)
     const auto& femalesFirstNames
         = person::data::countryToPeopleNamesMapping.at(country).femalesNames.firstNames;
 
-    const auto generatedFirstName = person::first_name(country, person::Sex::female);
+    const auto generatedFirstName = person::first_name(country, person::sex_t::female);
 
     FAKER_EXPECT_CONTAINER_CONTAINS(femalesFirstNames, generatedFirstName);
 }
@@ -190,7 +190,7 @@ TEST_P(PersonTest, shouldGenerateLastNameMale)
     const auto& malesLastNames
         = person::data::countryToPeopleNamesMapping.at(country).malesNames.lastNames;
 
-    const auto generatedLastName = person::last_name(country, person::Sex::male);
+    const auto generatedLastName = person::last_name(country, person::sex_t::male);
 
     FAKER_EXPECT_CONTAINER_CONTAINS(malesLastNames, generatedLastName);
 }
@@ -201,7 +201,7 @@ TEST_P(PersonTest, shouldGenerateLastNameFemale)
     const auto& femalesLastNames
         = person::data::countryToPeopleNamesMapping.at(country).femalesNames.lastNames;
 
-    const auto generatedLastName = person::last_name(country, person::Sex::female);
+    const auto generatedLastName = person::last_name(country, person::sex_t::female);
 
     FAKER_EXPECT_CONTAINER_CONTAINS(femalesLastNames, generatedLastName);
 }
@@ -226,7 +226,7 @@ TEST_P(PersonTest, shouldGenerateMaleFullName)
     const auto country = GetParam();
     const auto& peopleNames = person::data::countryToPeopleNamesMapping.at(country);
 
-    const auto generatedFullName = person::full_name(country, person::Sex::male);
+    const auto generatedFullName = person::full_name(country, person::sex_t::male);
 
     FAKER_EXPECT_STRING_CONTAINS(generatedFullName, peopleNames.malesNames.firstNames);
     FAKER_EXPECT_STRING_CONTAINS(generatedFullName, peopleNames.malesNames.lastNames);
@@ -237,7 +237,7 @@ TEST_P(PersonTest, shouldGenerateFemaleFullName)
     const auto country = GetParam();
     const auto& peopleNames = person::data::countryToPeopleNamesMapping.at(country);
 
-    const auto generatedFullName = person::full_name(country, person::Sex::female);
+    const auto generatedFullName = person::full_name(country, person::sex_t::female);
 
     FAKER_EXPECT_STRING_CONTAINS(generatedFullName, peopleNames.femalesNames.firstNames);
     FAKER_EXPECT_STRING_CONTAINS(generatedFullName, peopleNames.femalesNames.lastNames);
@@ -326,14 +326,14 @@ TEST_F(PersonTest, shouldGeneratePrefix)
 
 TEST_F(PersonTest, shouldGenerateMalePrefix)
 {
-    const auto generatedPrefix = person::prefix(person::Sex::male);
+    const auto generatedPrefix = person::prefix(person::sex_t::male);
 
     FAKER_EXPECT_CONTAINER_CONTAINS(malesPrefixes, generatedPrefix);
 }
 
 TEST_F(PersonTest, shouldGenerateFemalePrefix)
 {
-    const auto generatedPrefix = person::prefix(person::Sex::female);
+    const auto generatedPrefix = person::prefix(person::sex_t::female);
 
     FAKER_EXPECT_CONTAINER_CONTAINS(femalesPrefixes, generatedPrefix);
 }
@@ -437,7 +437,7 @@ TEST_F(PersonTest, shouldGenerateChineseZodiacs)
     FAKER_EXPECT_CONTAINER_CONTAINS(person::data::chineseZodiacs, generatedChineseZodiacs);
 }
 
-class PersonSexSuite : public TestWithParam<std::pair<person::Language, person::Sex>> { };
+class PersonSexSuite : public TestWithParam<std::pair<person::Language, person::sex_t>> { };
 
 TEST_P(PersonSexSuite, shouldTranslateSexCorrectly)
 {
@@ -450,75 +450,75 @@ TEST_P(PersonSexSuite, shouldTranslateSexCorrectly)
     ASSERT_EQ(expectedTranslation, actualTranslation);
 }
 
-std::vector<std::pair<person::Language, person::Sex>> languageSexPairs
-    = { { person::Language::English, person::Sex::male },
-          { person::Language::English, person::Sex::female },
-          { person::Language::Polish, person::Sex::male },
-          { person::Language::Polish, person::Sex::female },
-          { person::Language::Italian, person::Sex::male },
-          { person::Language::Italian, person::Sex::female },
-          { person::Language::French, person::Sex::male },
-          { person::Language::French, person::Sex::female },
-          { person::Language::German, person::Sex::male },
-          { person::Language::German, person::Sex::female },
-          { person::Language::Russian, person::Sex::male },
-          { person::Language::Russian, person::Sex::female },
-          { person::Language::Romanian, person::Sex::male },
-          { person::Language::Romanian, person::Sex::female },
-          { person::Language::Hindi, person::Sex::male },
-          { person::Language::Hindi, person::Sex::female },
-          { person::Language::Finnish, person::Sex::male },
-          { person::Language::Finnish, person::Sex::female },
-          { person::Language::Nepali, person::Sex::male },
-          { person::Language::Nepali, person::Sex::female },
-          { person::Language::Spanish, person::Sex::male },
-          { person::Language::Spanish, person::Sex::female },
-          { person::Language::Turkish, person::Sex::male },
-          { person::Language::Turkish, person::Sex::female },
-          { person::Language::Czech, person::Sex::male },
-          { person::Language::Czech, person::Sex::female },
-          { person::Language::Slovak, person::Sex::male },
-          { person::Language::Slovak, person::Sex::female },
-          { person::Language::Ukrainian, person::Sex::male },
-          { person::Language::Ukrainian, person::Sex::female },
-          { person::Language::Danish, person::Sex::male },
-          { person::Language::Danish, person::Sex::female },
-          { person::Language::Swedish, person::Sex::male },
-          { person::Language::Swedish, person::Sex::female },
-          { person::Language::Portuguese, person::Sex::male },
-          { person::Language::Portuguese, person::Sex::female },
-          { person::Language::Norwegian, person::Sex::male },
-          { person::Language::Norwegian, person::Sex::female },
-          { person::Language::Japanese, person::Sex::male },
-          { person::Language::Japanese, person::Sex::female },
-          { person::Language::Hungarian, person::Sex::male },
-          { person::Language::Hungarian, person::Sex::female },
-          { person::Language::Croatian, person::Sex::male },
-          { person::Language::Croatian, person::Sex::female },
-          { person::Language::Greek, person::Sex::male },
-          { person::Language::Greek, person::Sex::female },
-          { person::Language::Slovene, person::Sex::male },
-          { person::Language::Slovene, person::Sex::female },
-          { person::Language::Dutch, person::Sex::male },
-          { person::Language::Dutch, person::Sex::female },
-          { person::Language::Mandarin, person::Sex::male },
-          { person::Language::Mandarin, person::Sex::female },
-          { person::Language::Korean, person::Sex::male },
-          { person::Language::Korean, person::Sex::female },
-          { person::Language::Serbian, person::Sex::male },
-          { person::Language::Serbian, person::Sex::female },
-          { person::Language::Macedonian, person::Sex::male },
-          { person::Language::Macedonian, person::Sex::female },
-          { person::Language::Albanian, person::Sex::male },
-          { person::Language::Albanian, person::Sex::female },
-          { person::Language::Latvian, person::Sex::male },
-          { person::Language::Latvian, person::Sex::female },
-          { person::Language::Irish, person::Sex::male },
-          { person::Language::Irish, person::Sex::female },
-          { person::Language::Belarusian, person::Sex::male },
-          { person::Language::Belarusian, person::Sex::female },
-          { person::Language::Estonian, person::Sex::male },
-          { person::Language::Estonian, person::Sex::female } };
+std::vector<std::pair<person::Language, person::sex_t>> languageSexPairs
+    = { { person::Language::English, person::sex_t::male },
+          { person::Language::English, person::sex_t::female },
+          { person::Language::Polish, person::sex_t::male },
+          { person::Language::Polish, person::sex_t::female },
+          { person::Language::Italian, person::sex_t::male },
+          { person::Language::Italian, person::sex_t::female },
+          { person::Language::French, person::sex_t::male },
+          { person::Language::French, person::sex_t::female },
+          { person::Language::German, person::sex_t::male },
+          { person::Language::German, person::sex_t::female },
+          { person::Language::Russian, person::sex_t::male },
+          { person::Language::Russian, person::sex_t::female },
+          { person::Language::Romanian, person::sex_t::male },
+          { person::Language::Romanian, person::sex_t::female },
+          { person::Language::Hindi, person::sex_t::male },
+          { person::Language::Hindi, person::sex_t::female },
+          { person::Language::Finnish, person::sex_t::male },
+          { person::Language::Finnish, person::sex_t::female },
+          { person::Language::Nepali, person::sex_t::male },
+          { person::Language::Nepali, person::sex_t::female },
+          { person::Language::Spanish, person::sex_t::male },
+          { person::Language::Spanish, person::sex_t::female },
+          { person::Language::Turkish, person::sex_t::male },
+          { person::Language::Turkish, person::sex_t::female },
+          { person::Language::Czech, person::sex_t::male },
+          { person::Language::Czech, person::sex_t::female },
+          { person::Language::Slovak, person::sex_t::male },
+          { person::Language::Slovak, person::sex_t::female },
+          { person::Language::Ukrainian, person::sex_t::male },
+          { person::Language::Ukrainian, person::sex_t::female },
+          { person::Language::Danish, person::sex_t::male },
+          { person::Language::Danish, person::sex_t::female },
+          { person::Language::Swedish, person::sex_t::male },
+          { person::Language::Swedish, person::sex_t::female },
+          { person::Language::Portuguese, person::sex_t::male },
+          { person::Language::Portuguese, person::sex_t::female },
+          { person::Language::Norwegian, person::sex_t::male },
+          { person::Language::Norwegian, person::sex_t::female },
+          { person::Language::Japanese, person::sex_t::male },
+          { person::Language::Japanese, person::sex_t::female },
+          { person::Language::Hungarian, person::sex_t::male },
+          { person::Language::Hungarian, person::sex_t::female },
+          { person::Language::Croatian, person::sex_t::male },
+          { person::Language::Croatian, person::sex_t::female },
+          { person::Language::Greek, person::sex_t::male },
+          { person::Language::Greek, person::sex_t::female },
+          { person::Language::Slovene, person::sex_t::male },
+          { person::Language::Slovene, person::sex_t::female },
+          { person::Language::Dutch, person::sex_t::male },
+          { person::Language::Dutch, person::sex_t::female },
+          { person::Language::Mandarin, person::sex_t::male },
+          { person::Language::Mandarin, person::sex_t::female },
+          { person::Language::Korean, person::sex_t::male },
+          { person::Language::Korean, person::sex_t::female },
+          { person::Language::Serbian, person::sex_t::male },
+          { person::Language::Serbian, person::sex_t::female },
+          { person::Language::Macedonian, person::sex_t::male },
+          { person::Language::Macedonian, person::sex_t::female },
+          { person::Language::Albanian, person::sex_t::male },
+          { person::Language::Albanian, person::sex_t::female },
+          { person::Language::Latvian, person::sex_t::male },
+          { person::Language::Latvian, person::sex_t::female },
+          { person::Language::Irish, person::sex_t::male },
+          { person::Language::Irish, person::sex_t::female },
+          { person::Language::Belarusian, person::sex_t::male },
+          { person::Language::Belarusian, person::sex_t::female },
+          { person::Language::Estonian, person::sex_t::male },
+          { person::Language::Estonian, person::sex_t::female } };
 
 std::string_view toString(person::Language language)
 {

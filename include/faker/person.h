@@ -6,7 +6,7 @@
 #include <string>
 
 namespace faker::person {
-enum class Sex {
+enum class sex_t {
     male,
     female,
 };
@@ -48,7 +48,7 @@ enum class Language {
     Estonian
 };
 
-std::string_view to_string(Sex sex, Language lang = Language::English);
+std::string_view to_string(sex_t sex, Language lang = Language::English);
 
 enum class ssn_country {
     poland,
@@ -71,11 +71,11 @@ enum class ssn_country {
  *
  * @code
  * person::first_name() // "Michael"
- * person::first_name(Country::England, Sex::female) // "Emma"
- * person::first_name(Country::England, Sex::male) // "Arthur"
+ * person::first_name(Country::England, sex_t::female) // "Emma"
+ * person::first_name(Country::England, sex_t::male) // "Arthur"
  * @endcode
  */
-std::string first_name(Country country = Country::England, std::optional<Sex> sex = std::nullopt);
+std::string first_name(Country country = Country::England, std::optional<sex_t> sex = std::nullopt);
 
 /**
  * @brief Returns a random last name.
@@ -89,7 +89,7 @@ std::string first_name(Country country = Country::England, std::optional<Sex> se
  * person::last_name() // "Peterson"
  * @endcode
  */
-std::string last_name(Country country = Country::England, std::optional<Sex> sex = std::nullopt);
+std::string last_name(Country country = Country::England, std::optional<sex_t> sex = std::nullopt);
 
 /**
  * @brief Returns a random middle name.
@@ -102,7 +102,7 @@ std::string last_name(Country country = Country::England, std::optional<Sex> sex
  * person::middle_name() // "Васильевич"
  * @endcode
  */
-std::string middle_name(std::optional<Sex> sex = std::nullopt);
+std::string middle_name(std::optional<sex_t> sex = std::nullopt);
 
 /**
  * @brief Returns a random full name.
@@ -114,11 +114,11 @@ std::string middle_name(std::optional<Sex> sex = std::nullopt);
  *
  * @code
  * person::full_name() // "Marcia Robinson"
- * person::full_name(Country::England, Sex::female) // "Jennifer Martin"
- * person::full_name(Country::England, Sex::male) // "Samuel Walker"
+ * person::full_name(Country::England, sex_t::female) // "Jennifer Martin"
+ * person::full_name(Country::England, sex_t::male) // "Samuel Walker"
  * @endcode
  */
-std::string full_name(Country country = Country::England, std::optional<Sex> sex = std::nullopt);
+std::string full_name(Country country = Country::England, std::optional<sex_t> sex = std::nullopt);
 
 /**
  * @brief Returns a random name prefix.
@@ -129,11 +129,11 @@ std::string full_name(Country country = Country::England, std::optional<Sex> sex
  *
  * @code
  * person::prefix() // "Miss"
- * person::prefix(Sex::female) // "Ms."
- * person::prefix(Sex::male) // "Mr."
+ * person::prefix(sex_t::female) // "Ms."
+ * person::prefix(sex_t::male) // "Mr."
  * @endcode
  */
-std::string prefix(std::optional<Sex> sex = std::nullopt);
+std::string prefix(std::optional<sex_t> sex = std::nullopt);
 
 /**
  * @brief Returns a random name suffix.
