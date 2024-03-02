@@ -79,6 +79,7 @@
         "bit": "cpp",
         "memory": "cpp",
         "cassert": "cpp",
-        "format": "cpp"
+        "format": "cpp",
+        "__memory": "cpp"
     }
 }

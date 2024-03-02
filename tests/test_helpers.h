@@ -99,6 +99,12 @@ template <typename ContainerT> inline bool contains(const std::string& str, cons
     return any_of(part, [&str](const auto& p) { return str.find(p) != std::string::npos; });
 }
 
+template<typename StringLikeT, typename PrefixContainerT>
+inline bool starts_with_any_of(StringLikeT str, const PrefixContainerT& prefixes)
+{
+    return any_of(prefixes, [&str](const auto& p) { return starts_with(str, p); });
+}
+
 template <typename ContainerT, typename ElementT>
 inline size_t count(const ContainerT& container, const ElementT& elements)
 {
@@ -123,6 +129,12 @@ inline auto find(const ContainerT& range, const ElementT& element)
     EXPECT_TRUE(faker::testing::ends_with((str), (suffix)))
 
 #define FAKER_EXPECT_STRING_CONTAINS(str, part) EXPECT_TRUE(faker::testing::contains((str), (part)))
+
+#define FAKER_EXPECT_BETWEEN(value, min, max)                                                      \
+    {                                                                                              \
+        EXPECT_GE((value), (min));                                                                 \
+        EXPECT_LE((value), (max));                                                                 \
+    }
 
 }
 

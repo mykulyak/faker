@@ -1,111 +1,110 @@
 #include "../test_helpers.h"
-#include <algorithm>
 #include <faker/animal.h>
 #include <modules/animal_data.h>
 
 using namespace faker;
 
-TEST(AnimalTest, shouldGenerateBear)
+TEST(AnimalTest, should_generate_bear)
 {
-    auto generatedBear = animal::bear();
+    auto any_bear = animal::bear();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::bears, generatedBear);
+    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::bears, any_bear);
 }
 
-TEST(AnimalTest, shouldGenerateBird)
+TEST(AnimalTest, should_generate_bird)
 {
-    auto generatedBird = animal::bird();
+    auto any_bird = animal::bird();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::birds, generatedBird);
+    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::birds, any_bird);
 }
 
-TEST(AnimalTest, shouldGenerateCat)
+TEST(AnimalTest, should_generate_cat)
 {
-    auto generatedCat = animal::cat();
+    auto any_cat = animal::cat();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::cats, generatedCat);
+    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::cats, any_cat);
 }
 
-TEST(AnimalTest, shouldGenerateCetacean)
+TEST(AnimalTest, should_generate_cetacean)
 {
-    auto generatedCetacean = animal::cetacean();
+    auto any_cetacean = animal::cetacean();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::cetaceans, generatedCetacean);
+    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::cetaceans, any_cetacean);
 }
 
-TEST(AnimalTest, shouldGenerateCow)
+TEST(AnimalTest, should_generate_cow)
 {
-    auto generatedCow = animal::cow();
+    auto any_cow = animal::cow();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::cows, generatedCow);
+    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::cows, any_cow);
 }
 
-TEST(AnimalTest, shouldGenerateCrocodilia)
+TEST(AnimalTest, should_generate_crocodilia)
 {
-    auto generatedCrocodilia = animal::crocodilia();
+    auto any_crocodilia = animal::crocodilia();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::crocodilia, generatedCrocodilia);
+    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::crocodilia, any_crocodilia);
 }
 
-TEST(AnimalTest, shouldGenerateDog)
+TEST(AnimalTest, should_generate_dog)
 {
-    auto generatedDog = animal::dog();
+    auto any_dog = animal::dog();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::dogs, generatedDog);
+    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::dogs, any_dog);
 }
 
-TEST(AnimalTest, shouldGenerateFish)
+TEST(AnimalTest, should_generate_fish)
 {
-    auto generatedFish = animal::fish();
+    auto and_fish = animal::fish();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::fishes, generatedFish);
+    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::fishes, and_fish);
 }
 
-TEST(AnimalTest, shouldGenerateHorse)
+TEST(AnimalTest, should_generate_horse)
 {
-    auto generatedHorse = animal::horse();
+    auto any_horse = animal::horse();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::horses, generatedHorse);
+    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::horses, any_horse);
 }
 
-TEST(AnimalTest, shouldGenerateInsect)
+TEST(AnimalTest, should_generate_insect)
 {
-    auto generatedInsect = animal::insect();
+    auto any_insect = animal::insect();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::insects, generatedInsect);
+    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::insects, any_insect);
 }
 
-TEST(AnimalTest, shouldGenerateLion)
+TEST(AnimalTest, should_generate_lion)
 {
-    auto generatedLion = animal::lion();
+    auto any_lion = animal::lion();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::lions, generatedLion);
+    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::lions, any_lion);
 }
 
-TEST(AnimalTest, shouldGenerateRabbit)
+TEST(AnimalTest, should_generate_rabbit)
 {
-    auto generatedRabbit = animal::rabbit();
+    auto any_rabbit = animal::rabbit();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::rabbits, generatedRabbit);
+    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::rabbits, any_rabbit);
 }
 
-TEST(AnimalTest, shouldGenerateRodent)
+TEST(AnimalTest, should_generate_rodent)
 {
-    auto generatedRodent = animal::rodent();
+    auto any_rodent = animal::rodent();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::rodents, generatedRodent);
+    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::rodents, any_rodent);
 }
 
-TEST(AnimalTest, shouldGenerateSnake)
+TEST(AnimalTest, should_generate_snake)
 {
-    auto generatedSnake = animal::snake();
+    auto any_snake = animal::snake();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::snakes, generatedSnake);
+    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::snakes, any_snake);
 }
 
-TEST(AnimalTest, shouldGenerateType)
+TEST(AnimalTest, should_generate_type)
 {
-    auto generatedType = animal::type();
+    auto any_type = animal::type();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::types, generatedType);
+    FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::types, any_type);
 }

@@ -4,63 +4,62 @@
 
 using namespace faker;
 
-TEST(WeatherTest, shouldGenerateTemperature)
+TEST(WeatherTest, should_generate_temperature)
 {
-    auto generatedTemperature = weather::temperature();
+    auto temperature = weather::temperature();
 
-    ASSERT_TRUE(generatedTemperature.metric >= 10 && generatedTemperature.metric <= 30);
-    ASSERT_TRUE(generatedTemperature.imperial >= 50 && generatedTemperature.imperial <= 90);
+    FAKER_EXPECT_BETWEEN(temperature.metric, 10, 30);
+    FAKER_EXPECT_BETWEEN(temperature.imperial, 50, 90);
 }
 
-TEST(WeatherTest, shouldGeneratePressure)
+TEST(WeatherTest, should_generate_pressure)
 {
-    auto generatedPressure = weather::pressure();
+    auto pressure = weather::pressure();
 
-    ASSERT_TRUE(generatedPressure.metric >= 100.0 && generatedPressure.metric <= 102.0);
-    ASSERT_TRUE(generatedPressure.imperial >= 14.5 && generatedPressure.imperial <= 14.8);
+    FAKER_EXPECT_BETWEEN(pressure.metric, 100.0, 102.0);
+    FAKER_EXPECT_BETWEEN(pressure.imperial, 14.5, 14.8);
 }
 
-TEST(WeatherTest, shouldGenerateVisibility)
+TEST(WeatherTest, should_generate_visibility)
 {
-    auto generatedVisibility = weather::visibility();
+    auto visibility = weather::visibility();
 
-    ASSERT_TRUE(generatedVisibility.metric >= 1 && generatedVisibility.metric <= 10.0);
-    ASSERT_TRUE(generatedVisibility.imperial >= 1.6 && generatedVisibility.imperial <= 16.1);
+    FAKER_EXPECT_BETWEEN(visibility.metric, 1, 10.0);
+    FAKER_EXPECT_BETWEEN(visibility.imperial, 1.6, 16.1);
 }
 
-TEST(WeatherTest, shouldGenerateWindSpeed)
+TEST(WeatherTest, should_generate_wind_speed)
 {
-    auto generatedWindSpeed = weather::wind_speed();
+    auto wind_speed = weather::wind_speed();
 
-    ASSERT_TRUE(generatedWindSpeed.metric >= 0.1 && generatedWindSpeed.metric <= 24.2);
-    ASSERT_TRUE(generatedWindSpeed.imperial >= 0.1 && generatedWindSpeed.imperial <= 15.0);
+    FAKER_EXPECT_BETWEEN(wind_speed.metric, 0.1, 24.2);
+    FAKER_EXPECT_BETWEEN(wind_speed.imperial, 0.1, 15.0);
 }
 
-TEST(WeatherTest, shouldGenerateUvIndex)
+TEST(WeatherTest, should_generate_uv_idex)
 {
-    auto generatedUvIndex = weather::uv_index();
+    auto uv_index = weather::uv_index();
 
-    ASSERT_TRUE(generatedUvIndex >= 0 && generatedUvIndex <= 11);
+    FAKER_EXPECT_BETWEEN(uv_index, 0, 11);
 }
 
-TEST(WeatherTest, shouldGenerateHumidity)
+TEST(WeatherTest, should_generate_humidity)
 {
-    auto generatedHumidity = weather::humidity();
+    auto humidity = weather::humidity();
 
-    ASSERT_TRUE(generatedHumidity >= 0 && generatedHumidity <= 100);
+    FAKER_EXPECT_BETWEEN(humidity, 0, 100);
 }
 
-TEST(WeatherTest, shouldGenerateWeatherDescription)
+TEST(WeatherTest, should_generate_weather_description)
 {
-    auto generatedWeatherDescription = weather::description();
+    auto weather_description = weather::description();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(
-        weather::data::weather_descriptions, generatedWeatherDescription);
+    FAKER_EXPECT_CONTAINER_CONTAINS(weather::data::weather_descriptions, weather_description);
 }
 
-TEST(WeatherTest, shouldGenerateWeatherCloudCover)
+TEST(WeatherTest, should_generate_cloud_cover)
 {
-    auto generatedCloudCover = weather::cloud_cover();
+    auto cloud_cover = weather::cloud_cover();
 
-    ASSERT_TRUE(generatedCloudCover >= 0 && generatedCloudCover <= 100);
+    FAKER_EXPECT_BETWEEN(cloud_cover, 0, 100);
 }

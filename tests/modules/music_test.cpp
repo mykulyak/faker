@@ -4,23 +4,23 @@
 
 using namespace faker;
 
-TEST(MusicTest, shouldGenerateArtist)
+TEST(MusicTest, should_generate_artist)
 {
-    auto generatedArtist = music::artist();
+    auto artist = music::artist();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(music::data::artists, generatedArtist);
+    FAKER_EXPECT_CONTAINER_CONTAINS(music::data::artists, artist);
 }
 
-TEST(MusicTest, shouldGenerateGenre)
+TEST(MusicTest, should_generate_genre)
 {
-    auto generatedGenre = music::genre();
+    auto genre = music::genre();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(music::data::genres, generatedGenre);
+    FAKER_EXPECT_CONTAINER_CONTAINS(music::data::genres, genre);
 }
 
-TEST(MusicTest, shouldGenerateSongName)
+TEST(MusicTest, should_generate_song_name)
 {
-    auto generatedSongName = music::song_name();
+    auto song_name = music::song_name();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(music::data::song_names, generatedSongName);
+    FAKER_EXPECT_CONTAINER_CONTAINS(music::data::song_names, song_name);
 }

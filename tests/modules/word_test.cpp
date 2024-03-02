@@ -1,205 +1,116 @@
 #include "../test_helpers.h"
+#include <algorithm>
 #include <common/strings.h>
 #include <faker/word.h>
 #include <modules/word_data.h>
 
 using namespace faker;
 
-class WordTest : public ::testing::Test {
-public:
-    WordTest()
-    {
-        allWords.insert(
-            allWords.end(), word::data::adjectives.begin(), word::data::adjectives.end());
-        allWords.insert(allWords.end(), word::data::adverbs.begin(), word::data::adverbs.end());
-        allWords.insert(
-            allWords.end(), word::data::conjunctions.begin(), word::data::conjunctions.end());
-        allWords.insert(
-            allWords.end(), word::data::interjections.begin(), word::data::interjections.end());
-        allWords.insert(allWords.end(), word::data::nouns.begin(), word::data::nouns.end());
-        allWords.insert(
-            allWords.end(), word::data::prepositions.begin(), word::data::prepositions.end());
-        allWords.insert(allWords.end(), word::data::verbs.begin(), word::data::verbs.end());
-    }
-
-    std::vector<std::string> allWords;
-};
-
-TEST_F(WordTest, shouldGenerateAdjective)
+namespace {
+bool is_valid_word(std::string_view word)
 {
-    const auto generatedAdjective = word::adjective();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::adjectives, generatedAdjective);
+    return faker::testing::contains(word::data::adjectives, word)
+        || faker::testing::contains(word::data::adverbs, word)
+        || faker::testing::contains(word::data::conjunctions, word)
+        || faker::testing::contains(word::data::interjections, word)
+        || faker::testing::contains(word::data::nouns, word)
+        || faker::testing::contains(word::data::prepositions, word)
+        || faker::testing::contains(word::data::verbs, word);
+}
 }
 
-TEST_F(WordTest, shouldGenerateAdjectiveWithExistingLength)
+TEST(WordTest, should_generate_adjective)
 {
-    const auto generatedAdjective = word::adjective(5);
+    auto adjective_any_length = word::adjective();
+    auto adjective_fixed_length = word::adjective(5);
+    auto adjective_non_existent_length = word::adjective(100);
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::adjectives, generatedAdjective);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::adjectives, adjective_any_length);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::adjectives, adjective_fixed_length);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::adjectives, adjective_non_existent_length);
 }
 
-TEST_F(WordTest, shouldGenerateAdjectiveWithNonExistingLength)
+TEST(WordTest, should_generate_adverb)
 {
-    const auto generatedAdjective = word::adjective(100);
+    auto adverb_any_length = word::adverb();
+    auto adverb_fixed_length = word::adverb(5);
+    auto adverb_non_existent_length = word::adverb(100);
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::adjectives, generatedAdjective);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::adverbs, adverb_any_length);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::adverbs, adverb_fixed_length);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::adverbs, adverb_non_existent_length);
 }
 
-TEST_F(WordTest, shouldGenerateAdverb)
+TEST(WordTest, should_generate_conjunction)
 {
-    const auto generatedAdverb = word::adverb();
+    auto conjunction_any_length = word::conjunction();
+    auto conjunction_fixed_length = word::conjunction(5);
+    auto conjunction_non_existent_length = word::conjunction(100);
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::adverbs, generatedAdverb);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::conjunctions, conjunction_any_length);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::conjunctions, conjunction_fixed_length);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::conjunctions, conjunction_non_existent_length);
 }
 
-TEST_F(WordTest, shouldGenerateAdverbWithExistingLength)
+TEST(WordTest, should_generate_interjection)
 {
-    const auto generatedAdverb = word::adverb(5);
+    auto interjection_any_length = word::interjection();
+    auto interjection_fixed_length = word::interjection(5);
+    auto interjection_non_existent_length = word::interjection(100);
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::adverbs, generatedAdverb);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::interjections, interjection_any_length);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::interjections, interjection_fixed_length);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::interjections, interjection_non_existent_length);
 }
 
-TEST_F(WordTest, shouldGenerateAdverbWithNonExistingLength)
+TEST(WordTest, should_generate_noun)
 {
-    const auto generatedAdverb = word::adverb(100);
+    auto noun_any_length = word::noun();
+    auto noun_fixed_length = word::noun(5);
+    auto noun_non_existent_length = word::noun(100);
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::adverbs, generatedAdverb);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::nouns, noun_any_length);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::nouns, noun_fixed_length);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::nouns, noun_non_existent_length);
 }
 
-TEST_F(WordTest, shouldGenerateConjunction)
+TEST(WordTest, should_generate_preposition)
 {
-    const auto generatedConjunction = word::conjunction();
+    auto preposition_any_length = word::preposition();
+    auto preposition_fixed_length = word::preposition(5);
+    auto preposition_non_existent_length = word::preposition(100);
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::conjunctions, generatedConjunction);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::prepositions, preposition_any_length);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::prepositions, preposition_fixed_length);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::prepositions, preposition_non_existent_length);
 }
 
-TEST_F(WordTest, shouldGenerateConjunctionWithExistingLength)
+TEST(WordTest, should_generate_verb)
 {
-    const auto generatedConjunction = word::conjunction(5);
+    auto verb_any_length = word::verb();
+    auto verb_fixed_length = word::verb(5);
+    auto verb_non_existent_length = word::verb(100);
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::conjunctions, generatedConjunction);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::verbs, verb_any_length);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::verbs, verb_fixed_length);
+    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::verbs, verb_non_existent_length);
 }
 
-TEST_F(WordTest, shouldGenerateConjunctionWithNonExistingLength)
+TEST(WordTest, should_generate_sample)
 {
-    const auto generatedConjunction = word::conjunction(100);
+    auto sample_any_length = word::sample();
+    auto sample_fixed_length = word::sample(5);
+    auto sample_non_existent_length = word::sample(100);
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::conjunctions, generatedConjunction);
+    EXPECT_TRUE(is_valid_word(sample_any_length));
+    EXPECT_TRUE(is_valid_word(sample_fixed_length));
+    EXPECT_TRUE(is_valid_word(sample_non_existent_length));
 }
 
-TEST_F(WordTest, shouldGenerateInterjection)
+TEST(WordTest, should_generate_words)
 {
-    const auto generatedInterjection = word::interjection();
+    auto words = word::words(5);
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::interjections, generatedInterjection);
-}
-
-TEST_F(WordTest, shouldGenerateInterjectionWithExistingLength)
-{
-    const auto generatedInterjection = word::interjection(5);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::interjections, generatedInterjection);
-}
-
-TEST_F(WordTest, shouldGenerateInterjectionWithNonExistingLength)
-{
-    const auto generatedInterjection = word::interjection(100);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::interjections, generatedInterjection);
-}
-
-TEST_F(WordTest, shouldGenerateNoun)
-{
-    const auto generatedNoun = word::noun();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::nouns, generatedNoun);
-}
-
-TEST_F(WordTest, shouldGenerateNounWithExistingLength)
-{
-    const auto generatedNoun = word::noun(5);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::nouns, generatedNoun);
-}
-
-TEST_F(WordTest, shouldGenerateNounWithNonExistingLength)
-{
-    const auto generatedNoun = word::noun(100);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::nouns, generatedNoun);
-}
-
-TEST_F(WordTest, shouldGeneratePreposition)
-{
-    const auto generatedPreposition = word::preposition();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::prepositions, generatedPreposition);
-}
-
-TEST_F(WordTest, shouldGeneratePrepositionWithExistingLength)
-{
-    const auto generatedPreposition = word::preposition(5);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::prepositions, generatedPreposition);
-}
-
-TEST_F(WordTest, shouldGeneratePrepositionWithNonExistingLength)
-{
-    const auto generatedPreposition = word::preposition(100);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::prepositions, generatedPreposition);
-}
-
-TEST_F(WordTest, shouldGenerateVerb)
-{
-    const auto generatedVerb = word::verb();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::verbs, generatedVerb);
-}
-
-TEST_F(WordTest, shouldGenerateVerbWithExistingLength)
-{
-    const auto generatedVerb = word::verb(5);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::verbs, generatedVerb);
-}
-
-TEST_F(WordTest, shouldGenerateVerbWithNonExistingLength)
-{
-    const auto generatedVerb = word::verb(100);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(word::data::verbs, generatedVerb);
-}
-
-TEST_F(WordTest, shouldGenerateSample)
-{
-    const auto generatedSample = word::sample();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(allWords, generatedSample);
-}
-
-TEST_F(WordTest, shouldGenerateSampleWithExistingLength)
-{
-    const auto generatedSample = word::sample(5);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(allWords, generatedSample);
-}
-
-TEST_F(WordTest, shouldGenerateSampleWithNonExistingLength)
-{
-    const auto generatedSample = word::sample(100);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(allWords, generatedSample);
-}
-
-TEST_F(WordTest, shouldGenerateWords)
-{
-    const auto generatedWords = word::words(5);
-
-    const auto separatedWords = utils::split(generatedWords, " ");
-
-    ASSERT_TRUE(faker::testing::all_of(separatedWords, [this](auto separatedWord) {
-        return faker::testing::find(allWords, separatedWord) != allWords.end();
-    }));
+    auto split_words = utils::split(words, " ");
+    EXPECT_TRUE(faker::testing::all_of(split_words, is_valid_word));
 }

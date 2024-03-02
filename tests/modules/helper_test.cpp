@@ -1,157 +1,154 @@
 #include "../test_helpers.h"
-#include <algorithm>
 #include <common/random.h>
 #include <faker/string.h>
 #include <regex>
-#include <stdexcept>
 #include <unordered_map>
-#include <vector>
 
 using namespace faker;
 
-TEST(HelperTest, ArrayElement)
+TEST(HelperTest, should_choose_random_vector_element)
 {
     std::vector<std::string> data { "hello", "world" };
 
-    std::string result = random::element(data);
+    auto result = random::element(data);
 
-    ASSERT_TRUE(faker::testing::any_of(
-        data, [&result](const std::string& element) { return result == element; }));
+    FAKER_EXPECT_CONTAINER_CONTAINS(data, result);
 }
 
-TEST(HelperTest, ArrayElementEmptyData)
+TEST(HelperTest, should_throw_if_input_vector_is_empty)
 {
     std::vector<std::string> data {};
 
-    ASSERT_THROW(random::element(data), std::invalid_argument);
+    EXPECT_THROW(random::element(data), std::invalid_argument);
 }
 
-TEST(HelperTest, ArrayElementSpan)
+TEST(HelperTest, should_choose_random_array_element)
 {
-    std::vector<std::string> data { "hello", "world" };
+    std::array<std::string_view, 3> data { "hello", "beautiful", "world" };
 
-    std::string result = random::element(data);
+    auto result = random::element(data);
 
-    ASSERT_TRUE(faker::testing::any_of(
-        data, [&result](const std::string& element) { return result == element; }));
+    FAKER_EXPECT_CONTAINER_CONTAINS(data, result);
 }
 
-TEST(HelperTest, ArrayElementSpanEmptyData)
+TEST(HelperTest, should_throw_if_input_array_is_empty)
 {
-    std::vector<std::string> data {};
+    std::array<std::string_view, 0> data {};
 
-    ASSERT_THROW(random::element(data), std::invalid_argument);
+    EXPECT_THROW(random::element(data), std::invalid_argument);
 }
 
-TEST(HelperTest, WeightedArrayElement)
+TEST(HelperTest, should_chose_weighted_element_from_vector)
 {
     std::vector<random::WeightedElement<std::string>> data { { 1, "hello" }, { 9, "world" } };
 
     const auto result = random::weighted_element(data);
 
-    ASSERT_TRUE(faker::testing::any_of(
+    EXPECT_TRUE(faker::testing::any_of(
         data, [&result](const random::WeightedElement<std::string>& element) {
             return result == element.value;
         }));
 }
 
-TEST(HelperTest, WeightedArrayZeroSum)
+TEST(HelperTest, should_throw_if_sum_of_weights_is_zero)
 {
     std::vector<random::WeightedElement<std::string>> data { { 0, "hello" }, { 0, "world" } };
-    ASSERT_THROW(random::weighted_element(data), std::invalid_argument);
+
+    EXPECT_THROW(random::weighted_element(data), std::invalid_argument);
 }
 
-TEST(HelperTest, WeightedArrayEmptyData)
+TEST(HelperTest, should_throw_if_input_weight_vector_is_empty)
 {
     std::vector<random::WeightedElement<std::string>> data {};
-    ASSERT_THROW(random::weighted_element(data), std::invalid_argument);
+
+    EXPECT_THROW(random::weighted_element(data), std::invalid_argument);
 }
 
-TEST(HelperTest, ShuffleString)
+TEST(HelperTest, should_shuffle_string)
 {
     std::string input = "Hello World!";
 
     std::string result = random::shuffle_string(input);
 
-    ASSERT_TRUE(faker::testing::all_of(
+    EXPECT_TRUE(faker::testing::all_of(
         input, [&result](char character) { return result.find(character) != std::string::npos; }));
 }
 
-TEST(HelperTest, SetElement)
+TEST(HelperTest, should_choose_random_element_from_set)
 {
     std::unordered_set<char> chars { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'l', 'm' };
 
-    std::vector<char> randomChars;
+    std::vector<char> chosen;
 
-    randomChars.reserve(30);
-
+    chosen.reserve(30);
     for (int i = 0; i < 30; ++i) {
-        randomChars.push_back(random::element_from_set(chars));
+        chosen.push_back(random::element_from_set(chars));
     }
 
-    for (auto character : randomChars) {
-        ASSERT_TRUE(chars.find(character) != chars.end());
+    for (auto character : chosen) {
+        EXPECT_TRUE(chars.find(character) != chars.end());
     }
 }
 
-TEST(HelperTest, SetElementEmptyData)
+TEST(HelperTest, should_throw_if_input_set_is_empty)
 {
     std::unordered_set<char> chars {};
-    ASSERT_THROW(random::element_from_set(chars), std::invalid_argument);
+
+    EXPECT_THROW(random::element_from_set(chars), std::invalid_argument);
 }
 
-TEST(HelperTest, ReplaceSymbolWithNumber)
+TEST(HelperTest, should_replace_symbols_with_number)
 {
     std::string input = "123#456!";
     std::string result = random::replace_symbol_with_number(input);
 
     // The result should contain digits instead of '#' and '!'
-    ASSERT_TRUE(faker::testing::all_of(result, ::isdigit));
+    EXPECT_TRUE(faker::testing::all_of(result, ::isdigit));
 }
 
-TEST(HelperTest, RegexpStyleStringParse)
+TEST(HelperTest, should_regexp_style_string_parse)
 {
     std::string input = "#{5}[2-4]test[1-3]";
     std::string result = random::regexp_style_string_parse(input);
 
-    ASSERT_EQ(result.size(), 11);
+    EXPECT_EQ(result.size(), 11);
 }
 
-TEST(HelperTest, ReplaceCreditCardSymbols)
+TEST(HelperTest, should_replace_credit_card_symbols)
 {
     // Test with the default format "6453-####-####-####-###L"
     std::string result_default = random::replace_credit_card_symbols();
-    ASSERT_EQ(result_default.size(), 24);
-    ASSERT_EQ(result_default[4], '-');
-    ASSERT_EQ(result_default[9], '-');
-    ASSERT_EQ(result_default[14], '-');
-    ASSERT_EQ(result_default[19], '-');
+    EXPECT_EQ(result_default.size(), 24);
+    EXPECT_EQ(result_default[4], '-');
+    EXPECT_EQ(result_default[9], '-');
+    EXPECT_EQ(result_default[14], '-');
+    EXPECT_EQ(result_default[19], '-');
 
     // Test with a custom format "1234-[4-9]-##!!-L"
     std::string format_custom = "1234-[4-9]-##!!-L";
     std::string result_custom = random::replace_credit_card_symbols(format_custom);
     std::regex custom_format_regex("1234-[4-9]-\\d{2}[2-9]{2}-\\d");
-    ASSERT_TRUE(std::regex_match(result_custom, custom_format_regex));
+    EXPECT_TRUE(std::regex_match(result_custom, custom_format_regex));
 
     // Manually verify the custom format result, as the output is random
     // e.g., "1234-9-5298-2"
-    ASSERT_EQ(result_custom.substr(0, 5), "1234-");
-    ASSERT_EQ(result_custom.substr(6, 1), "-");
-    ASSERT_TRUE(result_custom[5] >= '4' && result_custom[5] <= '9');
-    ASSERT_TRUE(result_custom[8] >= '0' && result_custom[8] <= '9');
-    ASSERT_TRUE(result_custom[9] >= '0' && result_custom[9] <= '9');
+    EXPECT_EQ(result_custom.substr(0, 5), "1234-");
+    EXPECT_EQ(result_custom.substr(6, 1), "-");
+    EXPECT_TRUE(result_custom[5] >= '4' && result_custom[5] <= '9');
+    EXPECT_TRUE(result_custom[8] >= '0' && result_custom[8] <= '9');
+    EXPECT_TRUE(result_custom[9] >= '0' && result_custom[9] <= '9');
 }
 
-TEST(HelperTest, ObjectKeyTest)
+TEST(HelperTest, should_choose_random_map_key)
 {
-    std::unordered_map<int, std::string> testMap = { { 1, "one" }, { 2, "two" }, { 3, "three" } };
+    std::unordered_map<int, std::string> test_map = { { 1, "one" }, { 2, "two" }, { 3, "three" } };
 
-    ASSERT_NO_THROW({
-        int key = random::map_key(testMap);
-        EXPECT_TRUE(testMap.find(key) != testMap.end());
+    EXPECT_NO_THROW({
+        int key = random::map_key(test_map);
+        EXPECT_TRUE(test_map.find(key) != test_map.end());
     });
 
-    std::unordered_map<int, std::string> emptyMap;
+    std::unordered_map<int, std::string> empty_map;
 
-    ASSERT_THROW({ random::map_key(emptyMap); }, std::runtime_error);
+    EXPECT_THROW({ random::map_key(empty_map); }, std::runtime_error);
 }

@@ -4,20 +4,20 @@
 
 using namespace faker;
 
-TEST(CryptoTest, ChecksSHA256Hash)
+TEST(CryptoTest, should_generate_sha256)
 {
-    static const std::regex reSha256("^[a-f0-9]{64}$");
+    const auto sha256_checksum = crypto::sha256();
 
-    const auto generatedRandomHash = crypto::sha256();
+    static const std::regex re_sha256("^[a-f0-9]{64}$");
 
-    ASSERT_TRUE(std::regex_match(generatedRandomHash, reSha256));
+    EXPECT_TRUE(std::regex_match(sha256_checksum, re_sha256));
 }
 
-TEST(CryptoTest, ChecksMD5Hash)
+TEST(CryptoTest, should_generate_md5)
 {
-    static const std::regex reMd5("^[a-f0-9]{32}$");
+    const auto md5_checksum = crypto::md5();
 
-    const auto generatedRandomHash = crypto::md5();
+    static const std::regex re_md5("^[a-f0-9]{32}$");
 
-    ASSERT_TRUE(std::regex_match(generatedRandomHash, reMd5));
+    EXPECT_TRUE(std::regex_match(md5_checksum, re_md5));
 }

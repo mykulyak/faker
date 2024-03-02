@@ -5,62 +5,38 @@
 
 using namespace faker;
 
-TEST(ImageTest, shouldGenerateImageUrlDefault)
+TEST(ImageTest, should_generate_image_url)
 {
-    auto imageUrl = image::image_url();
+    auto url_with_defaults = image::image_url();
+    auto url_with_dimensions = image::image_url(800, 600);
+    auto url_with_dimentions_and_category
+        = image::image_url(800, 600, image::image_category::fashion);
 
-    ASSERT_EQ(imageUrl, "https://loremflickr.com/640/480");
+    EXPECT_EQ(url_with_defaults, "https://loremflickr.com/640/480");
+    EXPECT_EQ(url_with_dimensions, "https://loremflickr.com/800/600");
+    EXPECT_EQ(url_with_dimentions_and_category, "https://loremflickr.com/800/600/fashion");
 }
 
-TEST(ImageTest, shouldGenerateImageUrl)
+TEST(ImageTest, should_generate_github_avatar_url)
 {
-    auto width = 800;
-    auto height = 600;
+    auto avatar_url = image::github_avatar_url();
 
-    auto imageUrl = image::image_url(width, height);
-
-    ASSERT_EQ(imageUrl, "https://loremflickr.com/800/600");
+    const std::string expected_prefix = "https://avatars.githubusercontent.com/u/";
+    FAKER_EXPECT_STRING_STARTS_WITH(avatar_url, expected_prefix);
+    FAKER_EXPECT_BETWEEN(std::stoi(avatar_url.substr(expected_prefix.size())), 0, 100000000);
 }
 
-TEST(ImageTest, shouldGenerateImageUrlCategory)
+TEST(ImageTest, should_generate_dimensions)
 {
-    auto width = 800;
-    auto height = 600;
-    const image::image_category category = image::image_category::fashion;
+    auto dimension_parts = utils::split(image::dimensions(), "x");
 
-    auto imageUrl = image::image_url(width, height, category);
-
-    ASSERT_EQ(imageUrl, "https://loremflickr.com/800/600/fashion");
+    FAKER_EXPECT_BETWEEN(utils::to_int(dimension_parts[0]), 1, 32720);
+    FAKER_EXPECT_BETWEEN(utils::to_int(dimension_parts[1]), 1, 17280);
 }
 
-TEST(ImageTest, shouldGenerateGithubAvatarUrl)
+TEST(ImageTest, should_generate_type)
 {
-    auto githubAvatarUrl = image::github_avatar_url();
+    auto type = image::type();
 
-    const std::string expectedGithubAvatarPrefix = "https://avatars.githubusercontent.com/u/";
-
-    auto userNumber = std::stoi(githubAvatarUrl.substr(expectedGithubAvatarPrefix.size()));
-
-    FAKER_EXPECT_STRING_STARTS_WITH(githubAvatarUrl, expectedGithubAvatarPrefix);
-    ASSERT_TRUE(userNumber >= 0 && userNumber <= 100000000);
-}
-
-TEST(ImageTest, shouldGenerateDimensions)
-{
-    auto dimensions = image::dimensions();
-
-    auto split_dimensions = utils::split(dimensions, "x");
-
-    auto width_dimension = utils::to_int(split_dimensions[0]);
-    ASSERT_TRUE(width_dimension >= 1 && width_dimension <= 32720);
-
-    auto height_dimension = utils::to_int(split_dimensions[1]);
-    ASSERT_TRUE(height_dimension >= 1 && height_dimension <= 17280);
-}
-
-TEST(ImageTest, shouldGenerateType)
-{
-    auto generatedType = image::type();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(image::data::image_types, generatedType);
+    FAKER_EXPECT_CONTAINER_CONTAINS(image::data::image_types, type);
 }

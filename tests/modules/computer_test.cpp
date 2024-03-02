@@ -4,65 +4,65 @@
 
 using namespace faker;
 
-TEST(ComputerTest, ComputerTypeGeneration)
+TEST(ComputerTest, should_generate_computer_type)
 {
-    auto generatedType = computer::type();
+    auto any_type = computer::type();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(computer::data::types, generatedType);
+    FAKER_EXPECT_CONTAINER_CONTAINS(computer::data::types, any_type);
 }
 
-TEST(ComputerTest, ComputerManufactureGeneration)
+TEST(ComputerTest, should_generate_manufacturer)
 {
-    auto generatedManufacture = computer::manufacturer();
+    auto any_manufacturer = computer::manufacturer();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(computer::data::manufacturers, generatedManufacture);
+    FAKER_EXPECT_CONTAINER_CONTAINS(computer::data::manufacturers, any_manufacturer);
 }
 
-TEST(ComputerTest, ComputerModelGeneration)
+TEST(ComputerTest, should_generate_model)
 {
-    auto generatedModel = computer::model();
+    auto any_model = computer::model();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(computer::data::models, generatedModel);
+    FAKER_EXPECT_CONTAINER_CONTAINS(computer::data::models, any_model);
 }
 
-TEST(ComputerTest, ComputerCPUManufactureGeneration)
+TEST(ComputerTest, should_generate_cpu_manufacturer)
 {
-    auto generatedCPUManufacture = computer::cpu_manufacturer();
+    auto any_cpu_anufacturer = computer::cpu_manufacturer();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(computer::data::cpu_manufacturers, generatedCPUManufacture);
+    FAKER_EXPECT_CONTAINER_CONTAINS(computer::data::cpu_manufacturers, any_cpu_anufacturer);
 }
 
-TEST(ComputerTest, ComputerCPUTypeGeneration)
+TEST(ComputerTest, should_generate_cpu_type)
 {
-    auto generatedCPUType = computer::cpu_type();
+    auto any_cpu_type = computer::cpu_type();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(computer::data::cpu_types, generatedCPUType);
+    FAKER_EXPECT_CONTAINER_CONTAINS(computer::data::cpu_types, any_cpu_type);
 }
 
-TEST(ComputerTest, ComputerCPUModelGeneration)
+TEST(ComputerTest, should_generate_cpu_model)
 {
-    auto generatedCPUModel = computer::cpu_model();
+    auto any_cpu_model = computer::cpu_model();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(computer::data::cpu_models, generatedCPUModel);
+    FAKER_EXPECT_CONTAINER_CONTAINS(computer::data::cpu_models, any_cpu_model);
 }
 
-TEST(ComputerTest, ComputerGPUManufactureGeneration)
+TEST(ComputerTest, should_generate_gpu_manufacturer)
 {
-    auto generatedGPUManufacture = computer::gpu_manufacturer();
+    auto any_gpu_anufacturer = computer::gpu_manufacturer();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(computer::data::gpu_manufacturers, generatedGPUManufacture);
+    FAKER_EXPECT_CONTAINER_CONTAINS(computer::data::gpu_manufacturers, any_gpu_anufacturer);
 }
 
-TEST(ComputerTest, ComputerGPUTypeGeneration)
+TEST(ComputerTest, should_generate_gpu_type)
 {
-    auto generatedGPUType = computer::gpu_type();
+    auto any_gpu_type = computer::gpu_type();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(computer::data::gpu_types, generatedGPUType);
+    FAKER_EXPECT_CONTAINER_CONTAINS(computer::data::gpu_types, any_gpu_type);
 }
 
-TEST(ComputerTest, ComputerGPUModelGeneration)
+TEST(ComputerTest, should_generate_gpu_model)
 {
-    auto generatedGPUModel = computer::gpu_model();
+    auto any_gpu_model = computer::gpu_model();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(computer::data::gpu_models, generatedGPUModel);
+    FAKER_EXPECT_CONTAINER_CONTAINS(computer::data::gpu_models, any_gpu_model);
 }

@@ -1,18 +1,16 @@
 #include "../test_helpers.h"
-#include <algorithm>
 #include <common/luhn_check.h>
-#include <string>
 
 using namespace faker;
 
-TEST(LuhnCheckTest, BasicTest)
+TEST(LuhnCheckTest, should_do_luhn_check)
 {
     std::string input = "6453-4876-8626-8995-3771";
     bool result = utils::luhn_check(input);
     EXPECT_TRUE(result); // Replace true with the expected result for the given input.
 }
 
-TEST(LuhnCheckValueTest, BasicTest)
+TEST(LuhnCheckValueTest, should_return_luhn_check_result)
 {
     std::string input = "6453-4876-8626-8995-377L";
     int result = utils::luhn_check_value(input);

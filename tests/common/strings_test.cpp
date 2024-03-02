@@ -3,81 +3,53 @@
 
 using namespace faker;
 
-TEST(StringHelperTest, splitStringBySpace)
+TEST(StringHelperTest, should_split_string_by_space)
 {
-    const auto result = utils::split("faker cxx open source");
+    const auto with_default_sep = utils::split("faker cxx open source");
+    const auto with_custom_sep = utils::split("faker\ncxx\nopen\nsource", "\n");
 
-    ASSERT_EQ(result.size(), 4);
-    ASSERT_EQ(result[0], "faker");
-    ASSERT_EQ(result[1], "cxx");
-    ASSERT_EQ(result[2], "open");
-    ASSERT_EQ(result[3], "source");
+    std::vector<std::string_view> expected { "faker", "cxx", "open", "source" };
+    EXPECT_EQ(with_default_sep, expected);
+    EXPECT_EQ(with_custom_sep, expected);
 }
 
-TEST(StringHelperTest, splitStringByNewLine)
-{
-    const auto result = utils::split("faker\ncxx\nopen\nsource", "\n");
-
-    ASSERT_EQ(result.size(), 4);
-    ASSERT_EQ(result[0], "faker");
-    ASSERT_EQ(result[1], "cxx");
-    ASSERT_EQ(result[2], "open");
-    ASSERT_EQ(result[3], "source");
-}
-
-TEST(StringHelperTest, joinStringsIntoVectorBySpace)
+TEST(StringHelperTest, should_join_strings)
 {
     const std::vector<std::string> input { "Join", "faker", "development!" };
 
-    const auto result = utils::join(input);
+    const auto with_default_separator = utils::join(input);
+    const auto with_custom_separator = utils::join(input, "\n");
 
-    ASSERT_EQ(result, "Join faker development!");
+    EXPECT_EQ(with_default_separator, "Join faker development!");
+    EXPECT_EQ(with_custom_separator, "Join\nfaker\ndevelopment!");
 }
 
-TEST(StringHelperTest, joinStringsIntoVectorByNewLine)
+TEST(StringHelperTest, should_repeat_string)
 {
-    const std::vector<std::string> input { "Join", "faker", "development!" };
+    auto result = utils::repeat("hello ", 3);
 
-    const auto result = utils::join(input, "\n");
-
-    ASSERT_EQ(result, "Join\nfaker\ndevelopment!");
+    EXPECT_EQ(result, "hello hello hello ");
 }
 
-TEST(StringHelperTest, repeatString)
+TEST(StringHelperTest, should_convert_string_to_lower_case)
 {
-    const std::string data = "hello ";
-    const int repetition = 3;
-
-    const std::string result = utils::repeat(data, repetition);
-
-    ASSERT_EQ(result, "hello hello hello ");
+    EXPECT_EQ(utils::to_lower("HeLlo!"), "hello!");
 }
 
-TEST(StringHelperTest, to_lower)
-{
-    const std::string data = "HeLlo!";
-
-    const std::string result = utils::to_lower(data);
-
-    ASSERT_EQ(result, "hello!");
-}
-
-TEST(StringHelperTest, IsPunctuation)
+TEST(StringHelperTest, should_detect_punctuation)
 {
     std::string punctuation = ".,;:!?";
     for (char c : punctuation) {
         EXPECT_TRUE(utils::is_punctuation(c));
     }
 
-    std::string notPunctuation = "abc123";
-    for (char c : notPunctuation) {
+    std::string not_punctuation = "abc123";
+    for (char c : not_punctuation) {
         EXPECT_FALSE(utils::is_punctuation(c));
     }
 }
 
-TEST(StringHelperTest, RemovePunctuation)
+TEST(StringHelperTest, should_remove_punctuation)
 {
-    std::string input = "Hello, World!";
-    std::string result = utils::remove_punctuation(input);
-    EXPECT_EQ(result, "Hello World");
+    EXPECT_EQ(utils::remove_punctuation("Hello, World!"), "Hello World");
 }

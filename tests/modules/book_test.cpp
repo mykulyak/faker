@@ -5,79 +5,79 @@
 
 using namespace faker;
 
-TEST(BookTest, shouldGenerateTitle)
+TEST(BookTest, should_generate_title)
 {
-    auto bookTitle = book::title();
+    auto any_title = book::title();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(book::data::titles, bookTitle);
+    FAKER_EXPECT_CONTAINER_CONTAINS(book::data::titles, any_title);
 }
 
-TEST(BookTest, shouldGenerateGenre)
+TEST(BookTest, should_generate_genre)
 {
-    auto bookGenre = book::genre();
+    auto any_genre = book::genre();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(book::data::genres, bookGenre);
+    FAKER_EXPECT_CONTAINER_CONTAINS(book::data::genres, any_genre);
 }
 
-TEST(BookTest, shouldGenerateAuthor)
+TEST(BookTest, should_generate_author)
 {
-    auto bookAuthor = book::author();
+    auto any_author = book::author();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(book::data::authors, bookAuthor);
+    FAKER_EXPECT_CONTAINER_CONTAINS(book::data::authors, any_author);
 }
 
-TEST(BookTest, shouldGeneratePublisher)
+TEST(BookTest, should_generate_publisher)
 {
-    auto bookPublisher = book::publisher();
+    auto any_publisher = book::publisher();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(book::data::publishers, bookPublisher);
+    FAKER_EXPECT_CONTAINER_CONTAINS(book::data::publishers, any_publisher);
 }
 
-TEST(BookTest, shouldGenerateIsbn)
+TEST(BookTest, should_generate_isbn)
 {
-    auto bookIsbn = book::isbn();
+    auto any_isbn = book::isbn();
 
-    auto isbnNumbersGroups = utils::split(bookIsbn, "-");
+    EXPECT_EQ(any_isbn.size(), 17);
 
-    ASSERT_EQ(bookIsbn.size(), 17);
-    ASSERT_EQ(isbnNumbersGroups[0].size(), 3);
-    ASSERT_EQ(isbnNumbersGroups[1].size(), 2);
-    ASSERT_EQ(isbnNumbersGroups[2].size(), 2);
-    ASSERT_EQ(isbnNumbersGroups[3].size(), 5);
-    ASSERT_EQ(isbnNumbersGroups[4].size(), 1);
+    auto number_groups = utils::split(any_isbn, "-");
+    EXPECT_EQ(number_groups[0].size(), 3);
+    EXPECT_EQ(number_groups[1].size(), 2);
+    EXPECT_EQ(number_groups[2].size(), 2);
+    EXPECT_EQ(number_groups[3].size(), 5);
+    EXPECT_EQ(number_groups[4].size(), 1);
 }
 
-TEST(BookTest, shouldGenerateReleaseYear)
+TEST(BookTest, should_generate_release_year)
 {
-    auto releaseYear = book::release_year();
+    auto any_year = book::release_year();
 
-    ASSERT_TRUE((releaseYear >= 1940) && (releaseYear <= 2024));
+    FAKER_EXPECT_BETWEEN(any_year, 1940, 2024);
 }
 
-TEST(BookTest, shouldGenerateTranslator)
+TEST(BookTest, should_generate_translator)
 {
-    auto bookTranslator = book::translator();
+    auto any_translator = book::translator();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(book::data::translators, bookTranslator);
+    FAKER_EXPECT_CONTAINER_CONTAINS(book::data::translators, any_translator);
 }
 
-TEST(BookTest, shouldGenerateFormat)
+TEST(BookTest, should_generate_format)
 {
-    auto bookFormat = book::format();
+    auto any_format = book::format();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(book::data::book_formats, bookFormat);
+    FAKER_EXPECT_CONTAINER_CONTAINS(book::data::book_formats, any_format);
 }
 
-TEST(BookTest, shouldGeneratePage)
+TEST(BookTest, should_generate_page)
 {
-    auto bookPage = book::page();
+    auto any_page = book::page();
 
-    ASSERT_TRUE(bookPage >= 50 && bookPage <= 999);
+    FAKER_EXPECT_BETWEEN(any_page, 50, 999);
 }
 
-TEST(BookTest, shouldGenerateSeries)
+TEST(BookTest, should_generate_series)
 {
-    auto randomSeries = book::series();
+    auto any_series = book::series();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(book::data::book_series, randomSeries);
+    FAKER_EXPECT_CONTAINER_CONTAINS(book::data::book_series, any_series);
 }

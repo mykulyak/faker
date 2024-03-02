@@ -1,56 +1,56 @@
 add_executable(
     test_faker
-    ${CMAKE_CURRENT_SOURCE_DIR}/bio_helper_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/bio_helper.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/json_helper.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/conversions_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/format_helper_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/json_helper_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/luhn_check_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/precision_mapper_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/strings_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/airline_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/animal_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/book_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/color_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/commerce_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/company_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/computer_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/crypto_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/database_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/datatype_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/date_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/finance_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/food_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/git_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/hacker_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/helper_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/image_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/internet_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/location_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/lorem_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/medicine_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/movie_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/music_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/number_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/person_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/phone_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/science_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/sport_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/string_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/structure_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/system_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/vehicle_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/video_game_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/weather_test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules/word_test.cpp
+    bio_helper_test.cpp
+    bio_helper.cpp
+    json_helper.cpp
+    common/conversions_test.cpp
+    common/format_helper_test.cpp
+    common/json_helper_test.cpp
+    common/luhn_check_test.cpp
+    common/precision_mapper_test.cpp
+    common/strings_test.cpp
+    modules/airline_test.cpp
+    modules/animal_test.cpp
+    modules/book_test.cpp
+    modules/color_test.cpp
+    modules/commerce_test.cpp
+    modules/company_test.cpp
+    modules/computer_test.cpp
+    modules/crypto_test.cpp
+    modules/database_test.cpp
+    modules/datatype_test.cpp
+    modules/date_test.cpp
+    modules/finance_test.cpp
+    modules/food_test.cpp
+    modules/git_test.cpp
+    modules/hacker_test.cpp
+    modules/helper_test.cpp
+    modules/image_test.cpp
+    modules/internet_test.cpp
+    modules/location_test.cpp
+    modules/lorem_test.cpp
+    modules/medicine_test.cpp
+    modules/movie_test.cpp
+    modules/music_test.cpp
+    modules/number_test.cpp
+    modules/person_test.cpp
+    modules/phone_test.cpp
+    modules/science_test.cpp
+    modules/sport_test.cpp
+    modules/string_test.cpp
+    modules/structure_test.cpp
+    modules/system_test.cpp
+    modules/vehicle_test.cpp
+    modules/video_game_test.cpp
+    modules/weather_test.cpp
+    modules/word_test.cpp
 )
-target_include_directories(
-    test_faker 
-    PRIVATE
-        ${TCB_SPAN_INCLUDE_DIRS}
-        ${CMAKE_CURRENT_SOURCE_DIR}/../src
-)
+target_include_directories(test_faker PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../src)
+
+if (NOT USE_CXX20)
+target_include_directories(test_faker PRIVATE ${TCB_SPAN_INCLUDE_DIRS})
+endif()
+
 target_link_libraries(
     test_faker 
     PRIVATE 

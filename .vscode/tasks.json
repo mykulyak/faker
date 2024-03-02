@@ -45,7 +45,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Rebuild & retest (debug)",
+            "label": "Rebuild & retest (debug, C++17)",
             "type": "shell",
             "command": "make -j3 && ctest",
             "group": "none",
@@ -58,12 +58,12 @@
                 "clear": true
             },
             "options": {
-                "cwd": "${workspaceFolder}/build/debug"
+                "cwd": "${workspaceFolder}/build/debug17"
             },
             "problemMatcher": []
         },
         {
-            "label": "Rebuild & retest (release)",
+            "label": "Rebuild & retest (debug, C++20)",
             "type": "shell",
             "command": "make -j3 && ctest",
             "group": "none",
@@ -76,7 +76,43 @@
                 "clear": true
             },
             "options": {
-                "cwd": "${workspaceFolder}/build/release"
+                "cwd": "${workspaceFolder}/build/debug20"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Rebuild & retest (release C++17)",
+            "type": "shell",
+            "command": "make -j3 && ctest",
+            "group": "none",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/build/release17"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Rebuild & retest (release C++20)",
+            "type": "shell",
+            "command": "make -j3 && ctest",
+            "group": "none",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/build/release20"
             },
             "problemMatcher": []
         }
