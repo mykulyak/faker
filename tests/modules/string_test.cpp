@@ -1,7 +1,6 @@
 #include "../test_helpers.h"
 #include <algorithm>
 #include <faker/string.h>
-#include <iostream>
 #include <modules/string_data.h>
 #include <random>
 #include <stdexcept>

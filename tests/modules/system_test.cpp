@@ -21,13 +21,11 @@ bool is_valid_cron_expr(const std::string& value)
 TEST(SystemTest, should_generate_filename)
 {
     auto filename_fixed_ext_count = system::filename({ 3u, { 1u, 1u } });
-    std::cout << filename_fixed_ext_count << std::endl;
     EXPECT_FALSE(filename_fixed_ext_count.empty());
     // some mime types contain '.' in them, hence >=
     EXPECT_GE(std::count(filename_fixed_ext_count.begin(), filename_fixed_ext_count.end(), '.'), 3);
 
     auto filename_variable_ext_count = system::filename({ 1, { 1, 3 } });
-    std::cout << filename_variable_ext_count << std::endl;
     EXPECT_FALSE(filename_variable_ext_count.empty());
     // some mime types contain '.' in them, hence >=
     EXPECT_GE(

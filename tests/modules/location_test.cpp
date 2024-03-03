@@ -360,7 +360,7 @@ TEST_F(LocationTest, should_generate_street_address)
 
     const auto address_in = location::street_address(location::address_country::india);
     const auto street_in_parts = utils::split(address_in, " ");
-    EXPECT_GE(street_in_parts.size(), 3);
+    EXPECT_GE(street_in_parts.size(), 3u);
     FAKER_EXPECT_REGEX_MATCHES(street_in_parts[0], R"(^\d+$)");
     FAKER_EXPECT_CONTAINER_CONTAINS(location::data::india_street_suffixes,
         utils::join({ street_in_parts.begin() + 2, street_in_parts.end() }));
