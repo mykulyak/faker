@@ -404,11 +404,13 @@ std::string hexadecimal(
 
 std::string binary(unsigned length)
 {
-    std::string binaryNumber;
+    const std::string_view allowed_chars { "01" };
+
+    std::string result;
     for (unsigned i = 0; i < length; ++i) {
-        binaryNumber += static_cast<char>(number::integer(1));
+        result += random::element(allowed_chars);
     }
-    return "0b" + binaryNumber;
+    return "0b" + result;
 }
 
 std::string binary(const std::vector<Spec>& specs, unsigned length)
@@ -424,11 +426,13 @@ std::string binary(const std::vector<Spec>& specs, unsigned length)
 
 std::string octal(unsigned length)
 {
-    std::string octalNumber;
+    static const std::string_view allowed_chars { "01234567" };
+
+    std::string result;
     for (unsigned i = 0; i < length; ++i) {
-        octalNumber += static_cast<char>(number::integer(7));
+        result += random::element(allowed_chars);
     }
-    return "0o" + octalNumber;
+    return "0o" + result;
 }
 
 std::string octal(const std::vector<Spec>& guarantee, unsigned length)
