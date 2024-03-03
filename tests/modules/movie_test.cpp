@@ -4,44 +4,44 @@
 
 using namespace faker;
 
-TEST(MovieTest, shouldGenerateGenre)
+TEST(MovieTest, should_generate_Genre)
 {
-    auto generatedGenre = movie::genre();
+    auto genre = movie::genre();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(movie::data::genres, generatedGenre);
+    FAKER_EXPECT_CONTAINER_CONTAINS(movie::data::genres, genre);
 }
 
-TEST(MovieTest, shouldGenerateMovieTitle)
+TEST(MovieTest, should_generate_movie_title)
 {
-    auto generatedMovieTitle = movie::movie_title();
+    auto movie_title = movie::movie_title();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(movie::data::movies, generatedMovieTitle);
+    FAKER_EXPECT_CONTAINER_CONTAINS(movie::data::movies, movie_title);
 }
 
-TEST(MovieTest, shouldGenerateTvShow)
+TEST(MovieTest, should_generate_tv_show)
 {
-    auto generatedTvShow = movie::tv_show();
+    auto tv_show = movie::tv_show();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(movie::data::tv_shows, generatedTvShow);
+    FAKER_EXPECT_CONTAINER_CONTAINS(movie::data::tv_shows, tv_show);
 }
 
-TEST(MovieTest, shouldGenerateDirector)
+TEST(MovieTest, should_generate_director)
 {
-    auto generatedDirector = movie::director();
+    auto director = movie::director();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(movie::data::directors, generatedDirector);
+    FAKER_EXPECT_CONTAINER_CONTAINS(movie::data::directors, director);
 }
 
-TEST(MovieTest, shouldGenerateActor)
+TEST(MovieTest, should_generate_actor)
 {
-    auto generatedActor = movie::actor();
+    auto actor = movie::actor();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(movie::data::actors, generatedActor);
+    FAKER_EXPECT_CONTAINER_CONTAINS(movie::data::actors, actor);
 }
 
-TEST(MovieTest, shouldGenerateActress)
+TEST(MovieTest, should_generate_actress)
 {
-    auto generatedActress = movie::actress();
+    auto generated_actress = movie::actress();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(movie::data::actresses, generatedActress);
+    FAKER_EXPECT_CONTAINER_CONTAINS(movie::data::actresses, generated_actress);
 }

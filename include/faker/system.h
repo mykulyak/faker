@@ -177,7 +177,7 @@ struct NetworkInterfaceOptions {
  * system::network_interface(options) // "enp1s9f1d2"
  * @endcode
  */
-std::string network_interface(const std::optional<NetworkInterfaceOptions>& options = {});
+std::string network_interface(const std::optional<NetworkInterfaceOptions>& options = std::nullopt);
 
 enum cron_options_t {
     default_options = 0x00,

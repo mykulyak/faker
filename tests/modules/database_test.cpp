@@ -5,40 +5,39 @@
 
 using namespace faker;
 
-TEST(DatabaseTest, shouldGenerateColumnName)
+TEST(DatabaseTest, should_generate_column_name)
 {
-    auto generatedColumnName = database::column_name();
+    auto column_name = database::column_name();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(database::data::column_names, generatedColumnName);
+    FAKER_EXPECT_CONTAINER_CONTAINS(database::data::column_names, column_name);
 }
 
-TEST(DatabaseTest, shouldGenerateColumnType)
+TEST(DatabaseTest, should_generate_column_type)
 {
-    auto generatedColumnType = database::column_type();
+    auto column_type = database::column_type();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(database::data::column_types, generatedColumnType);
+    FAKER_EXPECT_CONTAINER_CONTAINS(database::data::column_types, column_type);
 }
 
-TEST(DatabaseTest, shouldGenerateEngine)
+TEST(DatabaseTest, should_generate_engine)
 {
-    auto generatedEngine = database::engine();
+    auto engine = database::engine();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(database::data::engines, generatedEngine);
+    FAKER_EXPECT_CONTAINER_CONTAINS(database::data::engines, engine);
 }
 
-TEST(DatabaseTest, shouldGenerateCollation)
+TEST(DatabaseTest, should_generate_collation)
 {
-    auto generatedCollation = database::collation();
+    auto collation = database::collation();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(database::data::collations, generatedCollation);
+    FAKER_EXPECT_CONTAINER_CONTAINS(database::data::collations, collation);
 }
 
-TEST(DatabaseTest, shouldGenerateMongoDbObjectId)
+TEST(DatabaseTest, should_generate_mongodb_object_id)
 {
-    auto mongoDbObjectId = database::mongodb_object_id();
+    auto object_id = database::mongodb_object_id();
 
-    ASSERT_EQ(mongoDbObjectId.size(), 24);
-    ASSERT_TRUE(faker::testing::any_of(mongoDbObjectId, [](char hexNumberCharacter) {
-        return string::data::hex_lower_digits.find(hexNumberCharacter) != std::string::npos;
-    }));
+    EXPECT_EQ(object_id.size(), 24u);
+    EXPECT_TRUE(faker::testing::all_of(object_id,
+        [](char ch) { return string::data::hex_lower_digits.find(ch) != std::string::npos; }));
 }

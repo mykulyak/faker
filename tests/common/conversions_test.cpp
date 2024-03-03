@@ -3,26 +3,18 @@
 
 using namespace faker;
 
-TEST(WeatherHelperTest, shouldConvertCelsiusToFahrenheit)
+TEST(WeatherHelperTest, should_convert_celsius_to_fahrenheit)
 {
-    double celsius = 10.0;
-    double fahrenheit = utils::celsius_to_fahrenheit(celsius);
-
-    ASSERT_EQ(fahrenheit, 50.0);
+    EXPECT_EQ(utils::celsius_to_fahrenheit(-40.0), -40.0);
+    EXPECT_EQ(utils::celsius_to_fahrenheit(10.0), 50.0);
 }
 
-TEST(WeatherHelperTest, shouldConvertKPaToPsi)
+TEST(WeatherHelperTest, should_convert_kpa_to_psi)
 {
-    double kPa = 100.0;
-    double psi = utils::kpa_to_psi(kPa);
-
-    ASSERT_EQ(psi, 14.503773773375);
+    EXPECT_EQ(utils::kpa_to_psi(100.0), 14.503773773375);
 }
 
-TEST(WeatherHelperTest, shouldConvertMilesToKilometers)
+TEST(WeatherHelperTest, should_convert_miles_to_kilometers)
 {
-    double miles = 10.0;
-    double kilometers = utils::mile_to_km(miles);
-
-    ASSERT_EQ(kilometers, 16.09344);
+    EXPECT_EQ(utils::mile_to_km(10.0), 16.09344);
 }

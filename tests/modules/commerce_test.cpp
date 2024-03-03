@@ -1,5 +1,4 @@
 #include "../test_helpers.h"
-#include <charconv>
 #include <common/strings.h>
 #include <faker/commerce.h>
 #include <modules/commerce_data.h>
@@ -7,249 +6,228 @@
 
 using namespace faker;
 
-TEST(CommerceTest, shouldGenerateCommerceDepartment)
+namespace {
+bool string_contains_only_digits(const std::string& str)
 {
-    auto generatedDepartment = commerce::department();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::departments, generatedDepartment);
+    return faker::testing::all_of(
+        str, [](char ch) { return string::data::digits.find(ch) != std::string::npos; });
+}
 }
 
-TEST(CommerceTest, shouldGeneratePrice)
+TEST(CommerceTest, should_generate_department)
 {
-    auto generatedPrice = commerce::price(100, 10000);
+    auto any_department = commerce::department();
 
-    auto offset = generatedPrice.size();
-    auto priceAsFloat = std::stof(generatedPrice.data(), &offset);
-
-    auto generatedPriceElements = utils::split(generatedPrice, ".");
-
-    ASSERT_EQ(generatedPriceElements.size(), 2);
-    ASSERT_EQ(generatedPriceElements[1].size(), 2);
-    ASSERT_GE(priceAsFloat, 100);
-    ASSERT_LE(priceAsFloat, 10000);
+    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::departments, any_department);
 }
 
-TEST(CommerceTest, shouldGenerateSku)
+TEST(CommerceTest, should_generate_price)
 {
-    auto sku = commerce::sku();
+    auto any_price = commerce::price(100, 10000);
 
-    ASSERT_EQ(sku.size(), 4);
-    ASSERT_TRUE(faker::testing::all_of(sku, [](char skuCharacter) {
-        return faker::testing::any_of(string::data::digits,
-            [skuCharacter](auto numericCharacter) { return skuCharacter == numericCharacter; });
-    }));
+    auto price_parts = utils::split(any_price, ".");
+    EXPECT_EQ(price_parts.size(), 2u);
+    EXPECT_EQ(price_parts[1].size(), 2u);
+
+    FAKER_EXPECT_BETWEEN(std::stof(any_price), 100, 10000);
 }
 
-TEST(CommerceTest, shouldGenerateSkuWithSpecifiedLength)
+TEST(CommerceTest, should_generate_sku)
 {
-    auto skuLength = 8;
+    auto sku_default_length = commerce::sku();
+    auto sku_fixed_length = commerce::sku(8);
 
-    auto sku = commerce::sku(skuLength);
+    EXPECT_EQ(sku_default_length.size(), 4u);
+    EXPECT_TRUE(string_contains_only_digits(sku_default_length));
 
-    ASSERT_EQ(sku.size(), skuLength);
-    ASSERT_TRUE(faker::testing::all_of(sku, [](char skuCharacter) {
-        return faker::testing::any_of(string::data::digits,
-            [skuCharacter](char numericCharacter) { return skuCharacter == numericCharacter; });
-    }));
+    EXPECT_EQ(sku_fixed_length.size(), 8u);
+    EXPECT_TRUE(string_contains_only_digits(sku_fixed_length));
 }
 
-TEST(CommerceTest, shouldGenerateProductFullName)
+TEST(CommerceTest, should_generate_product_full_name)
 {
-    auto productFullName = commerce::product_full_name();
+    auto product_name = commerce::product_full_name();
 
-    auto productFullNameElements = utils::split(productFullName, " ");
-
-    auto& generatedProductAdjective = productFullNameElements[0];
-    auto& generatedProductMaterial = productFullNameElements[1];
-    auto& generatedProductName = productFullNameElements[2];
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::product_adjectives, generatedProductAdjective);
-    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::product_materials, generatedProductMaterial);
-    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::product_names, generatedProductName);
+    auto product_name_parts = utils::split(product_name, " ");
+    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::product_adjectives, product_name_parts[0]);
+    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::product_materials, product_name_parts[1]);
+    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::product_names, product_name_parts[2]);
 }
 
-TEST(CommerceTest, shouldGenerateProductAdjective)
+TEST(CommerceTest, should_generate_product_adjective)
 {
-    auto generatedProductAdjective = commerce::product_adjective();
+    auto product_adjective = commerce::product_adjective();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::product_adjectives, generatedProductAdjective);
+    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::product_adjectives, product_adjective);
 }
 
-TEST(CommerceTest, shouldGenerateProductMaterial)
+TEST(CommerceTest, should_generate_product_material)
 {
-    auto generatedProductMaterial = commerce::product_material();
+    auto product_material = commerce::product_material();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::product_materials, generatedProductMaterial);
+    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::product_materials, product_material);
 }
 
-TEST(CommerceTest, shouldGenerateProductName)
+TEST(CommerceTest, should_generate_product_name)
 {
-    auto generatedProductName = commerce::product_name();
+    auto product_name = commerce::product_name();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::product_names, generatedProductName);
+    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::product_names, product_name);
 }
 
-TEST(CommerceTest, shouldGenerateEan13)
+TEST(CommerceTest, should_generate_ean13)
 {
-    auto generatedEan13 = commerce::ean13();
+    auto any_ean13 = commerce::ean13();
 
     int sum = 0;
     for (size_t i = 0; i < 13; i++) {
         if (i % 2 == 0) {
-            sum += (generatedEan13[i] - '0');
+            sum += (any_ean13[i] - '0');
         } else {
-            sum += 3 * (generatedEan13[i] - '0');
+            sum += 3 * (any_ean13[i] - '0');
         }
     }
 
-    ASSERT_EQ(generatedEan13.size(), 13);
-    ASSERT_TRUE(sum % 10 == 0);
+    EXPECT_EQ(any_ean13.size(), 13u);
+    EXPECT_TRUE(sum % 10 == 0);
 }
 
-TEST(CommerceTest, shouldGenerateEan8)
+TEST(CommerceTest, should_generate_ean8)
 {
-    auto generatedEan8 = commerce::ean8();
+    auto ean8 = commerce::ean8();
 
     int sum = 0;
     for (size_t i = 0; i < 8; i++) {
         if (i % 2 == 0) {
-            sum += 3 * (generatedEan8[i] - '0');
+            sum += 3 * (ean8[i] - '0');
         } else {
-            sum += (generatedEan8[i] - '0');
+            sum += (ean8[i] - '0');
         }
     }
 
-    ASSERT_EQ(generatedEan8.size(), 8);
-    ASSERT_TRUE(sum % 10 == 0);
+    EXPECT_EQ(ean8.size(), 8u);
+    EXPECT_TRUE(sum % 10 == 0);
 }
 
-TEST(CommerceTest, shouldGenerateIsbn13)
+TEST(CommerceTest, should_generate_isbn13)
 {
-    auto generatedIsbn13 = commerce::isbn13();
+    auto isbn13 = commerce::isbn13();
 
     int sum = 0;
     for (size_t i = 0; i < 13; i++) {
         if (i % 2 == 0) {
-            sum += (generatedIsbn13[i] - '0');
+            sum += (isbn13[i] - '0');
         } else {
-            sum += 3 * (generatedIsbn13[i] - '0');
+            sum += 3 * (isbn13[i] - '0');
         }
     }
 
-    ASSERT_EQ(generatedIsbn13.size(), 13);
-    ASSERT_TRUE(sum % 10 == 0);
+    EXPECT_EQ(isbn13.size(), 13u);
+    EXPECT_TRUE(sum % 10 == 0);
 }
 
-TEST(CommerceTest, shouldGenerateIsbn10)
+TEST(CommerceTest, should_generate_isbn10)
 {
-    auto generatedIsbn10 = commerce::isbn10();
+    auto isbn10 = commerce::isbn10();
 
     int sum = 0, weight = 10;
-    if (generatedIsbn10[9] == 'X') {
+    if (isbn10[9] == 'X') {
         for (size_t i = 0; i < 9; i++) {
-            sum += (generatedIsbn10[i] - '0') * weight;
+            sum += (isbn10[i] - '0') * weight;
             weight--;
         }
         sum += 10;
     } else {
         for (size_t i = 0; i < 10; i++) {
-            sum += (generatedIsbn10[i] - '0') * weight;
+            sum += (isbn10[i] - '0') * weight;
             weight--;
         }
     }
 
-    ASSERT_EQ(generatedIsbn10.size(), 10);
-    ASSERT_TRUE(sum % 11 == 0);
+    EXPECT_EQ(isbn10.size(), 10u);
+    EXPECT_TRUE(sum % 11 == 0);
 }
 
-TEST(CommerceTest, shouldGenerateProductId)
+TEST(CommerceTest, should_generate_product_id)
 {
-    auto generatedProductId = commerce::product_id();
+    auto product_id = commerce::product_id();
 
-    ASSERT_EQ(generatedProductId.length(), 10);
-    ASSERT_TRUE(faker::testing::all_of(generatedProductId, [](auto c) { return std::isalnum(c); }));
+    EXPECT_EQ(product_id.size(), 10u);
+    EXPECT_TRUE(faker::testing::all_of(product_id, [](auto c) { return std::isalnum(c); }));
 }
 
-TEST(CommerceTest, shouldGeneratePaymentType)
+TEST(CommerceTest, should_generate_payment_type)
 {
-    auto generatedPaymentType = commerce::payment_type();
+    auto payment_type = commerce::payment_type();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::payment_types, generatedPaymentType);
+    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::payment_types, payment_type);
 }
 
-TEST(CommerceTest, shouldGeneratePaymentProvider)
+TEST(CommerceTest, should_generate_payment_provider)
 {
-    auto generatedPaymentProvider = commerce::payment_provider();
+    auto payment_provider = commerce::payment_provider();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::payment_providers, generatedPaymentProvider);
+    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::payment_providers, payment_provider);
 }
 
-TEST(CommerceTest, shouldGenerateProductDescription)
+TEST(CommerceTest, should_generate_product_description)
 {
-    auto generatedProductDescription = commerce::product_description();
+    auto product_description = commerce::product_description();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(
-        commerce::data::product_descriptions, generatedProductDescription);
+    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::product_descriptions, product_description);
 }
 
-TEST(CommerceTest, shouldGenerateProductCategory)
+TEST(CommerceTest, should_generate_product_category)
 {
-    auto generatedProductCategory = commerce::product_category();
+    auto product_category = commerce::product_category();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(
-        commerce::data::product_category_names, generatedProductCategory);
+    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::product_category_names, product_category);
 }
 
-TEST(CommerceTest, shouldGenerateProductReview)
+TEST(CommerceTest, should_generate_product_review)
 {
-    auto generatedProductReview = commerce::product_review();
+    auto product_review = commerce::product_review();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::product_reviews, generatedProductReview);
+    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::product_reviews, product_review);
 }
 
-TEST(CommerceTest, shouldGenerateProductRating)
+TEST(CommerceTest, should_generate_product_rating)
 {
-    auto generatedProductRating = commerce::product_rating();
+    auto product_rating = commerce::product_rating();
 
-    ASSERT_TRUE(0. <= generatedProductRating && generatedProductRating <= 5.);
+    FAKER_EXPECT_BETWEEN(product_rating, 0.0, 5.0);
 }
 
-TEST(CommerceTest, shouldGenerateDiscountType)
+TEST(CommerceTest, should_generate_discount_type)
 {
-    auto generatedDiscountType = commerce::discount_type();
+    auto discount_type = commerce::discount_type();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::discount_types, generatedDiscountType);
+    FAKER_EXPECT_CONTAINER_CONTAINS(commerce::data::discount_types, discount_type);
 }
 
-TEST(CommerceTest, shouldGenerateDiscountCode)
+TEST(CommerceTest, should_generate_discount_code)
 {
+    auto discount_code = commerce::discount_code();
 
-    auto generatedDiscountCode = commerce::discount_code();
+    FAKER_EXPECT_BETWEEN(discount_code.length(), commerce::data::min_discount_code_length,
+        commerce::data::max_discount_code_length);
 
-    ASSERT_TRUE(commerce::data::min_discount_code_length <= generatedDiscountCode.length()
-        && generatedDiscountCode.length() <= commerce::data::max_discount_code_length);
-
-    ASSERT_TRUE(
-        faker::testing::all_of(generatedDiscountCode, [](char generatedDiscountCodeCharacter) {
-            return faker::testing::any_of(string::data::ascii_upper_alphanum,
-                [generatedDiscountCodeCharacter](char upperAlphanumericCharacter) {
-                    return upperAlphanumericCharacter == generatedDiscountCodeCharacter;
-                });
-        }));
+    EXPECT_TRUE(faker::testing::all_of(discount_code,
+        [](char ch) { return string::data::ascii_upper_alphanum.find(ch) != std::string::npos; }));
 }
 
-TEST(CommerceTest, shouldGenerateDiscountAmount)
+TEST(CommerceTest, should_generate_discount_amount)
 {
-    auto generatedDiscountAmount = commerce::discount_amount();
+    auto discount_amount = commerce::discount_amount();
 
-    ASSERT_TRUE(commerce::data::min_discount_amount <= generatedDiscountAmount
-        && generatedDiscountAmount <= commerce::data::max_discount_amount);
+    FAKER_EXPECT_BETWEEN(
+        discount_amount, commerce::data::min_discount_amount, commerce::data::max_discount_amount);
 }
 
-TEST(CommerceTest, shouldGenerateDiscountPercentage)
+TEST(CommerceTest, should_generate_discount_percentage)
 {
-    auto generatedDiscountPercentage = commerce::discount_percentage();
+    auto discount_percentage = commerce::discount_percentage();
 
-    ASSERT_TRUE(commerce::data::min_discount_percentage <= generatedDiscountPercentage
-        && generatedDiscountPercentage <= commerce::data::max_discount_percentage);
+    FAKER_EXPECT_BETWEEN(discount_percentage, commerce::data::min_discount_percentage,
+        commerce::data::max_discount_percentage);
 }

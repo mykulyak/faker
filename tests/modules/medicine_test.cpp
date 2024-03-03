@@ -4,23 +4,23 @@
 
 using namespace faker;
 
-TEST(MedicineTest, shouldGenerateMedicalCondition)
+TEST(MedicineTest, should_generate_medical_condition)
 {
-    auto generatedMedicalCondition = medicine::condition();
+    auto medical_condition = medicine::condition();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(medicine::data::medical_conditions, generatedMedicalCondition);
+    FAKER_EXPECT_CONTAINER_CONTAINS(medicine::data::medical_conditions, medical_condition);
 }
 
-TEST(MedicineTest, shouldGenerateMedicalTest)
+TEST(MedicineTest, should_generate_medical_test)
 {
-    auto generatedMedicalTest = medicine::medical_test();
+    auto medical_test = medicine::medical_test();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(medicine::data::medical_tests, generatedMedicalTest);
+    FAKER_EXPECT_CONTAINER_CONTAINS(medicine::data::medical_tests, medical_test);
 }
 
-TEST(MedicineTest, shouldGenerateSpecialty)
+TEST(MedicineTest, should_generate_specialty)
 {
-    auto generatedSpecialty = medicine::specialty();
+    auto specialty = medicine::specialty();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(medicine::data::specialties, generatedSpecialty);
+    FAKER_EXPECT_CONTAINER_CONTAINS(medicine::data::specialties, specialty);
 }

@@ -15,8 +15,9 @@ using namespace ::testing;
 using namespace faker;
 
 namespace {
-const std::string creditCardCharacters = "0123456789-";
-const std::unordered_map<finance::iban_country, std::string> expectedRegex {
+const std::string_view credit_card_chars = "0123456789-";
+
+const std::unordered_map<finance::iban_country, std::string> iban_country_regex {
     { finance::iban_country::austria, "^(AT)([0-9]{2})([0-9]{5})([0-9]{11})$" },
     { finance::iban_country::belgium, "^(BE)([0-9]{2})([0-9]{3})([0-9]{7})([0-9]{2})$" },
     { finance::iban_country::bulgaria,
@@ -51,7 +52,7 @@ const std::unordered_map<finance::iban_country, std::string> expectedRegex {
     { finance::iban_country::sweden, "^(SE)([0-9]{2})([0-9]{3})([0-9]{17})$" },
 };
 
-const std::unordered_map<finance::iban_country, std::string> generatedTestName {
+const std::unordered_map<finance::iban_country, std::string> iban_country_test_names {
     { finance::iban_country::austria, "shouldGenerateAustriaIban" },
     { finance::iban_country::belgium, "shouldGenerateBelgiumIban" },
     { finance::iban_country::bulgaria, "shouldGenerateBulgariaIban" },
@@ -81,7 +82,7 @@ const std::unordered_map<finance::iban_country, std::string> generatedTestName {
     { finance::iban_country::sweden, "shouldGenerateSwedenIban" },
 };
 
-const std::unordered_map<finance::bic_country, std::string> generatedBicTestName {
+const std::unordered_map<finance::bic_country, std::string> bic_country_test_names {
     { finance::bic_country::poland, "shouldGeneratePolandBic" },
     { finance::bic_country::usa, "shouldGenerateUnitedStatesBic" },
     { finance::bic_country::england, "shouldGenerateUnitedKingdomBic" },
@@ -93,88 +94,100 @@ const std::unordered_map<finance::bic_country, std::string> generatedBicTestName
     { finance::bic_country::netherlands, "shouldGenerateNetherlandsBic" },
     { finance::bic_country::india, "shouldGenerateIndiaBic" },
 };
+
+bool contains_only_digits(const std::string& data)
+{
+    return faker::testing::all_of(
+        data, [](char ch) { return faker::testing::contains(string::data::digits, ch); });
 }
 
-class FinanceTest : public TestWithParam<finance::iban_country> {
-public:
-    static bool checkIfAllCharactersAreNumeric(const std::string& data)
-    {
-        return faker::testing::all_of(data, [](char dataCharacter) {
-            return faker::testing::any_of(
-                string::data::digits, [dataCharacter](char numericCharacter) {
-                    return numericCharacter == dataCharacter;
-                });
-        });
-    }
+bool contains_only_valid_credit_card_chars(const std::string& data)
+{
+    return faker::testing::all_of(
+        data, [](char ch) { return faker::testing::contains(credit_card_chars, ch); });
+}
 
-    static bool checkIfAllCharactersAreCreditCardCharacters(const std::string& data)
-    {
-        return faker::testing::all_of(data, [](char dataCharacter) {
-            return faker::testing::any_of(
-                creditCardCharacters, [dataCharacter](char creditCardCharacter) {
-                    return creditCardCharacter == dataCharacter;
-                });
-        });
+std::unordered_set<finance::iban_country> prepare_iban_countries_keys()
+{
+    std::unordered_set<finance::iban_country> result;
+    for (const auto& [ibanCountry, _] : iban_country_regex) {
+        result.insert(ibanCountry);
     }
+    return result;
+}
+
+std::unordered_set<finance::iban_country> iban_countries_keys = prepare_iban_countries_keys();
+
+const std::vector<std::string_view> valid_iban_prefixes { "AT", "BE", "BG", "HR", "CY", "CZ", "DK",
+    "EE", "FI", "FR", "DE", "GR", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO",
+    "SK", "SI", "ES", "SE" };
+
+const std::vector<std::string_view> valid_discover_cc_prefixes = { "34", "37", "51", "52", "53",
+    "54", "55", "6771-89", "4", "6011", "65", "644", "645", "646", "647", "648", "649", "6011-62" };
+const std::vector<std::string_view> valid_mastercard_cc_prefixes
+    = { "51", "52", "53", "54", "55", "6771-89" };
+
+const std::string_view valid_bitcoin_address_chars {
+    "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789"
 };
 
-TEST_F(FinanceTest, shouldGenerateCurrency)
-{
-    const auto generatedCurrency = finance::currency();
+const std::string valid_litecoin_address_chars {
+    "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789"
+};
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(finance::data::currencies, generatedCurrency);
 }
 
-TEST_F(FinanceTest, shouldGenerateCurrencyName)
-{
-    const auto generatedCurrencyName = finance::currency_name();
+class FinanceTest : public TestWithParam<finance::iban_country> { };
 
-    ASSERT_TRUE(faker::testing::any_of(
-        finance::data::currencies, [generatedCurrencyName](const finance::currency_info& currency) {
-            return currency.name == generatedCurrencyName;
+TEST_F(FinanceTest, should_generate_currency)
+{
+    const auto currency = finance::currency();
+
+    FAKER_EXPECT_CONTAINER_CONTAINS(finance::data::currencies, currency);
+}
+
+TEST_F(FinanceTest, should_generate_currency_name)
+{
+    const auto currency_name = finance::currency_name();
+
+    EXPECT_TRUE(faker::testing::any_of(finance::data::currencies,
+        [=](const finance::currency_info& currency) { return currency.name == currency_name; }));
+}
+
+TEST_F(FinanceTest, should_generate_currency_code)
+{
+    const auto currency_code = finance::currency_code();
+
+    EXPECT_TRUE(faker::testing::any_of(finance::data::currencies,
+        [=](const finance::currency_info& currency) { return currency.code == currency_code; }));
+}
+
+TEST_F(FinanceTest, should_generate_currency_symbol)
+{
+    const auto currency_symbol = finance::currency_symbol();
+
+    EXPECT_TRUE(faker::testing::any_of(
+        finance::data::currencies, [=](const finance::currency_info& currency) {
+            return currency.symbol == currency_symbol;
         }));
 }
 
-TEST_F(FinanceTest, shouldGenerateCurrencyCode)
+TEST_F(FinanceTest, should_generate_account_type)
 {
-    const auto generatedCurrencyCode = finance::currency_code();
+    const auto account_type = finance::account_type();
 
-    ASSERT_TRUE(faker::testing::any_of(
-        finance::data::currencies, [generatedCurrencyCode](const finance::currency_info& currency) {
-            return currency.code == generatedCurrencyCode;
-        }));
+    FAKER_EXPECT_CONTAINER_CONTAINS(finance::data::account_types, account_type);
 }
 
-TEST_F(FinanceTest, shouldGenerateCurrencySymbol)
+TEST_F(FinanceTest, should_generate_amount)
 {
-    const auto generatedCurrencySymbol = finance::currency_symbol();
+    const auto amount = finance::amount();
 
-    ASSERT_TRUE(faker::testing::any_of(finance::data::currencies,
-        [generatedCurrencySymbol](const finance::currency_info& currency) {
-            return currency.symbol == generatedCurrencySymbol;
-        }));
-}
+    const auto amount_parts = utils::split(amount, ".");
+    EXPECT_EQ(amount_parts.size(), 2u);
+    EXPECT_EQ(amount_parts[1].size(), 2u);
 
-TEST_F(FinanceTest, shouldGenerateAccountType)
-{
-    const auto generatedAccountType = finance::account_type();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(finance::data::account_types, generatedAccountType);
-}
-
-TEST_F(FinanceTest, shouldGenerateAmount)
-{
-    const auto generatedAmount = finance::amount();
-
-    auto offset = generatedAmount.size();
-    const auto amountAsFloat = std::stof(generatedAmount.data(), &offset);
-
-    const auto generatedAmountParts = utils::split(generatedAmount, ".");
-
-    ASSERT_EQ(generatedAmountParts.size(), 2);
-    ASSERT_EQ(generatedAmountParts[1].size(), 2);
-    ASSERT_GE(amountAsFloat, 0);
-    ASSERT_LE(amountAsFloat, 1000);
+    FAKER_EXPECT_BETWEEN(std::stof(amount.data()), 0, 1000);
 }
 
 /*
@@ -184,250 +197,159 @@ TEST_F(FinanceTest, shouldGenerateAmount)
  */
 MATCHER_P(MatchesRegexCpp, value, "") { return std::regex_match(arg, std::regex(value)); }
 
-TEST_P(FinanceTest, CheckIbanGenerator)
+TEST_P(FinanceTest, should_check_iban_generator)
 {
-    auto ibanCountry = GetParam();
+    auto iban_country = GetParam();
 
-    ASSERT_THAT(finance::iban(ibanCountry), MatchesRegexCpp(expectedRegex.at(ibanCountry)));
+    EXPECT_THAT(finance::iban(iban_country), MatchesRegexCpp(iban_country_regex.at(iban_country)));
 }
-
-std::unordered_set<finance::iban_country> getIbanCountryKeys()
-{
-    std::unordered_set<finance::iban_country> ibanCountries;
-    for (const auto& [ibanCountry, _] : expectedRegex) {
-        ibanCountries.insert(ibanCountry);
-    }
-    return ibanCountries;
-}
-
-std::unordered_set<finance::iban_country> ibanCountryKeys = getIbanCountryKeys();
 
 INSTANTIATE_TEST_SUITE_P(TestIbanGenerator, FinanceTest,
-    ValuesIn(ibanCountryKeys.begin(), ibanCountryKeys.end()),
+    ValuesIn(iban_countries_keys.begin(), iban_countries_keys.end()),
     [](const TestParamInfo<finance::iban_country>& info) {
-        return generatedTestName.at(info.param);
+        return iban_country_test_names.at(info.param);
     });
 
-TEST_F(FinanceTest, shouldGenerateAmountWithSymbol)
+TEST_F(FinanceTest, should_generate_amount_with_symbol)
 {
-    const auto min = 150;
-    const auto max = 450;
-    const auto precision = precision_t::four_dp;
-    const std::string currencySymbol = "$";
+    const auto amount = finance::amount(150, 450, precision_t::four_dp, "$");
 
-    const auto generatedAmount = finance::amount(150, 450, precision, currencySymbol);
+    FAKER_EXPECT_STRING_STARTS_WITH(amount, "$");
 
-    const auto amountAsFloat = std::stof(generatedAmount.substr(currencySymbol.size()));
+    const auto amount_parts = utils::split(amount, ".");
+    EXPECT_EQ(amount_parts.size(), 2u);
+    EXPECT_EQ(amount_parts[1].size(), 4u);
 
-    const auto generatedAmountParts = utils::split(generatedAmount, ".");
-
-    FAKER_EXPECT_STRING_STARTS_WITH(generatedAmount, currencySymbol);
-    ASSERT_EQ(generatedAmountParts.size(), 2);
-    ASSERT_EQ(generatedAmountParts[1].size(), 4);
-    ASSERT_GE(amountAsFloat, min);
-    ASSERT_LE(amountAsFloat, max);
+    FAKER_EXPECT_BETWEEN(std::stof(amount.substr(1)), 150, 450);
 }
 
-TEST_F(FinanceTest, shouldGenerateIban)
+TEST_F(FinanceTest, should_generate_iban)
 {
     const auto iban = finance::iban();
 
-    ASSERT_TRUE(faker::testing::starts_with(iban, "AT") || faker::testing::starts_with(iban, "BE")
-        || faker::testing::starts_with(iban, "BG") || faker::testing::starts_with(iban, "HR")
-        || faker::testing::starts_with(iban, "CY") || faker::testing::starts_with(iban, "CZ")
-        || faker::testing::starts_with(iban, "DK") || faker::testing::starts_with(iban, "EE")
-        || faker::testing::starts_with(iban, "FI") || faker::testing::starts_with(iban, "FR")
-        || faker::testing::starts_with(iban, "DE") || faker::testing::starts_with(iban, "GR")
-        || faker::testing::starts_with(iban, "HU") || faker::testing::starts_with(iban, "IE")
-        || faker::testing::starts_with(iban, "IT") || faker::testing::starts_with(iban, "LV")
-        || faker::testing::starts_with(iban, "LT") || faker::testing::starts_with(iban, "LU")
-        || faker::testing::starts_with(iban, "MT") || faker::testing::starts_with(iban, "NL")
-        || faker::testing::starts_with(iban, "PL") || faker::testing::starts_with(iban, "PT")
-        || faker::testing::starts_with(iban, "RO") || faker::testing::starts_with(iban, "SK")
-        || faker::testing::starts_with(iban, "SI") || faker::testing::starts_with(iban, "ES")
-        || faker::testing::starts_with(iban, "SE"));
+    EXPECT_TRUE(faker::testing::any_of(valid_iban_prefixes,
+        [&](std::string_view prefix) { return faker::testing::starts_with(iban, prefix); }));
 }
 
-TEST_F(FinanceTest, shouldGenerateAccountNumber)
+TEST_F(FinanceTest, should_generate_account_number)
 {
-    const auto accountNumber = finance::account_number();
+    const auto account_number_with_default_len = finance::account_number();
+    const auto account_number_with_custom_len = finance::account_number(26);
 
-    ASSERT_EQ(accountNumber.size(), 8);
-    ASSERT_TRUE(checkIfAllCharactersAreNumeric(accountNumber));
+    EXPECT_EQ(account_number_with_default_len.size(), 8u);
+    EXPECT_TRUE(contains_only_digits(account_number_with_default_len));
+
+    EXPECT_EQ(account_number_with_custom_len.size(), 26u);
+    EXPECT_TRUE(contains_only_digits(account_number_with_custom_len));
 }
 
-TEST_F(FinanceTest, shouldGenerateAccountNumberWithSpecifiedLength)
+TEST_F(FinanceTest, should_generate_pin_number)
 {
-    const auto accountNumberLength = 26;
+    const auto pin_with_default_len = finance::pin();
+    const auto pin_with_custom_len = finance::pin(8);
 
-    const auto accountNumber = finance::account_number(accountNumberLength);
+    EXPECT_EQ(pin_with_default_len.size(), 4u);
+    EXPECT_TRUE(contains_only_digits(pin_with_default_len));
 
-    ASSERT_EQ(accountNumber.size(), accountNumberLength);
-    ASSERT_TRUE(checkIfAllCharactersAreNumeric(accountNumber));
+    EXPECT_EQ(pin_with_custom_len.size(), 8u);
+    EXPECT_TRUE(contains_only_digits(pin_with_custom_len));
 }
 
-TEST_F(FinanceTest, shouldGeneratePinNumber)
+TEST_F(FinanceTest, should_generate_routing_number)
 {
-    const auto pin = finance::pin();
+    const auto routing_number = finance::routing_number();
 
-    ASSERT_EQ(pin.size(), 4);
-    ASSERT_TRUE(checkIfAllCharactersAreNumeric(pin));
+    EXPECT_EQ(routing_number.size(), 9u);
+    EXPECT_TRUE(contains_only_digits(routing_number));
 }
 
-TEST_F(FinanceTest, shouldGeneratePinNumberWithSpecifiedLength)
+TEST_F(FinanceTest, should_generate_credit_card_number)
 {
-    const auto pinLength = 8;
-
-    const auto pin = finance::pin(pinLength);
-
-    ASSERT_EQ(pin.size(), pinLength);
-    ASSERT_TRUE(checkIfAllCharactersAreNumeric(pin));
-}
-
-TEST_F(FinanceTest, shouldGenerateRoutingNumber)
-{
-    const auto routingNumber = finance::routing_number();
-
-    ASSERT_EQ(routingNumber.size(), 9);
-    ASSERT_TRUE(checkIfAllCharactersAreNumeric(routingNumber));
-}
-
-TEST_F(FinanceTest, shouldGenerateCreditCardNumber)
-{
-    const auto creditCardNumber = finance::credit_card_number();
-
-    ASSERT_TRUE(checkIfAllCharactersAreCreditCardCharacters(creditCardNumber));
-    ASSERT_TRUE(utils::luhn_check(creditCardNumber));
-}
-
-TEST_F(FinanceTest, shouldGenerateAmericanExpressCreditCardNumber)
-{
-    const auto creditCardNumber
+    const auto any_cc_number = finance::credit_card_number();
+    const auto amex_cc_number
         = finance::credit_card_number(finance::credit_card_type::american_express);
-
-    ASSERT_TRUE(faker::testing::starts_with(creditCardNumber, "34")
-        || faker::testing::starts_with(creditCardNumber, "37"));
-    ASSERT_TRUE(checkIfAllCharactersAreCreditCardCharacters(creditCardNumber));
-    ASSERT_TRUE(utils::luhn_check(creditCardNumber));
-}
-
-TEST_F(FinanceTest, shouldGenerateDiscoverCreditCardNumber)
-{
-    const auto creditCardNumber = finance::credit_card_number(finance::credit_card_type::discover);
-
-    ASSERT_TRUE(faker::testing::starts_with(creditCardNumber, "6011")
-        || faker::testing::starts_with(creditCardNumber, "65")
-        || faker::testing::starts_with(creditCardNumber, "644")
-        || faker::testing::starts_with(creditCardNumber, "645")
-        || faker::testing::starts_with(creditCardNumber, "646")
-        || faker::testing::starts_with(creditCardNumber, "647")
-        || faker::testing::starts_with(creditCardNumber, "648")
-        || faker::testing::starts_with(creditCardNumber, "649")
-        || faker::testing::starts_with(creditCardNumber, "6011-62"));
-    ASSERT_TRUE(checkIfAllCharactersAreCreditCardCharacters(creditCardNumber));
-    ASSERT_TRUE(utils::luhn_check(creditCardNumber));
-}
-
-TEST_F(FinanceTest, shouldGenerateMasterCardCreditCardNumber)
-{
-    const auto creditCardNumber
+    const auto discover_cc_number
+        = finance::credit_card_number(finance::credit_card_type::discover);
+    const auto mastercard_cc_number
         = finance::credit_card_number(finance::credit_card_type::mastercard);
+    const auto visa_cc_number = finance::credit_card_number(finance::credit_card_type::visa);
 
-    ASSERT_TRUE(faker::testing::starts_with(creditCardNumber, "51")
-        || faker::testing::starts_with(creditCardNumber, "52")
-        || faker::testing::starts_with(creditCardNumber, "53")
-        || faker::testing::starts_with(creditCardNumber, "54")
-        || faker::testing::starts_with(creditCardNumber, "55")
-        || faker::testing::starts_with(creditCardNumber, "6771-89"));
-    ASSERT_TRUE(checkIfAllCharactersAreCreditCardCharacters(creditCardNumber));
-    ASSERT_TRUE(utils::luhn_check(creditCardNumber));
+    EXPECT_TRUE(contains_only_valid_credit_card_chars(any_cc_number));
+    EXPECT_TRUE(utils::luhn_check(any_cc_number));
+
+    EXPECT_TRUE(faker::testing::starts_with(amex_cc_number, "34")
+        || faker::testing::starts_with(amex_cc_number, "37"));
+    EXPECT_TRUE(contains_only_valid_credit_card_chars(amex_cc_number));
+    EXPECT_TRUE(utils::luhn_check(amex_cc_number));
+
+    EXPECT_TRUE(faker::testing::starts_with_any_of(discover_cc_number, valid_discover_cc_prefixes));
+    EXPECT_TRUE(contains_only_valid_credit_card_chars(discover_cc_number));
+    EXPECT_TRUE(utils::luhn_check(discover_cc_number));
+
+    EXPECT_TRUE(
+        faker::testing::starts_with_any_of(mastercard_cc_number, valid_discover_cc_prefixes));
+    EXPECT_TRUE(contains_only_valid_credit_card_chars(mastercard_cc_number));
+    EXPECT_TRUE(utils::luhn_check(mastercard_cc_number));
+
+    FAKER_EXPECT_STRING_STARTS_WITH(visa_cc_number, "4");
+    EXPECT_TRUE(contains_only_valid_credit_card_chars(visa_cc_number));
+    EXPECT_TRUE(utils::luhn_check(visa_cc_number));
 }
 
-TEST_F(FinanceTest, shouldGenerateVisaCreditCardNumber)
+TEST_F(FinanceTest, should_generate_credit_card_cvv)
 {
-    const auto creditCardNumber = finance::credit_card_number(finance::credit_card_type::visa);
+    const auto cvv = finance::credit_card_cvv();
 
-    FAKER_EXPECT_STRING_STARTS_WITH(creditCardNumber, "4");
-    ASSERT_TRUE(checkIfAllCharactersAreCreditCardCharacters(creditCardNumber));
-    ASSERT_TRUE(utils::luhn_check(creditCardNumber));
+    EXPECT_EQ(cvv.size(), 3u);
+    EXPECT_TRUE(contains_only_digits(cvv));
 }
 
-TEST_F(FinanceTest, shouldGenerateCreditCardCvv)
+TEST_F(FinanceTest, should_generate_bitcoin_address)
 {
-    const auto creditCardCvv = finance::credit_card_cvv();
+    const auto bitcoin_address = finance::bitcoin_address();
 
-    ASSERT_EQ(creditCardCvv.size(), 3);
-    ASSERT_TRUE(checkIfAllCharactersAreNumeric(creditCardCvv));
+    FAKER_EXPECT_BETWEEN(bitcoin_address.size(), 27u, 34u);
+
+    EXPECT_TRUE(faker::testing::starts_with(bitcoin_address, "1")
+        || faker::testing::starts_with(bitcoin_address, "3"));
+    EXPECT_TRUE(faker::testing::all_of(bitcoin_address,
+        [](char ch) { return valid_bitcoin_address_chars.find(ch) != std::string::npos; }));
 }
 
-TEST_F(FinanceTest, shouldGenerateBitcoinAddress)
+TEST_F(FinanceTest, should_generate_litecoin_address)
 {
-    const auto bitcoinAddress = finance::bitcoin_address();
+    const auto litecoin_address = finance::litecoin_address();
 
-    ASSERT_GE(bitcoinAddress.size(), 27);
-    ASSERT_LE(bitcoinAddress.size(), 34);
+    FAKER_EXPECT_BETWEEN(litecoin_address.size(), 27u, 34u);
 
-    const std::string supportedBitcoinAddressCharacters
-        = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789";
-
-    ASSERT_TRUE(faker::testing::starts_with(bitcoinAddress, "1")
-        || faker::testing::starts_with(bitcoinAddress, "3"));
-    ASSERT_TRUE(faker::testing::all_of(
-        bitcoinAddress, [&supportedBitcoinAddressCharacters](char dataCharacter) {
-            return faker::testing::any_of(supportedBitcoinAddressCharacters,
-                [dataCharacter](char supportedBitcoinAddressCharacter) {
-                    return supportedBitcoinAddressCharacter == dataCharacter;
-                });
-        }));
+    EXPECT_TRUE(faker::testing::starts_with(litecoin_address, "L")
+        || faker::testing::starts_with(litecoin_address, "M")
+        || faker::testing::starts_with(litecoin_address, "3"));
+    EXPECT_TRUE(faker::testing::all_of(litecoin_address,
+        [](char ch) { return valid_litecoin_address_chars.find(ch) != std::string::npos; }));
 }
 
-TEST_F(FinanceTest, shouldGenerateLitecoinAddress)
+TEST_F(FinanceTest, should_generate_ethereum_address)
 {
-    const auto litecoinAddress = finance::litecoin_address();
+    const auto ethereum_address = finance::ethereum_address();
 
-    ASSERT_GE(litecoinAddress.size(), 27);
-    ASSERT_LE(litecoinAddress.size(), 34);
-
-    const std::string supportedLitecoinAddressCharacters
-        = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789";
-
-    ASSERT_TRUE(faker::testing::starts_with(litecoinAddress, "L")
-        || faker::testing::starts_with(litecoinAddress, "M")
-        || faker::testing::starts_with(litecoinAddress, "3"));
-    ASSERT_TRUE(faker::testing::all_of(
-        litecoinAddress, [&supportedLitecoinAddressCharacters](char dataCharacter) {
-            return faker::testing::any_of(supportedLitecoinAddressCharacters,
-                [dataCharacter](char supportedLitecoinAddressCharacter) {
-                    return supportedLitecoinAddressCharacter == dataCharacter;
-                });
-        }));
+    EXPECT_EQ(ethereum_address.size(), 42u);
+    EXPECT_EQ(ethereum_address.substr(0, 2), "0x");
+    EXPECT_TRUE(faker::testing::any_of(ethereum_address.substr(2),
+        [](char ch) { return string::data::hex_lower_digits.find(ch) != std::string::npos; }));
 }
 
-TEST_F(FinanceTest, shouldGenerateEthereumAddress)
+TEST_F(FinanceTest, should_generate_expiration_date)
 {
-    const auto ethereumAddress = finance::ethereum_address();
+    const auto expiration_date = finance::credit_card_expiration_date();
 
-    const auto prefix = ethereumAddress.substr(0, 2);
-    const auto hexNumber = ethereumAddress.substr(2);
-
-    ASSERT_EQ(ethereumAddress.size(), 42);
-    ASSERT_EQ(prefix, "0x");
-    ASSERT_TRUE(faker::testing::any_of(hexNumber, [hexNumber](char hexNumberCharacter) {
-        return string::data::hex_lower_digits.find(hexNumberCharacter) != std::string::npos;
-    }));
-}
-
-TEST_F(FinanceTest, shouldGenerateExpirationDate)
-{
-    const auto expirationDate = finance::credit_card_expiration_date();
-    int tenthPlaceYear = std::stoi(expirationDate.substr(3, 2));
-    std::cout << expirationDate << " " << tenthPlaceYear << "\n";
-    ASSERT_TRUE(tenthPlaceYear >= 24);
+    int tenth_place_year = std::stoi(expiration_date.substr(3, 2));
+    EXPECT_GE(tenth_place_year, 24);
 }
 
 class FinanceBicTest : public TestWithParam<finance::bic_country> { };
 
-TEST_P(FinanceBicTest, CheckBicGenerator)
+TEST_P(FinanceBicTest, should_check_bic_generator)
 {
     const auto country = GetParam();
 
@@ -442,5 +364,5 @@ INSTANTIATE_TEST_SUITE_P(TestBicGenerator, FinanceBicTest,
         finance::bic_country::italy, finance::bic_country::spain, finance::bic_country::netherlands,
         finance::bic_country::india),
     [](const TestParamInfo<finance::bic_country>& info) {
-        return generatedBicTestName.at(info.param);
+        return bic_country_test_names.at(info.param);
     });

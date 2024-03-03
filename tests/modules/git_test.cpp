@@ -1,97 +1,97 @@
 #include "../test_helpers.h"
-#include <algorithm>
+#include <common/formatter.h>
 #include <common/strings.h>
 #include <faker/git.h>
 #include <faker/number.h>
 #include <regex>
-#include <string>
 
-using namespace ::testing;
 using namespace faker;
 
-class GitTest : public Test {
-public:
-    inline static const std::string DATE_REGEX
-        = "[A-Z][a-z]{2} [A-Z][a-z]{2,3} (([0-2][0-9])|(3[0-1])) "
-          "(([0-1][0-9])|(2[0-4])):[0-5][0-9]:[0-5][0-9] "
-          "[1-2][0-9]{3} (-|\\+)((0[0-9])|(1[0-2]))00";
-    inline static const std::string MESSAGE_REGEX
-        = R"([a-zA-Z]+(\-[a-zA-Z]+)* ([a-zA-Z\-]+(\-[a-zA-Z]+)*\s)*[a-zA-Z\-]+(\-[a-zA-Z]+)*)";
-    inline static const std::string EMAIL_REGEX
-        = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-    inline static const std::string NAME_REGEX = "^[A-Z][a-zA-Z]+\\s[A-Z][a-zA-Z]+$";
+namespace {
+static const std::string date_re_str = "[A-Z][a-z]{2} [A-Z][a-z]{2,3} (([0-2][0-9])|(3[0-1])) "
+                                       "(([0-1][0-9])|(2[0-4])):[0-5][0-9]:[0-5][0-9] "
+                                       "[1-2][0-9]{3} (-|\\+)((0[0-9])|(1[0-2]))00";
+static const std::string message_re_str
+    = R"([a-zA-Z]+(\-[a-zA-Z]+)* ([a-zA-Z\-]+(\-[a-zA-Z]+)*\s)*[a-zA-Z\-]+(\-[a-zA-Z]+)*)";
 
-    static std::string generateShaRegex(unsigned length);
-    static std::string generateShaRegex();
-};
-
-std::string GitTest::generateShaRegex(unsigned length)
+std::string generate_sha_regex_str(unsigned length)
 {
-    return "[0-9a-fA-F]{" + std::to_string(length) + "}";
+    return utils::format("[0-9a-fA-F]{{{}}}", length);
 }
 
-std::string GitTest::generateShaRegex() { return "[0-9a-fA-F]+"; }
+std::string generate_sha_regex_str() { return "[0-9a-fA-F]+"; }
 
-TEST_F(GitTest, shouldGenerateBranch)
+}
+
+TEST(GitTest, should_generate_branch)
 {
     const auto branch = git::branch();
-    const auto branchSplit = faker::utils::split(branch, "-").size();
 
-    ASSERT_TRUE(2 <= branchSplit && branchSplit <= 7);
+    FAKER_EXPECT_BETWEEN(faker::utils::split(branch, "-").size(), 2u, 7u);
 }
 
-TEST_F(GitTest, branchIssueNumTest)
+TEST(GitTest, should_generate_branch_with_max_issue_number)
 {
-    auto testValue = unsigned(number::integer(2, 100));
-    auto branch = utils::split(git::branch(testValue), "-");
-    bool numberAtFront = false;
+    int max_issue_number = number::integer(2u, 100u);
+
+    auto branch_name = git::branch(max_issue_number);
+
+    auto branch = utils::split(branch_name, "-");
+    bool number_at_front = false;
     int number;
-    while (!numberAtFront) {
-        branch = utils::split(git::branch(testValue), "-");
+    while (!number_at_front) {
+        branch = utils::split(git::branch(max_issue_number), "-");
         try {
             number = utils::to_int(branch[0]);
-            numberAtFront = true;
+            number_at_front = true;
         } catch (...) {
             continue;
         }
     }
 
-    ASSERT_TRUE(1 <= number && number <= int(testValue));
+    FAKER_EXPECT_BETWEEN(number, 1, max_issue_number);
 }
 
-TEST_F(GitTest, shouldGenerateCommitDate)
+TEST(GitTest, should_generate_commit_date)
 {
-    const std::regex dateRegex("^" + GitTest::DATE_REGEX + "$");
-    ASSERT_TRUE(std::regex_match(git::commit_date(), dateRegex));
+    auto commit_date = git::commit_date();
+
+    const std::regex re_date("^" + date_re_str + "$");
+    EXPECT_TRUE(std::regex_match(commit_date, re_date));
 }
 
-TEST_F(GitTest, shouldGenerateCommitEntry)
+TEST(GitTest, should_generate_commit_entry)
 {
-    const std::regex entryRegex("^commit " + GitTest::generateShaRegex()
+    auto commit_entry = git::commit_entry();
+
+    const std::regex re_entry("^commit " + generate_sha_regex_str()
         + "\nAuthor: [A-Z][a-zA-Z]+ [A-Z][a-zA-Z]+ .+@[0-9a-zA-Z]+\\.[0-9a-zA-Z]+\nDate: "
-        + GitTest::DATE_REGEX + "\n\n\t" + GitTest::MESSAGE_REGEX + "$");
-    ASSERT_TRUE(std::regex_match(git::commit_entry(), entryRegex));
+        + date_re_str + "\n\n\t" + message_re_str + "$");
+    EXPECT_TRUE(std::regex_match(commit_entry, re_entry));
 }
 
-TEST_F(GitTest, shouldGenerateCommitMessage)
+TEST(GitTest, should_generate_commit_message)
 {
-    const std::regex messageRegex("^" + GitTest::MESSAGE_REGEX + "$");
-    std::string temp = git::commit_message();
-    ASSERT_TRUE(std::regex_match(temp, messageRegex));
+    auto message = git::commit_message();
+
+    const std::regex re_message("^" + message_re_str + "$");
+    EXPECT_TRUE(std::regex_match(message, re_message));
 }
 
-TEST_F(GitTest, shouldGenerateCommitSha)
+TEST(GitTest, should_generate_commit_sha)
 {
-    unsigned length = 40;
-    const std::regex shaRegex("^" + GitTest::generateShaRegex(length) + "$");
-    ASSERT_TRUE(std::regex_match(git::commit_sha(length), shaRegex));
+    auto commit_sha = git::commit_sha(40);
+
+    const std::regex re_sha("^" + generate_sha_regex_str(40) + "$");
+    EXPECT_TRUE(std::regex_match(commit_sha, re_sha));
 }
 
-TEST_F(GitTest, shouldGenerateAuthor)
+TEST(GitTest, should_generate_author)
 {
-    git::author_info generatedAuthor = git::author();
-    const std::regex nameRegex(NAME_REGEX);
-    const std::regex emailRegex(EMAIL_REGEX);
-    ASSERT_TRUE(std::regex_match(generatedAuthor.name, nameRegex));
-    ASSERT_TRUE(std::regex_match(generatedAuthor.email, emailRegex));
+    auto author = git::author();
+
+    const std::regex re_name("^[A-Z][a-zA-Z]+\\s[A-Z][a-zA-Z]+$");
+    const std::regex re_email("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    EXPECT_TRUE(std::regex_match(author.name, re_name));
+    EXPECT_TRUE(std::regex_match(author.email, re_email));
 }

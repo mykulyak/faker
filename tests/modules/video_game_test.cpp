@@ -4,30 +4,30 @@
 
 using namespace faker;
 
-TEST(VideoGameTest, shouldGenerateGameTitle)
+TEST(VideoGameTest, should_generate_game_title)
 {
-    auto generatedGameTitle = video_game::title();
+    auto game_title = video_game::title();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(video_game::data::video_game_names, generatedGameTitle);
+    FAKER_EXPECT_CONTAINER_CONTAINS(video_game::data::video_game_names, game_title);
 }
 
-TEST(VideoGameTest, shouldGenerateGenre)
+TEST(VideoGameTest, should_generate_genre)
 {
-    auto generatedGenre = video_game::genre();
+    auto genre = video_game::genre();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(video_game::data::genres, generatedGenre);
+    FAKER_EXPECT_CONTAINER_CONTAINS(video_game::data::genres, genre);
 }
 
-TEST(VideoGameTest, shouldGeneratePlatform)
+TEST(VideoGameTest, should_generate_platform)
 {
-    auto generatedPlatform = video_game::platform();
+    auto platform = video_game::platform();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(video_game::data::platforms, generatedPlatform);
+    FAKER_EXPECT_CONTAINER_CONTAINS(video_game::data::platforms, platform);
 }
 
-TEST(VideoGameTest, shouldGenerateStudioName)
+TEST(VideoGameTest, should_generate_studio_name)
 {
-    auto generatedStudioName = faker::video_game::studio_name();
+    auto studio_name = faker::video_game::studio_name();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(video_game::data::studio_names, generatedStudioName);
+    FAKER_EXPECT_CONTAINER_CONTAINS(video_game::data::studio_names, studio_name);
 }

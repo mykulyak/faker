@@ -11,7 +11,7 @@
 
 using namespace faker;
 
-TEST(StructureTest, shouldGenerateJson)
+TEST(StructureTest, should_generate_json)
 {
     std::vector<structure::structure_token_spec> specs;
     specs.push_back(structure::structure_token_spec {
@@ -23,36 +23,23 @@ TEST(StructureTest, shouldGenerateJson)
     specs.push_back(structure::structure_token_spec {
         "Actor name", structure::structure_token_t::movie_actor });
 
-    const auto generatedJson = structure::json(specs);
+    const auto json_str = structure::json(specs);
 
-    const auto parsedJson = JsonHelper::simpleJsonParser(generatedJson);
+    const auto parsed_json = faker::testing::simple_json_parser(json_str);
 
-    const auto key1 = parsedJson.find("Airport name")->first;
-    const auto key2 = parsedJson.find("Bird name")->first;
-    const auto key3 = parsedJson.find("Book title")->first;
-    const auto key4 = parsedJson.find("Actor name")->first;
+    auto value1 = parsed_json.find("Airport name")->second;
+    auto value2 = parsed_json.find("Bird name")->second;
+    auto value3 = parsed_json.find("Book title")->second;
+    auto value4 = parsed_json.find("Actor name")->second;
 
-    const auto value1 = parsedJson.find("Airport name")->second;
-    const auto value2 = parsedJson.find("Bird name")->second;
-    const auto value3 = parsedJson.find("Book title")->second;
-    const auto value4 = parsedJson.find("Actor name")->second;
-
-    // there is no point for this but it's better to be there
-    ASSERT_EQ(key1, "Airport name");
-    ASSERT_EQ(key2, "Bird name");
-    ASSERT_EQ(key3, "Book title");
-    ASSERT_EQ(key4, "Actor name");
-
-    ASSERT_TRUE(faker::testing::any_of(
+    EXPECT_TRUE(faker::testing::any_of(
         airline::data::airports, [value1](auto& airport) { return airport.name == value1; }));
     FAKER_EXPECT_CONTAINER_CONTAINS(animal::data::birds, value2);
-    ASSERT_TRUE(faker::testing::any_of(
-        book::data::titles, [value3](const auto& title) { return title == value3; }));
-    ASSERT_TRUE(faker::testing::any_of(
-        movie::data::actors, [value4](const auto& actor) { return actor == value4; }));
+    FAKER_EXPECT_CONTAINER_CONTAINS(book::data::titles, value3);
+    FAKER_EXPECT_CONTAINER_CONTAINS(movie::data::actors, value4);
 }
 
-TEST(StructureTest, shouldGenerateCSV)
+TEST(StructureTest, should_generate_csv)
 {
     std::vector<structure::structure_token_spec> specs;
     specs.push_back(structure::structure_token_spec {
@@ -64,7 +51,7 @@ TEST(StructureTest, shouldGenerateCSV)
     specs.push_back(structure::structure_token_spec {
         "Actor name", structure::structure_token_t::movie_actor });
 
-    const unsigned int row_count = 2;
+    const unsigned row_count = 2;
     const auto generated_csv = structure::csv(specs, row_count);
 
     std::istringstream stream(generated_csv);
@@ -82,16 +69,16 @@ TEST(StructureTest, shouldGenerateCSV)
 
     unsigned lines_read = 0;
     while (std::getline(stream, line)) {
-        ASSERT_TRUE(faker::testing::any_of(movie::data::actors,
+        EXPECT_TRUE(faker::testing::any_of(movie::data::actors,
             [&line](const auto& actor) { return line.find(actor) != std::string::npos; }));
-        ASSERT_TRUE(faker::testing::any_of(airline::data::airports,
+        EXPECT_TRUE(faker::testing::any_of(airline::data::airports,
             [&line](auto& airport) { return line.find(airport.name) != std::string::npos; }));
-        ASSERT_TRUE(faker::testing::any_of(animal::data::birds,
+        EXPECT_TRUE(faker::testing::any_of(animal::data::birds,
             [&line](const auto& bird) { return line.find(bird) != std::string::npos; }));
-        ASSERT_TRUE(faker::testing::any_of(book::data::titles,
+        EXPECT_TRUE(faker::testing::any_of(book::data::titles,
             [&line](const auto& title) { return line.find(title) != std::string::npos; }));
         ++lines_read;
     }
 
-    ASSERT_EQ(lines_read, row_count);
+    EXPECT_EQ(lines_read, row_count);
 }

@@ -1,5 +1,4 @@
 #include "../test_helpers.h"
-#include <common/formatter.h>
 #include <common/strings.h>
 #include <faker/company.h>
 #include <modules/company_data.h>
@@ -7,114 +6,99 @@
 
 using namespace faker;
 
-TEST(CompanyTest, shouldGenerateCompanyName)
+TEST(CompanyTest, should_generate_company_name)
 {
-    auto expectedFirstNames = faker::testing::make_vector(
-        person::data::english_male_first_names, person::data::english_female_first_names);
+    auto company_name = company::name();
 
-    auto companyName = company::name();
-
-    auto companyNameElements = utils::split(companyName, " ");
-    if (companyNameElements.size() == 2) {
-        auto generatedLastName = companyNameElements[0];
-        auto generatedCompanySuffix = companyNameElements[1];
-
-        FAKER_EXPECT_CONTAINER_CONTAINS(person::data::english_last_names, generatedLastName);
-        FAKER_EXPECT_CONTAINER_CONTAINS(company::data::company_suffixes, generatedCompanySuffix);
-    } else if (companyNameElements.size() == 3) {
-        auto generatedFirstName = companyNameElements[0];
-        auto generatedLastName = companyNameElements[1];
-        auto generatedJobArea = companyNameElements[2];
-
-        FAKER_EXPECT_CONTAINER_CONTAINS(expectedFirstNames, generatedFirstName);
-        FAKER_EXPECT_CONTAINER_CONTAINS(person::data::english_last_names, generatedLastName);
-        FAKER_EXPECT_CONTAINER_CONTAINS(person::data::job_areas, generatedJobArea);
-    } else if (companyNameElements.size() == 4) {
-        auto generatedFirstName = companyNameElements[0];
-        auto generatedLastName = companyNameElements[1];
-        auto generatedJobArea = companyNameElements[2];
-        auto lastElement = companyNameElements[3];
-
-        FAKER_EXPECT_CONTAINER_CONTAINS(expectedFirstNames, generatedFirstName);
-        FAKER_EXPECT_CONTAINER_CONTAINS(person::data::english_last_names, generatedLastName);
-        FAKER_EXPECT_CONTAINER_CONTAINS(person::data::job_areas, generatedJobArea);
-        ASSERT_TRUE(lastElement == "Services"
-            || faker::testing::contains(company::data::company_suffixes, lastElement));
+    auto name_parts = utils::split(company_name, " ");
+    if (name_parts.size() == 2) {
+        FAKER_EXPECT_CONTAINER_CONTAINS(person::data::english_last_names, name_parts[0]);
+        FAKER_EXPECT_CONTAINER_CONTAINS(company::data::company_suffixes, name_parts[1]);
+    } else if (name_parts.size() == 3) {
+        EXPECT_TRUE(faker::testing::contains(person::data::english_male_first_names, name_parts[0])
+            || faker::testing::contains(person::data::english_female_first_names, name_parts[0]));
+        FAKER_EXPECT_CONTAINER_CONTAINS(person::data::english_last_names, name_parts[1]);
+        FAKER_EXPECT_CONTAINER_CONTAINS(person::data::job_areas, name_parts[2]);
+    } else if (name_parts.size() == 4) {
+        EXPECT_TRUE(faker::testing::contains(person::data::english_male_first_names, name_parts[0])
+            || faker::testing::contains(person::data::english_female_first_names, name_parts[0]));
+        FAKER_EXPECT_CONTAINER_CONTAINS(person::data::english_last_names, name_parts[1]);
+        FAKER_EXPECT_CONTAINER_CONTAINS(person::data::job_areas, name_parts[2]);
+        EXPECT_TRUE(name_parts[3] == "Services"
+            || faker::testing::contains(company::data::company_suffixes, name_parts[3]));
     }
 }
 
-TEST(CompanyTest, shouldGenerateCompanyType)
+TEST(CompanyTest, should_generate_company_type)
 {
-    auto generatedCompanyType = company::type();
+    auto company_type = company::type();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(company::data::company_types, generatedCompanyType);
+    FAKER_EXPECT_CONTAINER_CONTAINS(company::data::company_types, company_type);
 }
 
-TEST(CompanyTest, shouldGenerateCompanyIndustry)
+TEST(CompanyTest, should_generate_company_industry)
 {
-    auto generatedCompanyIndustry = company::industry();
+    auto industry = company::industry();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(company::data::company_industries, generatedCompanyIndustry);
+    FAKER_EXPECT_CONTAINER_CONTAINS(company::data::company_industries, industry);
 }
 
-TEST(CompanyTest, shouldGenerateBuzzPhrase)
+TEST(CompanyTest, should_generate_buzz_phrase)
 {
-    auto buzzPhrase = company::buzz_phrase();
+    auto buzz_phrase = company::buzz_phrase();
 
-    FAKER_EXPECT_STRING_CONTAINS(buzzPhrase, company::data::buzz_verbs);
-    FAKER_EXPECT_STRING_CONTAINS(buzzPhrase, company::data::buzz_adjectives);
-    FAKER_EXPECT_STRING_CONTAINS(buzzPhrase, company::data::buzz_nouns);
+    FAKER_EXPECT_STRING_CONTAINS(buzz_phrase, company::data::buzz_verbs);
+    FAKER_EXPECT_STRING_CONTAINS(buzz_phrase, company::data::buzz_adjectives);
+    FAKER_EXPECT_STRING_CONTAINS(buzz_phrase, company::data::buzz_nouns);
 }
 
-TEST(CompanyTest, shouldGenerateBuzzVerb)
+TEST(CompanyTest, should_generate_buzz_verb)
 {
-    auto generatedBuzzVerb = company::buzz_verb();
+    auto buzz_verb = company::buzz_verb();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(company::data::buzz_verbs, generatedBuzzVerb);
+    FAKER_EXPECT_CONTAINER_CONTAINS(company::data::buzz_verbs, buzz_verb);
 }
 
-TEST(CompanyTest, shouldGenerateBuzzAdjective)
+TEST(CompanyTest, should_generate_buzz_adjective)
 {
-    auto generatedBuzzAdjective = company::buzz_adjective();
+    auto buzz_adjective = company::buzz_adjective();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(company::data::buzz_adjectives, generatedBuzzAdjective);
+    FAKER_EXPECT_CONTAINER_CONTAINS(company::data::buzz_adjectives, buzz_adjective);
 }
 
-TEST(CompanyTest, shouldGenerateBuzzNoun)
+TEST(CompanyTest, should_generate_buzz_noun)
 {
-    auto generatedBuzzNoun = company::buzz_noun();
+    auto buzz_noun = company::buzz_noun();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(company::data::buzz_nouns, generatedBuzzNoun);
+    FAKER_EXPECT_CONTAINER_CONTAINS(company::data::buzz_nouns, buzz_noun);
 }
 
-TEST(CompanyTest, shouldGenerateCatchPhrase)
+TEST(CompanyTest, should_generate_catch_phrase)
 {
-    auto catchPhrase = company::catch_phrase();
+    auto catch_phrase = company::catch_phrase();
 
-    FAKER_EXPECT_STRING_CONTAINS(catchPhrase, company::data::catch_phrase_adjectives);
-    FAKER_EXPECT_STRING_CONTAINS(catchPhrase, company::data::catch_phrase_descriptors);
-    FAKER_EXPECT_STRING_CONTAINS(catchPhrase, company::data::catch_phrase_nouns);
+    FAKER_EXPECT_STRING_CONTAINS(catch_phrase, company::data::catch_phrase_adjectives);
+    FAKER_EXPECT_STRING_CONTAINS(catch_phrase, company::data::catch_phrase_descriptors);
+    FAKER_EXPECT_STRING_CONTAINS(catch_phrase, company::data::catch_phrase_nouns);
 }
 
-TEST(CompanyTest, shouldGenerateCatchPhraseAdjective)
+TEST(CompanyTest, should_generate_catch_phrase_adjective)
 {
-    auto generatedCatchPhraseAdjective = company::catch_phrase_adjective();
+    auto catchy_adjective = company::catch_phrase_adjective();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(
-        company::data::catch_phrase_adjectives, generatedCatchPhraseAdjective);
+    FAKER_EXPECT_CONTAINER_CONTAINS(company::data::catch_phrase_adjectives, catchy_adjective);
 }
 
-TEST(CompanyTest, shouldGenerateCatchPhraseDescriptor)
+TEST(CompanyTest, should_generate_catch_phrase_descriptor)
 {
-    auto generatedCatchPhraseDescriptor = company::catch_phrase_descriptor();
+    auto catchy_descriptor = company::catch_phrase_descriptor();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(
-        company::data::catch_phrase_descriptors, generatedCatchPhraseDescriptor);
+    FAKER_EXPECT_CONTAINER_CONTAINS(company::data::catch_phrase_descriptors, catchy_descriptor);
 }
 
-TEST(CompanyTest, shouldGenerateCatchPhraseNoun)
+TEST(CompanyTest, should_generate_catch_phrase_noun)
 {
-    auto generatedCatchPhraseNoun = company::catch_phrase_noun();
+    auto catchy_noun = company::catch_phrase_noun();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(company::data::catch_phrase_nouns, generatedCatchPhraseNoun);
+    FAKER_EXPECT_CONTAINER_CONTAINS(company::data::catch_phrase_nouns, catchy_noun);
 }

@@ -3,11 +3,8 @@
 
 #include <string>
 
-namespace faker {
-class BioHelper {
-public:
-    static bool checkTokenFormat(const std::string& bio);
-};
+namespace faker::testing {
+bool check_bio_format(const std::string& bio);
 }
 
 #endif

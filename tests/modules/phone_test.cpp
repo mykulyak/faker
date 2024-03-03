@@ -1,84 +1,75 @@
 #include "../test_helpers.h"
-#include <algorithm>
 #include <faker/phone.h>
 #include <modules/phone_data.h>
-#include <string>
-#include <vector>
+#include <regex>
 
 using namespace faker;
 
-bool isStringNumericWithSpecialChars(const std::string& str)
+namespace {
+bool contains_one_or_more_digits_or_special_chars(const std::string& str)
 {
-    return faker::testing::all_of(str, [](char c) {
+    return !str.empty() && faker::testing::all_of(str, [](char c) {
         return std::isdigit(c) || c == '-' || c == '(' || c == ')' || c == '+' || c == ' ';
     });
 }
-
-TEST(PhoneTest, NumberWithNoFormat)
-{
-    auto phoneNumber = phone::number();
-
-    ASSERT_TRUE(isStringNumericWithSpecialChars(phoneNumber));
 }
 
-TEST(PhoneTest, NumberWithFormat)
+TEST(PhoneTest, should_generate_phone_number)
 {
-    std::string format = "501-###-###";
-    std::string phoneNumber = phone::number(format);
-    ASSERT_NE(phoneNumber, format);
-    ASSERT_TRUE(isStringNumericWithSpecialChars(phoneNumber));
+    auto phone_number_any_format = phone::number();
+    auto phone_number_zimbabwe = phone::number(phone::phone_number_format_t::zimbabwe);
+    auto phone_number_with_custom_format_1 = phone::number("501-###-###");
+    auto phone_number_with_custom_format_2 = phone::number("+48 91 ### ## ##");
+    auto phone_number_with_custom_format_3 = phone::number("+376 (###) ###-####");
+    auto phone_number_with_custom_format_4 = phone::number("+376 (!!!) !!!-!!!!");
 
-    format = "+48 91 ### ## ##";
-    phoneNumber = phone::number(format);
-    ASSERT_NE(phoneNumber, format);
-    ASSERT_TRUE(isStringNumericWithSpecialChars(phoneNumber));
+    EXPECT_TRUE(contains_one_or_more_digits_or_special_chars(phone_number_any_format));
+    EXPECT_TRUE(contains_one_or_more_digits_or_special_chars(phone_number_zimbabwe));
 
-    format = "+376 (###) ###-####";
-    phoneNumber = phone::number(format);
-    ASSERT_NE(phoneNumber, format);
-    ASSERT_TRUE(isStringNumericWithSpecialChars(phoneNumber));
+    EXPECT_TRUE(contains_one_or_more_digits_or_special_chars(phone_number_with_custom_format_1));
+    EXPECT_TRUE(
+        std::regex_match(phone_number_with_custom_format_1, std::regex(R"(501-\d{3}-\d{3})")));
 
-    format = "+376 (!!!) !!!-!!!!";
-    phoneNumber = phone::number(format);
-    ASSERT_NE(phoneNumber, format);
-    ASSERT_TRUE(isStringNumericWithSpecialChars(phoneNumber));
+    EXPECT_TRUE(contains_one_or_more_digits_or_special_chars(phone_number_with_custom_format_2));
+    EXPECT_TRUE(std::regex_match(
+        phone_number_with_custom_format_2, std::regex(R"(\+48 91 \d{3} \d{2} \d{2})")));
+
+    EXPECT_TRUE(contains_one_or_more_digits_or_special_chars(phone_number_with_custom_format_1));
+    EXPECT_TRUE(std::regex_match(
+        phone_number_with_custom_format_3, std::regex(R"(\+376 \(\d{3}\) \d{3}-\d{4})")));
+
+    EXPECT_TRUE(contains_one_or_more_digits_or_special_chars(phone_number_with_custom_format_1));
+    EXPECT_TRUE(std::regex_match(
+        phone_number_with_custom_format_4, std::regex(R"(\+376 \(\d{3}\) \d{3}-\d{4})")));
 }
 
-TEST(PhoneTest, IMEIGeneration)
+TEST(PhoneTest, should_generate_imei)
 {
     auto imei = phone::imei();
 
     imei.erase(std::remove(imei.begin(), imei.end(), '-'), imei.end());
 
-    ASSERT_EQ(imei.length(), 15);
-    ASSERT_TRUE(isStringNumericWithSpecialChars(imei));
+    EXPECT_EQ(imei.size(), 15u);
+    EXPECT_TRUE(contains_one_or_more_digits_or_special_chars(imei));
 }
 
-TEST(PhoneTest, NumberFormatTest)
+TEST(PhoneTest, should_generate_platform)
 {
-    auto phoneNumber = phone::number(phone::phone_number_format_t::zimbabwe);
+    auto platform = phone::platform();
 
-    EXPECT_FALSE(phoneNumber.empty());
-    ASSERT_TRUE(isStringNumericWithSpecialChars(phoneNumber));
+    FAKER_EXPECT_CONTAINER_CONTAINS(phone::data::platforms, platform);
 }
 
-TEST(PhoneTest, PlatformGeneration)
+TEST(PhoneTest, should_generate_model_name)
 {
-    auto generatedPlatform = phone::platform();
+    auto model_name = phone::model_name();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(phone::data::platforms, generatedPlatform);
+    FAKER_EXPECT_CONTAINER_CONTAINS(phone::data::model_names, model_name);
 }
 
-TEST(PhoneTest, ModelNameGeneration)
+TEST(PhoneTest, should_generate_manufacturer)
 {
-    auto generatedModelName = phone::model_name();
+    auto manufacturer = phone::manufacturer();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(phone::data::model_names, generatedModelName);
-}
-
-TEST(PhoneTest, ManufacturerGeneration)
-{
-    auto generatedManufacturer = phone::manufacturer();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(phone::data::manufacturers, generatedManufacturer);
+    FAKER_EXPECT_CONTAINER_CONTAINS(phone::data::manufacturers, manufacturer);
 }

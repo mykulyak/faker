@@ -4,101 +4,100 @@
 
 using namespace faker;
 
-TEST(FoodTest, shouldGenerateAlcoholicBeverage)
+TEST(FoodTest, should_generate_alcoholic_beverage)
 {
-    auto generatedAlcoholicBeverage = food::alcoholic_beverage();
+    auto alcoholic_beverage = food::alcoholic_beverage();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::alcoholic_beverages, generatedAlcoholicBeverage);
+    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::alcoholic_beverages, alcoholic_beverage);
 }
 
-TEST(FoodTest, shouldGenerateDishName)
+TEST(FoodTest, should_generate_dish_name)
 {
-    auto generatedDishName = food::dish_name();
+    auto dish_name = food::dish_name();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::dish_names, generatedDishName);
+    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::dish_names, dish_name);
 }
 
-TEST(FoodTest, shouldGenerateFoodCategories)
+TEST(FoodTest, should_generate_food_categories)
 {
-    auto generatedFoodCategory = food::category();
+    auto food_category = food::category();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::food_categories, generatedFoodCategory);
+    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::food_categories, food_category);
 }
 
-TEST(FoodTest, shouldGenerateFruit)
+TEST(FoodTest, should_generate_fruit)
 {
-    auto generatedFruit = food::fruit();
+    auto fruit = food::fruit();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::fruits, generatedFruit);
+    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::fruits, fruit);
 }
 
-TEST(FoodTest, shouldGenerateMeat)
+TEST(FoodTest, should_generate_meat)
 {
-    auto generatedMeat = food::meat();
+    auto meat = food::meat();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::meats, generatedMeat);
+    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::meats, meat);
 }
 
-TEST(FoodTest, shouldGenerateMilkProduct)
+TEST(FoodTest, should_generate_milk_product)
 {
-    auto generatedMilkProduct = food::milk_product();
+    auto milk_product = food::milk_product();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::milk_products, generatedMilkProduct);
+    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::milk_products, milk_product);
 }
 
-TEST(FoodTest, shouldGenerateNonalcoholicBeverages)
+TEST(FoodTest, should_generate_nonalcoholic_beverages)
 {
-    auto generatedNonalcoholicBeverages = food::non_alcoholic_beverage();
+    auto nonalcoholic_beverage = food::non_alcoholic_beverage();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(
-        food::data::nonalcoholic_beverages, generatedNonalcoholicBeverages);
+    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::nonalcoholic_beverages, nonalcoholic_beverage);
 }
 
-TEST(FoodTest, shouldGenerateNut)
+TEST(FoodTest, should_generate_nut)
 {
-    auto generatedNut = food::nut();
+    auto nut = food::nut();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::nuts, generatedNut);
+    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::nuts, nut);
 }
 
-TEST(FoodTest, shouldGenerateOil)
+TEST(FoodTest, should_generate_oil)
 {
-    auto generatedOil = food::oil();
+    auto oil = food::oil();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::oils, generatedOil);
+    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::oils, oil);
 }
 
-TEST(FoodTest, shouldGenerateSeafood)
+TEST(FoodTest, should_generate_seafood)
 {
-    auto generatedSeafood = food::seafood();
+    auto seafood = food::seafood();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::seafoods, generatedSeafood);
+    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::seafoods, seafood);
 }
 
-TEST(FoodTest, shouldGenerateSeed)
+TEST(FoodTest, should_generate_seed)
 {
-    auto generatedSeed = food::seed();
+    auto seed = food::seed();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::seeds, generatedSeed);
+    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::seeds, seed);
 }
 
-TEST(FoodTest, shouldGenerateGrain)
+TEST(FoodTest, should_generate_grain)
 {
-    auto generatedGrain = food::grain();
+    auto grain = food::grain();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::grains, generatedGrain);
+    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::grains, grain);
 }
 
-TEST(FoodTest, shouldGenerateSugarProduct)
+TEST(FoodTest, should_generate_sugar_product)
 {
-    auto generatedSugarProduct = food::sugar_product();
+    auto sugar_product = food::sugar_product();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::sugar_products, generatedSugarProduct);
+    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::sugar_products, sugar_product);
 }
 
-TEST(FoodTest, shouldGenerateVegetable)
+TEST(FoodTest, should_generate_vegetable)
 {
-    auto generatedVegetable = food::vegetable();
+    auto vegetable = food::vegetable();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::vegetables, generatedVegetable);
+    FAKER_EXPECT_CONTAINER_CONTAINS(food::data::vegetables, vegetable);
 }

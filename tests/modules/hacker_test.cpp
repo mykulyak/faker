@@ -1,84 +1,56 @@
 #include "../test_helpers.h"
-#include <algorithm>
 #include <faker/hacker.h>
 #include <modules/hacker_data.h>
-#include <string>
 
 using namespace faker;
 
-TEST(HackerTest, shouldGenerateAbbreviation)
+TEST(HackerTest, should_generate_abbreviation)
 {
-    auto generatedAbbreviation = hacker::abbreviation();
+    auto abbreviation = hacker::abbreviation();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(hacker::data::abbreviations, generatedAbbreviation);
+    FAKER_EXPECT_CONTAINER_CONTAINS(hacker::data::abbreviations, abbreviation);
 }
 
-TEST(HackerTest, shouldGenerateAdjective)
+TEST(HackerTest, should_generate_adjective)
 {
-    auto generatedAdjective = hacker::adjective();
+    auto adjective = hacker::adjective();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(hacker::data::adjectives, generatedAdjective);
+    FAKER_EXPECT_CONTAINER_CONTAINS(hacker::data::adjectives, adjective);
 }
 
-TEST(HackerTest, shouldGenerateNoun)
+TEST(HackerTest, should_generate_noun)
 {
-    auto generatedNoun = hacker::noun();
+    auto noun = hacker::noun();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(hacker::data::nouns, generatedNoun);
+    FAKER_EXPECT_CONTAINER_CONTAINS(hacker::data::nouns, noun);
 }
 
-TEST(HackerTest, shouldGenerateVerb)
+TEST(HackerTest, should_generate_verb)
 {
-    auto generatedVerb = hacker::verb();
+    auto verb = hacker::verb();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(hacker::data::verbs, generatedVerb);
+    FAKER_EXPECT_CONTAINER_CONTAINS(hacker::data::verbs, verb);
 }
 
-TEST(HackerTest, shouldGenerateIngverb)
+TEST(HackerTest, should_generate_ingverb)
 {
-    auto generatedIngverb = hacker::ingverb();
+    auto ingverb = hacker::ingverb();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(hacker::data::ingverbs, generatedIngverb);
+    FAKER_EXPECT_CONTAINER_CONTAINS(hacker::data::ingverbs, ingverb);
 }
 
-TEST(HackerTest, shouldGeneratePhrase)
+TEST(HackerTest, should_generate_phrase)
 {
-    auto generatedPhrase = hacker::phrase();
+    auto phrase = hacker::phrase();
 
-    bool hasAdjective, hasNoun, hasVerb, hasAbbreviation;
-    hasAdjective = hasNoun = hasVerb = hasAbbreviation = false;
+    auto has_adjective = faker::testing::any_of(hacker::data::adjectives,
+        [&](auto item) { return phrase.find(item) != std::string::npos; });
+    auto has_noun = faker::testing::any_of(
+        hacker::data::nouns, [&](auto item) { return phrase.find(item) != std::string::npos; });
+    auto has_verb = faker::testing::any_of(
+        hacker::data::verbs, [&](auto item) { return phrase.find(item) != std::string::npos; });
+    auto has_abbreviation = faker::testing::any_of(hacker::data::abbreviations,
+        [&](auto item) { return phrase.find(item) != std::string::npos; });
 
-    // Check for adjectives
-    for (const auto& adj : hacker::data::adjectives) {
-        if (generatedPhrase.find(adj) != std::string::npos) {
-            hasAdjective = true;
-            break;
-        }
-    }
-
-    // Check for nouns
-    for (const auto& noun : hacker::data::nouns) {
-        if (generatedPhrase.find(noun) != std::string::npos) {
-            hasNoun = true;
-            break;
-        }
-    }
-
-    // Check for verbs
-    for (const auto& verb : hacker::data::verbs) {
-        if (generatedPhrase.find(verb) != std::string::npos) {
-            hasVerb = true;
-            break;
-        }
-    }
-
-    // Check for abbreviations
-    for (const auto& abbreviation : hacker::data::abbreviations) {
-        if (generatedPhrase.find(abbreviation) != std::string::npos) {
-            hasAbbreviation = true;
-            break;
-        }
-    }
-
-    ASSERT_TRUE((hasAdjective && hasNoun && hasVerb && hasAbbreviation));
+    ASSERT_TRUE((has_adjective && has_noun && has_verb && has_abbreviation));
 }

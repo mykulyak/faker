@@ -1,81 +1,74 @@
 #include "../test_helpers.h"
 #include <faker/vehicle.h>
 #include <modules/vehicle_data.h>
-#include <regex>
-#include <string>
 
 using namespace faker;
 
-TEST(VehicleTest, shouldGenerateBicycle)
+TEST(VehicleTest, should_generate_bicycle)
 {
-    auto generatedBicycle = vehicle::bicycle();
+    auto bicycle = vehicle::bicycle();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(vehicle::data::bicycle_types, generatedBicycle);
+    FAKER_EXPECT_CONTAINER_CONTAINS(vehicle::data::bicycle_types, bicycle);
 }
 
-TEST(VehicleTest, shouldGenerateColor)
+TEST(VehicleTest, should_generate_color)
 {
-    auto generatedColor = vehicle::color();
+    auto color = vehicle::color();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(vehicle::data::vehicle_colors, generatedColor);
+    FAKER_EXPECT_CONTAINER_CONTAINS(vehicle::data::vehicle_colors, color);
 }
 
-TEST(VehicleTest, shouldGenerateFuel)
+TEST(VehicleTest, should_generate_fuel)
 {
-    auto generatedFuel = vehicle::fuel();
+    auto fuel = vehicle::fuel();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(vehicle::data::fuel_types, generatedFuel);
+    FAKER_EXPECT_CONTAINER_CONTAINS(vehicle::data::fuel_types, fuel);
 }
 
-TEST(VehicleTest, shouldGenerateManufacturer)
+TEST(VehicleTest, should_generate_manufacturer)
 {
-    auto generatedManufacturer = vehicle::manufacturer();
+    auto manufacturer = vehicle::manufacturer();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(vehicle::data::manufacturers, generatedManufacturer);
+    FAKER_EXPECT_CONTAINER_CONTAINS(vehicle::data::manufacturers, manufacturer);
 }
 
-TEST(VehicleTest, shouldGenerateModel)
+TEST(VehicleTest, should_generate_model)
 {
-    auto generatedModel = vehicle::model();
+    auto model = vehicle::model();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(vehicle::data::models, generatedModel);
+    FAKER_EXPECT_CONTAINER_CONTAINS(vehicle::data::models, model);
 }
 
-TEST(VehicleTest, shouldGenerateType)
+TEST(VehicleTest, should_generate_type)
 {
-    auto generatedType = vehicle::type();
+    auto vehicle_type = vehicle::type();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(vehicle::data::vehicle_types, generatedType);
+    FAKER_EXPECT_CONTAINER_CONTAINS(vehicle::data::vehicle_types, vehicle_type);
 }
 
-TEST(VehicleTest, shouldGenerateVehicle)
+TEST(VehicleTest, should_generate_vehicle)
 {
-    auto generatedVehicle = vehicle::vehicle();
+    auto vehicle = vehicle::vehicle();
 
-    ASSERT_TRUE(
-        faker::testing::any_of(vehicle::data::manufacturers, [generatedVehicle](auto manufacturer) {
-            return faker::testing::starts_with(generatedVehicle, manufacturer);
-        }));
-
-    ASSERT_TRUE(faker::testing::any_of(vehicle::data::models, [generatedVehicle](auto model) {
-        return faker::testing::ends_with(generatedVehicle, model);
+    ASSERT_TRUE(faker::testing::any_of(vehicle::data::manufacturers, [vehicle](auto manufacturer) {
+        return faker::testing::starts_with(vehicle, manufacturer);
     }));
+
+    ASSERT_TRUE(faker::testing::any_of(vehicle::data::models,
+        [vehicle](auto model) { return faker::testing::ends_with(vehicle, model); }));
 }
 
-TEST(VehicleTest, shouldGenerateVin)
+TEST(VehicleTest, should_generate_vin)
 {
-    auto generatedVin = vehicle::vin();
+    auto vin = vehicle::vin();
 
-    std::regex vinRegex("[A-HJ-NPR-Z0-9]{10}[A-HJ-NPR-Z0-9]{1}[A-HJ-NPR-Z0-9]{1}[0-9]{5}");
-
-    ASSERT_TRUE(std::regex_match(generatedVin, vinRegex));
+    FAKER_EXPECT_REGEX_MATCHES(
+        vin, "[A-HJ-NPR-Z0-9]{10}[A-HJ-NPR-Z0-9]{1}[A-HJ-NPR-Z0-9]{1}[0-9]{5}");
 }
 
-TEST(VehicleTest, shouldGenerateVrm)
+TEST(VehicleTest, should_generate_vrm)
 {
-    auto generatedVrm = vehicle::vrm();
+    auto vrm = vehicle::vrm();
 
-    std::regex vrmRegex("[A-Z]{2}[0-9]{2}[A-Z]{3}");
-
-    ASSERT_TRUE(std::regex_match(generatedVrm, vrmRegex));
+    FAKER_EXPECT_REGEX_MATCHES(vrm, "[A-Z]{2}[0-9]{2}[A-Z]{3}");
 }

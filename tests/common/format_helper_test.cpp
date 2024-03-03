@@ -4,13 +4,13 @@
 
 using namespace faker;
 
-namespace faker::errors {
+namespace {
 struct TokenGeneratorNotFoundError : std::runtime_error {
     using std::runtime_error::runtime_error;
 };
 }
 
-TEST(FormatHelperTest, fillFormatTokensData)
+TEST(FormatHelperTest, should_fill_format_tokens_data)
 {
     const auto format = "{hello} {faker}-{cxx} {library}";
 
@@ -28,16 +28,14 @@ TEST(FormatHelperTest, fillFormatTokensData)
         }
     });
 
-    const auto expectedResult = "library cxx-faker hello";
-
-    EXPECT_EQ(result, expectedResult);
+    EXPECT_EQ(result, "library cxx-faker hello");
 }
 
-TEST(FormatHelperTest, givenTokensWithNotDefinedGenerator_shouldThrow)
+TEST(FormatHelperTest, should_throw_when_token_generator_not_found)
 {
     const auto format = "{hello} {faker}-{cxx} {library}";
 
-    ASSERT_THROW(utils::fill_token_values(format,
+    EXPECT_THROW(utils::fill_token_values(format,
         [](std::string_view token) {
             if (token == "hello") {
                 return "library";
@@ -46,14 +44,14 @@ TEST(FormatHelperTest, givenTokensWithNotDefinedGenerator_shouldThrow)
             } else if (token == "cxx") {
                 return "faker";
             } else {
-                throw errors::TokenGeneratorNotFoundError { utils::format(
+                throw TokenGeneratorNotFoundError { utils::format(
                     "Generator not found for token {}.", token) };
             }
         });
-                 , errors::TokenGeneratorNotFoundError);
+                 , TokenGeneratorNotFoundError);
 }
 
-TEST(FormatHelperTest, shouldFormat)
+TEST(FormatHelperTest, should_support_string_formatting)
 {
     EXPECT_EQ(utils::format("{}", 1), "1");
     EXPECT_EQ(utils::format("{} {}", "Hello", "World"), "Hello World");

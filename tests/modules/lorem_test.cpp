@@ -6,142 +6,103 @@
 
 using namespace faker;
 
-TEST(LoremTest, shouldGenerateWord)
+namespace {
+template <typename ContainerT> bool contains_only_valid_words(const ContainerT& container)
 {
-    const auto generatedWord = lorem::word();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(lorem::data::lorem_words, generatedWord);
+    return faker::testing::all_of(container, [](const auto& word) {
+        return faker::testing::contains(lorem::data::lorem_words, utils::to_lower(word));
+    });
+}
 }
 
-TEST(LoremTest, shouldGenerateWords)
+TEST(LoremTest, should_generate_word)
 {
-    const auto numberOfWords = 5;
+    auto word = lorem::word();
 
-    const auto generatedWords = lorem::words(numberOfWords);
-
-    const auto separatedWords = utils::split(generatedWords, " ");
-
-    ASSERT_EQ(separatedWords.size(), numberOfWords);
-    ASSERT_TRUE(faker::testing::all_of(separatedWords, [](auto separatedWord) {
-        return faker::testing::any_of(lorem::data::lorem_words, [separatedWord](const auto& word) {
-            return word
-                == static_cast<char>(std::tolower(separatedWord[0]))
-                + std::string(separatedWord.substr(1));
-        });
-    }));
+    FAKER_EXPECT_CONTAINER_CONTAINS(lorem::data::lorem_words, word);
 }
 
-TEST(LoremTest, shouldGenerateSentence)
+TEST(LoremTest, should_generate_words)
+{
+    auto words = lorem::words(5);
+
+    auto word_list = utils::split(words, " ");
+    EXPECT_EQ(word_list.size(), 5u);
+    EXPECT_TRUE(contains_only_valid_words(word_list));
+}
+
+TEST(LoremTest, should_generate_sentence)
 {
     const auto sentence = lorem::sentence();
 
-    const auto sentenceWithoutEndingDot = sentence.substr(0, sentence.size() - 1);
-
-    const auto sentenceWords = utils::split(sentenceWithoutEndingDot, " ");
-
-    ASSERT_TRUE(std::isupper(sentence[0]));
+    EXPECT_TRUE(std::isupper(sentence[0]));
     FAKER_EXPECT_STRING_ENDS_WITH(sentence, ".");
-    ASSERT_TRUE(sentenceWords.size() >= 3 && sentenceWords.size() <= 10);
-    ASSERT_TRUE(faker::testing::all_of(sentenceWords, [](auto sentenceWord) {
-        return faker::testing::any_of(lorem::data::lorem_words, [sentenceWord](const auto& word) {
-            return word
-                == static_cast<char>(std::tolower(sentenceWord[0]))
-                + std::string(sentenceWord.substr(1));
-        });
-    }));
+
+    const auto word_list = utils::split(sentence.substr(0, sentence.size() - 1), " ");
+    FAKER_EXPECT_BETWEEN(word_list.size(), 3u, 10u);
+    EXPECT_TRUE(contains_only_valid_words(word_list));
 }
 
-TEST(LoremTest, shouldGenerateSentences)
+TEST(LoremTest, should_generate_sentences)
 {
     const auto sentences = lorem::sentences();
 
-    const auto separatedSentences = utils::split(sentences, ". ");
+    const auto sentence_list = utils::split(sentences, ". ");
 
-    for (auto sentence2 : separatedSentences) {
-        std::string sentence { sentence2 };
+    for (auto sentence : sentence_list) {
         sentence.erase(std::remove(sentence.begin(), sentence.end(), '.'), sentence.end());
 
-        ASSERT_TRUE(std::isupper(sentence[0]));
+        EXPECT_TRUE(std::isupper(sentence[0]));
 
-        const auto sentenceWords = utils::split(sentence, " ");
-
-        ASSERT_TRUE(sentenceWords.size() >= 3 && sentenceWords.size() <= 10);
-
-        ASSERT_TRUE(faker::testing::all_of(sentenceWords, [](const auto& sentenceWord) {
-            return faker::testing::any_of(
-                lorem::data::lorem_words, [sentenceWord](const auto& word) {
-                    return word
-                        == static_cast<char>(std::tolower(sentenceWord[0]))
-                        + std::string(sentenceWord.substr(1));
-                });
-        }));
+        const auto word_list = utils::split(sentence, " ");
+        FAKER_EXPECT_BETWEEN(word_list.size(), 3u, 10u);
+        EXPECT_TRUE(contains_only_valid_words(word_list));
     }
 }
 
-TEST(LoremTest, shouldGenerateSlug)
+TEST(LoremTest, should_generate_slug)
 {
-    const auto generatedSlug = lorem::slug(3);
+    const auto slug = lorem::slug(3);
 
-    const auto separatedWords = utils::split(generatedSlug, "-");
-
-    ASSERT_EQ(separatedWords.size(), 3);
-    ASSERT_TRUE(faker::testing::all_of(separatedWords, [](auto separatedWord) {
-        return faker::testing::any_of(lorem::data::lorem_words, [separatedWord](auto word) {
-            return faker::testing::compare_no_case(separatedWord, word);
-        });
-    }));
+    const auto word_list = utils::split(slug, "-");
+    EXPECT_EQ(word_list.size(), 3u);
+    EXPECT_TRUE(contains_only_valid_words(word_list));
 }
 
-TEST(LoremTest, shouldGenerateParagraph)
+TEST(LoremTest, should_generate_paragraph)
 {
     const auto paragraph = lorem::paragraph();
 
-    const auto separatedSentences = utils::split(paragraph, ". ");
+    const auto sentence_list = utils::split(paragraph, ". ");
 
-    for (auto sentence2 : separatedSentences) {
-        std::string sentence { sentence2 };
+    for (auto sentence : sentence_list) {
         sentence.erase(std::remove(sentence.begin(), sentence.end(), '.'), sentence.end());
 
-        ASSERT_TRUE(std::isupper(sentence[0]));
+        EXPECT_TRUE(std::isupper(sentence[0]));
 
-        const auto sentenceWords = utils::split(sentence, " ");
-
-        ASSERT_TRUE(sentenceWords.size() >= 3 && sentenceWords.size() <= 10);
-
-        ASSERT_TRUE(faker::testing::all_of(sentenceWords, [](const auto& sentenceWord) {
-            return faker::testing::any_of(
-                lorem::data::lorem_words, [sentenceWord](const auto& word) {
-                    return faker::testing::compare_no_case(sentenceWord, word);
-                });
-        }));
+        const auto word_list = utils::split(sentence, " ");
+        FAKER_EXPECT_BETWEEN(word_list.size(), 3u, 10u);
+        EXPECT_TRUE(contains_only_valid_words(word_list));
     }
 }
 
-TEST(LoremTest, shouldGenerateParagraphs)
+TEST(LoremTest, should_generate_paragraphs)
 {
     const auto paragraphs = lorem::paragraphs();
 
-    const auto separatedParagraphs = utils::split(paragraphs, "\n");
+    const auto paragraph_list = utils::split(paragraphs, "\n");
 
-    for (const auto& paragraph : separatedParagraphs) {
-        const auto separatedSentences = utils::split(paragraph, ". ");
+    for (const auto& paragraph : paragraph_list) {
+        const auto sentence_list = utils::split(paragraph, ". ");
 
-        for (auto sentence2 : separatedSentences) {
-            std::string sentence { sentence2 };
+        for (auto sentence : sentence_list) {
             sentence.erase(std::remove(sentence.begin(), sentence.end(), '.'), sentence.end());
 
-            ASSERT_TRUE(std::isupper(sentence[0]));
+            EXPECT_TRUE(std::isupper(sentence[0]));
 
-            const auto sentenceWords = utils::split(sentence, " ");
-
-            ASSERT_TRUE(sentenceWords.size() >= 3 && sentenceWords.size() <= 10);
-
-            ASSERT_TRUE(faker::testing::all_of(sentenceWords, [](const auto& sentenceWord) {
-                return faker::testing::any_of(
-                    lorem::data::lorem_words, [sentenceWord](const auto& word) {
-                        return faker::testing::compare_no_case(sentenceWord, word);
-                    });
-            }));
+            const auto word_list = utils::split(sentence, " ");
+            FAKER_EXPECT_BETWEEN(word_list.size(), 3u, 10u);
+            EXPECT_TRUE(contains_only_valid_words(word_list));
         }
     }
 }

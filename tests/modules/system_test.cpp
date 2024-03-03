@@ -3,10 +3,12 @@
 #include <faker/system.h>
 #include <modules/system_data.h>
 #include <regex>
+#include <stdexcept>
 #include <unordered_set>
 
 using namespace faker;
 
+namespace {
 bool is_valid_cron_expr(const std::string& value)
 {
     const std::regex re_cron_expr(
@@ -14,181 +16,147 @@ bool is_valid_cron_expr(const std::string& value)
 
     return std::regex_match(value, re_cron_expr);
 }
-
-TEST(SystemTest, FileNameTestWithExtensionCount)
-{
-    system::file_options_t options;
-    options.extension_count = 3;
-
-    auto filename1 = system::filename(options);
-    EXPECT_FALSE(filename1.empty());
-
-    system::file_options_t options2;
-    options2.extension_range.min = 1;
-    options2.extension_range.max = 3;
-
-    auto filename2 = system::filename(options2);
-    EXPECT_FALSE(filename2.empty());
 }
 
-TEST(SystemTest, FileExtTestWithMimeType)
+TEST(SystemTest, should_generate_filename)
 {
-    auto ext = system::file_ext();
+    auto filename_fixed_ext_count = system::filename({ 3u, { 1u, 1u } });
+    std::cout << filename_fixed_ext_count << std::endl;
+    EXPECT_FALSE(filename_fixed_ext_count.empty());
+    // some mime types contain '.' in them, hence >=
+    EXPECT_GE(std::count(filename_fixed_ext_count.begin(), filename_fixed_ext_count.end(), '.'), 3);
 
-    EXPECT_FALSE(ext.empty());
+    auto filename_variable_ext_count = system::filename({ 1, { 1, 3 } });
+    std::cout << filename_variable_ext_count << std::endl;
+    EXPECT_FALSE(filename_variable_ext_count.empty());
+    // some mime types contain '.' in them, hence >=
+    EXPECT_GE(
+        std::count(filename_variable_ext_count.begin(), filename_variable_ext_count.end(), '.'), 1);
 }
 
-TEST(SystemTest, FileExtTestWithMimeTypeEnum)
+TEST(SystemTest, should_generate_file_extension)
 {
-    auto image = system::file_type_t::image;
-    auto audio = system::file_type_t::audio;
-    auto video = system::file_type_t::video;
-    auto text = system::file_type_t::text;
-    auto application = system::file_type_t::application;
-
-    std::vector<std::string_view> imageExtensions;
-    for (const auto& mimeType : system::data::mime_types) {
-        size_t pos = mimeType.find_first_of('/');
-        const auto ext = mimeType.substr(0, pos);
-        if (ext == to_string(image)) {
-            imageExtensions.push_back(mimeType.substr(pos + 1));
+    std::vector<std::string_view> all_image_exts;
+    std::vector<std::string_view> all_audio_exts;
+    std::vector<std::string_view> all_video_exts;
+    std::vector<std::string_view> all_text_exts;
+    std::vector<std::string_view> all_application_exts;
+    for (const auto& mime_type : system::data::mime_types) {
+        size_t pos = mime_type.find_first_of('/');
+        auto category = mime_type.substr(0, pos);
+        if (category == "image") {
+            all_image_exts.push_back(mime_type.substr(pos + 1));
+        } else if (category == "audio") {
+            all_audio_exts.push_back(mime_type.substr(pos + 1));
+        } else if (category == "video") {
+            all_video_exts.push_back(mime_type.substr(pos + 1));
+        } else if (category == "text") {
+            all_text_exts.push_back(mime_type.substr(pos + 1));
+        } else if (category == "application") {
+            all_application_exts.push_back(mime_type.substr(pos + 1));
         }
     }
-    std::vector<std::string_view> audioExtensions;
-    for (const auto& mimeType : system::data::mime_types) {
-        size_t pos = mimeType.find_first_of('/');
-        const auto ext = mimeType.substr(0, pos);
-        if (ext == to_string(audio)) {
-            audioExtensions.push_back(mimeType.substr(pos + 1));
-        }
-    }
-    std::vector<std::string_view> videoExtensions;
-    for (const auto& mimeType : system::data::mime_types) {
-        size_t pos = mimeType.find_first_of('/');
-        const auto ext = mimeType.substr(0, pos);
-        if (ext == to_string(video)) {
-            videoExtensions.push_back(mimeType.substr(pos + 1));
-        }
-    }
-    std::vector<std::string_view> textExtensions;
-    for (const auto& mimeType : system::data::mime_types) {
-        size_t pos = mimeType.find_first_of('/');
-        const auto ext = mimeType.substr(0, pos);
-        if (ext == to_string(text)) {
-            textExtensions.push_back(mimeType.substr(pos + 1));
-        }
-    }
-    std::vector<std::string_view> applicationExtensions;
-    for (const auto& mimeType : system::data::mime_types) {
-        size_t pos = mimeType.find_first_of('/');
-        const auto ext = mimeType.substr(0, pos);
-        if (ext == to_string(application)) {
-            applicationExtensions.push_back(mimeType.substr(pos + 1));
-        }
-    }
-    auto imageExt = system::file_ext(image);
-    auto audioExt = system::file_ext(audio);
-    auto videoExt = system::file_ext(video);
-    auto textExt = system::file_ext(text);
-    auto applicationExt = system::file_ext(application);
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(imageExtensions, imageExt);
-    FAKER_EXPECT_CONTAINER_CONTAINS(audioExtensions, audioExt);
-    FAKER_EXPECT_CONTAINER_CONTAINS(videoExtensions, videoExt);
-    FAKER_EXPECT_CONTAINER_CONTAINS(textExtensions, textExt);
-    FAKER_EXPECT_CONTAINER_CONTAINS(applicationExtensions, applicationExt);
+    auto ext_any_type = system::file_ext();
+    auto ext_image = system::file_ext(system::file_type_t::image);
+    auto ext_audio = system::file_ext(system::file_type_t::audio);
+    auto ext_video = system::file_ext(system::file_type_t::video);
+    auto ext_text = system::file_ext(system::file_type_t::text);
+    auto ext_application = system::file_ext(system::file_type_t::application);
+
+    EXPECT_FALSE(ext_any_type.empty());
+    FAKER_EXPECT_CONTAINER_CONTAINS(all_image_exts, ext_image);
+    FAKER_EXPECT_CONTAINER_CONTAINS(all_audio_exts, ext_audio);
+    FAKER_EXPECT_CONTAINER_CONTAINS(all_video_exts, ext_video);
+    FAKER_EXPECT_CONTAINER_CONTAINS(all_text_exts, ext_text);
+    FAKER_EXPECT_CONTAINER_CONTAINS(all_application_exts, ext_application);
 }
 
-TEST(SystemTest, CommonFileNameWithEmptyExtensionTest)
+TEST(SystemTest, should_generate_common_filename)
 {
-    auto actualFileName = system::common_filename();
+    auto filename_with_any_ext = system::common_filename();
+    auto filename_with_fixed_ext = system::common_filename("txt");
 
-    auto actualExtension = actualFileName.substr(actualFileName.find_last_of('.') + 1);
-    EXPECT_FALSE(actualExtension.empty());
+    auto get_last_file_ext
+        = [](const std::string& fname) { return fname.substr(fname.find_last_of('.') + 1); };
 
-    auto fileNameWithParam = system::common_filename("txt");
-    auto extensionWithParam = fileNameWithParam.substr(fileNameWithParam.find_last_of('.') + 1);
-
-    EXPECT_EQ(extensionWithParam, "txt");
+    EXPECT_FALSE(get_last_file_ext(filename_with_any_ext).empty());
+    EXPECT_EQ(get_last_file_ext(filename_with_fixed_ext), "txt");
 }
 
-TEST(SystemTest, MimeTypeTest)
+TEST(SystemTest, should_generate_mime_type)
 {
-    auto mimeTypeResult = system::mime_type();
+    auto mime_type = system::mime_type();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(system::data::mime_types, mimeTypeResult);
+    FAKER_EXPECT_CONTAINER_CONTAINS(system::data::mime_types, mime_type);
 }
 
-TEST(SystemTest, CommonFileTypeTest)
+TEST(SystemTest, should_generate_common_file_type)
 {
-    auto commonFileTypeResult = system::common_file_type();
+    auto file_type = system::common_file_type();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(system::data::common_file_types, commonFileTypeResult);
+    FAKER_EXPECT_CONTAINER_CONTAINS(system::data::common_file_types, file_type);
 }
 
-TEST(SystemTest, FileTypeTest)
+TEST(SystemTest, should_generate_file_type)
 {
-    std::unordered_set<std::string_view> typeSet;
-    for (const auto& entry : system::data::mime_types) {
-        const auto& m = entry;
-        size_t pos = m.find('/');
+    std::unordered_set<std::string_view> all_file_types;
+    for (auto mime_type : system::data::mime_types) {
+        size_t pos = mime_type.find('/');
         if (pos != std::string::npos) {
-            auto type = m.substr(0, pos);
-            typeSet.insert(type);
+            auto type = mime_type.substr(0, pos);
+            all_file_types.insert(type);
         }
     }
-    std::vector<std::string> expectedTypes(typeSet.begin(), typeSet.end());
 
-    auto fileTypeResult = system::file_type();
+    auto file_type = system::file_type();
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(expectedTypes, fileTypeResult);
+    EXPECT_TRUE(all_file_types.find(file_type) != all_file_types.end());
 }
 
-TEST(SystemTest, FilePathTest)
+TEST(SystemTest, should_generate_file_path)
 {
-    auto filePath = system::file_path();
+    auto path = system::file_path();
 
-    EXPECT_FALSE(filePath.empty());
+    EXPECT_FALSE(path.empty());
 }
 
-TEST(SystemTest, SemverTest)
+TEST(SystemTest, should_generate_semver)
 {
-    auto semverResult = system::semver();
+    auto semver = system::semver();
 
-    EXPECT_TRUE(std::regex_match(semverResult, std::regex("\\d+\\.\\d+\\.\\d+")));
+    EXPECT_TRUE(std::regex_match(semver, std::regex("\\d+\\.\\d+\\.\\d+")));
 }
 
 TEST(SystemTest, NetworkInterfaceMethodTest)
 {
+    system::NetworkInterfaceOptions options_fixed_type;
+    options_fixed_type.interfaceType = "wl";
+    system::NetworkInterfaceOptions options_fixed_schema;
+    options_fixed_schema.interfaceSchema = "mac";
+    system::NetworkInterfaceOptions options_type_and_schema;
+    options_type_and_schema.interfaceType = "en";
+    options_type_and_schema.interfaceSchema = "pci";
 
-    auto result1 = system::network_interface(std::nullopt);
-    ASSERT_TRUE(!result1.empty());
+    auto result_any = system::network_interface();
+    auto result_fixed_type = system::network_interface(options_fixed_type);
+    auto result_fixed_schema = system::network_interface(options_fixed_schema);
+    auto result_fixed_type_and_schema = system::network_interface(options_type_and_schema);
 
-    system::NetworkInterfaceOptions options2;
-    options2.interfaceType = "wl";
-    auto result2 = system::network_interface(options2);
-    ASSERT_TRUE(!result2.empty());
-
-    system::NetworkInterfaceOptions options3;
-    options3.interfaceSchema = "mac";
-    auto result3 = system::network_interface(options3);
-    ASSERT_EQ(result3.size(), 15);
-
-    system::NetworkInterfaceOptions options4;
-    options4.interfaceType = "en";
-    options4.interfaceSchema = "pci";
-    auto result4 = system::network_interface(options4);
-    ASSERT_TRUE(!result4.empty());
+    EXPECT_FALSE(result_any.empty());
+    EXPECT_FALSE(result_fixed_type.empty());
+    EXPECT_EQ(result_fixed_schema.size(), 15u);
+    EXPECT_FALSE(result_fixed_type_and_schema.empty());
 }
 
-TEST(SystemTest, ValidCronExpression)
+TEST(SystemTest, should_generate_cron_with_default_options)
 {
     auto expr = system::cron();
 
     EXPECT_TRUE(is_valid_cron_expr(expr));
 }
 
-TEST(SystemTest, IncludeYearOption)
+TEST(SystemTest, should_generate_cron_with_yaer_option)
 {
     auto expr = system::cron(system::cron_options_t::include_year);
 
@@ -198,19 +166,16 @@ TEST(SystemTest, IncludeYearOption)
     ASSERT_NE(last_sep_pos, std::string::npos);
 
     auto year_part_str = expr.substr(last_sep_pos + 1);
-
     if (year_part_str != "*") {
         auto year = std::stoi(year_part_str);
-        EXPECT_GE(year, 1970);
-        EXPECT_LE(year, 2099);
+        FAKER_EXPECT_BETWEEN(year, 1970, 2099);
     }
 }
 
-TEST(SystemTest, IncludeNonStandardOption)
+TEST(SystemTest, should_generate_cron_with_non_standard_option)
 {
     auto expr = system::cron(system::cron_options_t::include_non_standard);
 
-    auto is_non_standard = faker::testing::find(system::data::non_standard_cron_expressions, expr)
-        != system::data::non_standard_cron_expressions.end();
-    EXPECT_TRUE(is_non_standard || is_valid_cron_expr(expr));
+    EXPECT_TRUE(faker::testing::contains(system::data::non_standard_cron_expressions, expr)
+        || is_valid_cron_expr(expr));
 }

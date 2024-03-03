@@ -241,7 +241,7 @@ enum class phone_number_format_t {
 /**
  * @brief Returns a random phone number.
  *
- * @param string The optional string to use.
+ * @param format The optional format to use.
  *
  * @returns Random phone number.
  *
@@ -251,7 +251,7 @@ enum class phone_number_format_t {
  * phone::number("+48 91 ### ## ##") // "+48 91 463 61 70"
  * @endcode
  */
-std::string number(std::optional<std::string> = std::nullopt);
+std::string number(std::optional<std::string> format = std::nullopt);
 
 /**
  * @brief Returns a random phone platform.
