@@ -9,7 +9,8 @@
 using namespace ::testing;
 using namespace faker;
 
-const std::array<location::address_country, 14> addressCountries {
+namespace {
+const std::array<location::address_country, 14> address_countries {
     location::address_country::usa,
     location::address_country::poland,
     location::address_country::france,
@@ -64,8 +65,9 @@ const location::data::country_addresses_info& get_country_addresses(
         throw std::invalid_argument("Invalid country");
     }
 }
+}
 
-const std::unordered_map<location::address_country, std::string> generatedTestName {
+const std::unordered_map<location::address_country, std::string> generated_test_names {
     { location::address_country::usa, "shouldGenerateAmericanAddress" },
     { location::address_country::france, "shouldGenerateFrenchAddress" },
     { location::address_country::poland, "shouldGeneratePolishAddress" },
@@ -85,851 +87,366 @@ const std::unordered_map<location::address_country, std::string> generatedTestNa
 
 class LocationTest : public TestWithParam<location::address_country> {
 public:
-    static bool checkIfZipCode(std::string_view zipCode)
+    static bool contains_only_digits(std::string_view data)
     {
-        const std::string zipCodeCharacters = "0123456789-";
-
-        return faker::testing::all_of(zipCode, [&zipCodeCharacters](char dataCharacter) {
-            return faker::testing::any_of(
-                zipCodeCharacters, [dataCharacter](char numericCharacter) {
-                    return numericCharacter == dataCharacter;
-                });
-        });
-    }
-
-    static bool checkIfAllCharactersAreNumeric(std::string_view data)
-    {
-        return faker::testing::all_of(data, [](char dataCharacter) {
-            return faker::testing::any_of(
-                string::data::digits, [dataCharacter](char numericCharacter) {
-                    return numericCharacter == dataCharacter;
-                });
-        });
-    }
-
-    static bool checkIfCharacterIsNumeric(char character)
-    {
-        return faker::testing::contains(string::data::digits, character);
+        return faker::testing::all_of(
+            data, [](char ch) { return string::data::digits.find(ch) != std::string::npos; });
     }
 };
 
-TEST_P(LocationTest, shouldGenerateCounty)
+TEST_P(LocationTest, should_generate_county)
 {
     const auto country = GetParam();
 
-    const auto& countryAddresses = get_country_addresses(country);
+    const auto county = location::county(country);
 
-    const auto generatedCounty = location::county(country);
-
-    ASSERT_TRUE(faker::testing::contains(countryAddresses.counties, generatedCounty)
-        || (countryAddresses.counties.empty() && generatedCounty.empty()));
+    const auto& address_data = get_country_addresses(country);
+    EXPECT_TRUE(faker::testing::contains(address_data.counties, county)
+        || (address_data.counties.empty() && county.empty()));
 }
 
-TEST_P(LocationTest, shouldGenerateState)
+TEST_P(LocationTest, should_generate_state)
 {
     const auto country = GetParam();
-    const auto& countryAddresses = get_country_addresses(country);
 
-    const auto generatedState = location::state(country);
+    const auto state = location::state(country);
 
-    FAKER_EXPECT_CONTAINER_CONTAINS(countryAddresses.states, generatedState);
+    const auto& address_data = get_country_addresses(country);
+    FAKER_EXPECT_CONTAINER_CONTAINS(address_data.states, state);
 }
 
-TEST_P(LocationTest, shouldGenerateCity)
+TEST_P(LocationTest, should_generate_city)
 {
     const auto country = GetParam();
 
-    const auto& countryAddresses = get_country_addresses(country);
+    const auto city_name = location::city(country);
 
-    const auto generatedCity = location::city(country);
-
+    const auto& address_data = get_country_addresses(country);
     if (country == faker::location::address_country::brazil) {
-        const auto generatedCityElements = utils::split(generatedCity, " ");
+        const auto city_name_parts = utils::split(city_name, " ");
 
-        const auto& generatedCityPrefix = generatedCityElements[0];
+        const auto& city_prefix = city_name_parts[0];
 
-        std::vector<std::string_view> firstNames { person::data::brazilian_male_first_names.begin(),
-            person::data::brazilian_male_first_names.end() };
-        firstNames.insert(firstNames.end(), person::data::brazilian_female_first_names.begin(),
-            person::data::brazilian_female_first_names.end());
-
-        std::vector<std::string_view> lastNames { person::data::brazilian_last_names.begin(),
-            person::data::brazilian_last_names.end() };
-
-        ASSERT_TRUE(faker::testing::any_of(firstNames,
-                        [&generatedCityPrefix](auto firstName) {
-                            return generatedCityPrefix.find(firstName) != std::string::npos;
-                        })
-            || faker::testing::any_of(lastNames,
-                [&generatedCityPrefix](auto lastName) {
-                    return generatedCityPrefix.find(lastName) != std::string::npos;
-                })
-            || faker::testing::any_of(
-                location::data::brazil_city_suffixes, [&generatedCity](auto citySuffix) {
-                    return generatedCity.find(citySuffix) != std::string::npos;
-                }));
+        EXPECT_TRUE(
+            faker::testing::contains_any_of(city_prefix, person::data::brazilian_male_first_names)
+            || faker::testing::contains_any_of(
+                city_prefix, person::data::brazilian_female_first_names)
+            || faker::testing::contains_any_of(city_prefix, person::data::brazilian_last_names)
+            || faker::testing::contains_any_of(city_name, location::data::brazil_city_suffixes));
     } else {
-        FAKER_EXPECT_CONTAINER_CONTAINS(countryAddresses.cities, generatedCity);
+        FAKER_EXPECT_CONTAINER_CONTAINS(address_data.cities, city_name);
     }
 }
 
-TEST_P(LocationTest, shouldGenerateZipCode)
+TEST_P(LocationTest, should_generate_zip_code)
 {
     const auto country = GetParam();
 
-    const auto& countryAddresses = get_country_addresses(country);
+    const auto zip_code = location::zip_code(country);
 
-    const auto generatedZipCode = location::zip_code(country);
-
-    ASSERT_EQ(generatedZipCode.size(), countryAddresses.zip_code_format.size());
-    ASSERT_TRUE(checkIfZipCode(generatedZipCode));
+    EXPECT_EQ(zip_code.size(), get_country_addresses(country).zip_code_format.size());
+    FAKER_EXPECT_REGEX_MATCHES(zip_code, R"(^\d+(-\d+)*$)");
 }
 
-TEST_P(LocationTest, shouldGenerateBuildingNumber)
+TEST_P(LocationTest, should_generate_building_number)
 {
     const auto country = GetParam();
 
-    const auto& countryAddresses = get_country_addresses(country);
+    const auto building_number = location::building_number(country);
 
-    const auto generatedBuildingNumber = location::building_number(country);
-
-    const auto generatedBuildingNumberExceptLastCharacter
-        = generatedBuildingNumber.substr(0, generatedBuildingNumber.size() - 1);
-
-    ASSERT_TRUE(faker::testing::any_of(countryAddresses.building_number_formats,
-        [&generatedBuildingNumber](auto buildingNumberFormat) {
-            for (std::size_t i = 0; i < buildingNumberFormat.size(); i++) {
-                if (buildingNumberFormat[i] == '#') {
-                    const auto isNumeric = checkIfCharacterIsNumeric(generatedBuildingNumber[i]);
-
-                    if (!isNumeric) {
+    const auto building_number_formats = get_country_addresses(country).building_number_formats;
+    EXPECT_TRUE(faker::testing::any_of(
+        building_number_formats, [&building_number](auto building_number_format) {
+            for (std::size_t i = 0; i < building_number_format.size(); i++) {
+                if (building_number_format[i] == '#') {
+                    if (string::data::digits.find(building_number[i]) == std::string::npos) {
                         return false;
                     }
-                } else {
-                    if (generatedBuildingNumber.find(buildingNumberFormat[i])
-                        == std::string::npos) {
-                        return false;
-                    }
+                } else if (building_number[i] != building_number_format[i]) {
+                    return false;
                 }
             }
-
             return true;
         }));
 }
 
-TEST_P(LocationTest, shouldGenerateSecondaryAddress)
+TEST_P(LocationTest, should_generate_secondary_address)
 {
     const auto country = GetParam();
 
-    const auto& countryAddresses = get_country_addresses(country);
+    const auto secondary_address = location::secondary_address(country);
 
-    const auto generatedSecondaryAddress = location::secondary_address(country);
-
-    ASSERT_TRUE(
-        (countryAddresses.secondary_address_formats.empty() && generatedSecondaryAddress.empty())
-        || faker::testing::any_of(countryAddresses.secondary_address_formats,
-            [&generatedSecondaryAddress](auto secondaryAddressFormat) {
-                for (std::size_t i = 0; i < secondaryAddressFormat.size(); i++) {
-                    if (secondaryAddressFormat[i] == '#') {
-                        const auto isNumeric
-                            = checkIfCharacterIsNumeric(generatedSecondaryAddress[i]);
-
-                        if (!isNumeric) {
+    const auto& address_data = get_country_addresses(country);
+    EXPECT_TRUE((address_data.secondary_address_formats.empty() && secondary_address.empty())
+        || faker::testing::any_of(
+            address_data.secondary_address_formats, [&secondary_address](auto address_format) {
+                for (std::size_t i = 0; i < address_format.size(); i++) {
+                    if (address_format[i] == '#') {
+                        if (string::data::digits.find(secondary_address[i]) == std::string::npos) {
                             return false;
                         }
-                    } else {
-                        if (generatedSecondaryAddress.find(secondaryAddressFormat[i])
-                            == std::string::npos) {
-                            return false;
-                        }
+                    } else if (address_format[i] != secondary_address[i]) {
+                        return false;
                     }
                 }
-
                 return true;
             }));
 }
 
-INSTANTIATE_TEST_SUITE_P(TestLocationByCountries, LocationTest, ValuesIn(addressCountries),
+INSTANTIATE_TEST_SUITE_P(TestLocationByCountries, LocationTest, ValuesIn(address_countries),
     [](const TestParamInfo<location::address_country>& info) {
-        return generatedTestName.at(info.param);
+        return generated_test_names.at(info.param);
     });
 
-TEST_F(LocationTest, shouldGenerateUsaStreet)
+TEST_F(LocationTest, should_generate_street)
 {
-    const auto generatedStreet = location::street();
+    const auto street_usa = location::street();
+    const auto street_usa_parts = utils::split(street_usa, " ");
+    EXPECT_EQ(street_usa_parts.size(), 2u);
+    EXPECT_TRUE(
+        faker::testing::contains_any_of(street_usa_parts[0], person::data::english_male_first_names)
+        || faker::testing::contains_any_of(
+            street_usa_parts[0], person::data::english_female_first_names)
+        || faker::testing::contains_any_of(street_usa_parts[0], person::data::english_last_names));
+    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::usa_street_suffixes, street_usa_parts[1]);
 
-    const auto generatedStreetElements = utils::split(generatedStreet, " ");
+    const auto street_pl = location::street(location::address_country::poland);
+    const auto street_pl_parts = utils::split(street_pl, " ");
+    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::poland_street_prefixes, street_pl_parts[0]);
+    FAKER_EXPECT_CONTAINER_CONTAINS(
+        location::data::poland_street_names, street_pl.substr(street_pl_parts[0].size() + 1));
 
-    const auto& generatedFirstOrLastName = generatedStreetElements[0];
-    const auto& generatedStreetSuffix = generatedStreetElements[1];
+    const auto street_ua = location::street(location::address_country::ukraine);
+    const auto street_ua_parts = utils::split(street_ua, " ");
+    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::ukraine_street_prefixes, street_ua_parts[0]);
+    const auto& street_ua_suffix
+        = utils::join({ street_ua_parts.begin() + 1, street_ua_parts.end() });
+    EXPECT_TRUE(
+        faker::testing::contains_any_of(street_ua_suffix, person::data::ukrainian_male_first_names)
+        || faker::testing::contains_any_of(
+            street_ua_suffix, person::data::ukrainian_female_first_names)
+        || faker::testing::contains_any_of(
+            street_ua_suffix, person::data::ukrainian_males_last_names)
+        || faker::testing::contains_any_of(
+            street_ua_suffix, person::data::ukrainian_female_first_names)
+        || faker::testing::contains_any_of(street_ua_suffix, location::data::ukraine_street_names));
 
-    std::vector<std::string_view> firstNames { person::data::english_male_first_names.begin(),
-        person::data::english_male_first_names.end() };
-    firstNames.insert(firstNames.end(), person::data::english_female_first_names.begin(),
-        person::data::english_female_first_names.end());
+    const auto street_es = location::street(location::address_country::estonia);
+    EXPECT_TRUE(faker::testing::contains_any_of(street_es, location::data::estonia_street_names));
 
-    ASSERT_EQ(generatedStreetElements.size(), 2);
-    ASSERT_TRUE(faker::testing::any_of(firstNames,
-                    [&generatedFirstOrLastName](
-                        auto firstName) { return firstName == generatedFirstOrLastName; })
-        || faker::testing::any_of(
-            person::data::english_last_names, [&generatedFirstOrLastName](auto lastName) {
-                return lastName == generatedFirstOrLastName;
-            }));
-    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::usa_street_suffixes, generatedStreetSuffix);
+    const auto street_de = location::street(location::address_country::germany);
+    EXPECT_TRUE(faker::testing::contains_any_of(street_de, location::data::germany_street_names));
+
+    const auto street_cz = location::street(location::address_country::czechia);
+    EXPECT_TRUE(faker::testing::contains_any_of(street_cz, location::data::czech_street_names));
+
+    const auto street_dk = location::street(location::address_country::denmark);
+    EXPECT_TRUE(faker::testing::contains_any_of(street_dk, location::data::denmark_street_names));
+
+    const auto street_fr = location::street(location::address_country::france);
+    const auto street_fr_parts = utils::split(street_fr, " ");
+    EXPECT_GE(street_fr_parts.size(), 2u);
+    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::france_street_prefixes, street_fr_parts[0]);
+    FAKER_EXPECT_CONTAINER_CONTAINS(
+        location::data::france_street_suffixes, street_fr.substr(street_fr_parts[0].size() + 1));
+
+    const auto street_it = location::street(location::address_country::italy);
+    const auto street_it_parts = utils::split(street_it, " ");
+    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::italy_street_prefixes, street_it_parts[0]);
+    const auto& street_it_suffix
+        = utils::join({ street_it_parts.begin() + 1, street_it_parts.end() });
+    EXPECT_TRUE(
+        faker::testing::contains_any_of(street_it_suffix, person::data::italian_male_first_names)
+        || faker::testing::contains_any_of(
+            street_it_suffix, person::data::italian_female_first_names)
+        || faker::testing::contains_any_of(street_it_suffix, person::data::italian_last_names));
+
+    const auto street_au = location::street(location::address_country::australia);
+    EXPECT_TRUE(
+        faker::testing::contains_any_of(street_au, person::data::australian_male_first_names)
+        || faker::testing::contains_any_of(street_au, person::data::australian_female_first_names)
+        || faker::testing::contains_any_of(street_au, person::data::australian_last_names));
+    EXPECT_TRUE(
+        faker::testing::contains_any_of(street_au, location::data::australia_street_suffixes));
+
+    const auto street_in = location::street(location::address_country::india);
+    const auto street_in_parts = utils::split(street_in, " ");
+    EXPECT_GE(street_in_parts.size(), 2u);
+    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::india_street_suffixes,
+        utils::join({ street_in_parts.begin() + 1, street_in_parts.end() }));
+
+    const auto street_sp = location::street(location::address_country::spain);
+    EXPECT_TRUE(faker::testing::contains_any_of(street_sp, person::data::spanish_male_first_names)
+        || faker::testing::contains_any_of(street_sp, person::data::spanish_female_first_names)
+        || faker::testing::contains_any_of(street_sp, person::data::spanish_last_names));
+    EXPECT_TRUE(faker::testing::contains_any_of(street_sp, location::data::spain_street_suffixes));
+
+    const auto street_fi = location::street(location::address_country::finland);
+    const auto street_fi_parts = utils::split(street_fi, " ");
+    EXPECT_GE(street_fi_parts.size(), 2u);
+    EXPECT_TRUE(
+        faker::testing::contains_any_of(street_fi_parts[0], person::data::finnish_male_first_names)
+        || faker::testing::contains_any_of(
+            street_fi_parts[0], person::data::finnish_female_first_names)
+        || faker::testing::contains_any_of(street_fi_parts[0], person::data::finnish_last_names));
+    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::finland_street_suffixes, street_fi_parts[1]);
+
+    const auto street_ru = location::street(location::address_country::russia);
+    const auto street_ru_parts = utils::split(street_ru, " ");
+    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::russia_street_prefixes, street_ru_parts[0]);
+    const auto street_ru_tail = street_ru.substr(street_ru_parts[0].size() + 1);
+    EXPECT_TRUE(
+        faker::testing::contains_any_of(street_ru_tail, person::data::russian_male_first_names)
+        || faker::testing::contains_any_of(street_ru_tail, person::data::russian_female_first_names)
+        || faker::testing::contains_any_of(street_ru_tail, person::data::russian_male_last_names)
+        || faker::testing::contains_any_of(street_ru_tail, person::data::russian_female_last_names)
+        || faker::testing::contains_any_of(street_ru_tail, location::data::russia_street_names));
 }
 
-TEST_F(LocationTest, shouldGenerateUsaStreetAddress)
+TEST_F(LocationTest, should_generate_street_address)
 {
-    const auto generatedStreetAddress = location::street_address();
+    const auto address_usa = location::street_address();
+    const auto street_usa_parts = utils::split(address_usa, " ");
+    EXPECT_EQ(street_usa_parts.size(), 3u);
+    FAKER_EXPECT_REGEX_MATCHES(street_usa_parts[0], R"(^\d{3,5}$)");
+    EXPECT_TRUE(
+        faker::testing::contains_any_of(street_usa_parts[1], person::data::english_male_first_names)
+        || faker::testing::contains_any_of(
+            street_usa_parts[1], person::data::english_female_first_names)
+        || faker::testing::contains_any_of(street_usa_parts[1], person::data::english_last_names));
+    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::usa_street_suffixes, street_usa_parts[2]);
 
-    const auto generatedStreetAddressElements = utils::split(generatedStreetAddress, " ");
+    const auto address_pl = location::street_address(location::address_country::poland);
+    EXPECT_TRUE(
+        faker::testing::contains_any_of(address_pl, location::data::poland_street_prefixes));
+    EXPECT_TRUE(faker::testing::contains_any_of(address_pl, location::data::poland_street_names));
 
-    const auto& generatedBuildingNumber = generatedStreetAddressElements[0];
-    const auto& generatedFirstOrLastName = generatedStreetAddressElements[1];
-    const auto& generatedStreetSuffix = generatedStreetAddressElements[2];
+    const auto address_ua = location::street_address(location::address_country::ukraine);
+    EXPECT_TRUE(
+        faker::testing::contains_any_of(address_ua, location::data::ukraine_street_prefixes));
+    EXPECT_TRUE(
+        faker::testing::contains_any_of(address_ua, person::data::ukrainian_male_first_names)
+        || faker::testing::contains_any_of(address_ua, person::data::ukrainian_males_last_names)
+        || faker::testing::contains_any_of(address_ua, person::data::ukrainian_female_first_names)
+        || faker::testing::contains_any_of(address_ua, person::data::ukrainian_female_last_names)
+        || faker::testing::contains_any_of(address_ua, location::data::ukraine_street_names));
 
-    std::vector<std::string_view> firstNames { person::data::english_male_first_names.begin(),
-        person::data::english_male_first_names.end() };
-    firstNames.insert(firstNames.end(), person::data::english_female_first_names.begin(),
-        person::data::english_female_first_names.end());
+    const auto address_es = location::street_address(location::address_country::estonia);
+    EXPECT_TRUE(faker::testing::contains_any_of(address_es, location::data::estonia_street_names));
 
-    ASSERT_EQ(generatedStreetAddressElements.size(), 3);
-    ASSERT_TRUE(generatedBuildingNumber.size() >= 3 && generatedBuildingNumber.size() <= 5);
-    ASSERT_TRUE(checkIfAllCharactersAreNumeric(generatedBuildingNumber));
-    ASSERT_TRUE(faker::testing::any_of(firstNames,
-                    [&generatedFirstOrLastName](
-                        auto firstName) { return firstName == generatedFirstOrLastName; })
-        || faker::testing::any_of(
-            person::data::english_last_names, [&generatedFirstOrLastName](auto lastName) {
-                return lastName == generatedFirstOrLastName;
-            }));
-    ASSERT_TRUE(faker::testing::any_of(
-        location::data::usa_street_suffixes, [&generatedStreetSuffix](auto streetSuffix) {
-            return streetSuffix == generatedStreetSuffix;
-        }));
+    const auto address_de = location::street_address(location::address_country::germany);
+    EXPECT_TRUE(faker::testing::contains_any_of(address_de, location::data::germany_street_names));
+
+    const auto address_cz = location::street_address(location::address_country::czechia);
+    EXPECT_TRUE(faker::testing::contains_any_of(address_cz, location::data::czech_street_names));
+
+    const auto address_dk = location::street_address(location::address_country::denmark);
+    EXPECT_TRUE(faker::testing::contains_any_of(address_dk, location::data::denmark_street_names));
+
+    const auto address_fr = location::street_address(location::address_country::france);
+    const auto street_fr_parts = utils::split(address_fr, " ");
+    EXPECT_GE(street_fr_parts.size(), 3u);
+    FAKER_EXPECT_REGEX_MATCHES(street_fr_parts[0], R"(^\d{1,4}$)");
+    EXPECT_TRUE(
+        faker::testing::contains(location::data::france_street_prefixes, street_fr_parts[1]));
+    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::france_street_suffixes,
+        utils::join({ street_fr_parts.begin() + 2, street_fr_parts.end() }));
+
+    const auto address_it = location::street_address(location::address_country::italy);
+    EXPECT_TRUE(faker::testing::contains_any_of(address_it, person::data::italian_male_first_names)
+        || faker::testing::contains_any_of(address_it, person::data::italian_female_first_names)
+        || faker::testing::contains_any_of(address_it, person::data::italian_last_names));
+    EXPECT_TRUE(faker::testing::contains_any_of(address_it, location::data::italy_street_prefixes));
+
+    const auto address_in = location::street_address(location::address_country::india);
+    const auto street_in_parts = utils::split(address_in, " ");
+    EXPECT_GE(street_in_parts.size(), 3);
+    FAKER_EXPECT_REGEX_MATCHES(street_in_parts[0], R"(^\d+$)");
+    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::india_street_suffixes,
+        utils::join({ street_in_parts.begin() + 2, street_in_parts.end() }));
+
+    const auto address_sp = location::street_address(location::address_country::spain);
+    EXPECT_TRUE(faker::testing::contains_any_of(address_sp, person::data::spanish_male_first_names)
+        || faker::testing::contains_any_of(address_sp, person::data::spanish_female_first_names)
+        || faker::testing::contains_any_of(address_sp, person::data::spanish_last_names));
+    EXPECT_TRUE(faker::testing::contains_any_of(address_sp, location::data::spain_street_suffixes));
+
+    const auto address_fi = location::street_address(location::address_country::finland);
+    EXPECT_TRUE(faker::testing::contains_any_of(address_fi, person::data::finnish_male_first_names)
+        || faker::testing::contains_any_of(address_fi, person::data::finnish_female_first_names)
+        || faker::testing::contains_any_of(address_fi, person::data::finnish_last_names));
+    EXPECT_TRUE(
+        faker::testing::contains_any_of(address_fi, location::data::finland_street_suffixes));
+
+    const auto address_au = location::street_address(location::address_country::australia);
+    const auto address_au_parts = utils::split(address_au, " ");
+    const auto& address_au_suffix
+        = utils::join({ address_au_parts.begin() + 1, address_au_parts.end() });
+    EXPECT_TRUE(faker::testing::contains_any_of(
+                    address_au_suffix, person::data::australian_male_first_names)
+        || faker::testing::contains_any_of(
+            address_au_suffix, person::data::australian_female_first_names)
+        || faker::testing::contains_any_of(address_au_suffix, person::data::australian_last_names)
+        || faker::testing::contains_any_of(
+            address_au_suffix, location::data::australia_street_suffixes));
+    FAKER_EXPECT_REGEX_MATCHES(address_au_parts[0], R"(^\d{1,4}$)");
+
+    const auto address_ru = location::street_address(location::address_country::russia);
+    EXPECT_TRUE(
+        faker::testing::contains_any_of(address_ru, location::data::russia_street_prefixes));
+    EXPECT_TRUE(faker::testing::contains_any_of(address_ru, person::data::russian_male_first_names)
+        || faker::testing::contains_any_of(address_ru, person::data::russian_male_last_names)
+        || faker::testing::contains_any_of(address_ru, person::data::russian_female_first_names)
+        || faker::testing::contains_any_of(address_ru, person::data::russian_female_last_names)
+        || faker::testing::contains_any_of(address_ru, location::data::russia_street_names));
 }
 
-TEST_F(LocationTest, shouldGeneratePolandStreet)
+TEST_F(LocationTest, should_generate_country)
 {
-    const auto generatedStreet = location::street(location::address_country::poland);
+    const auto country = location::country_name();
 
-    const auto generatedStreetElements = utils::split(generatedStreet, " ");
-
-    const auto& generatedStreetPrefix = generatedStreetElements[0];
-    const auto& generatedStreetName
-        = utils::join({ generatedStreetElements.begin() + 1, generatedStreetElements.end() });
-
-    ASSERT_TRUE(faker::testing::any_of(
-        location::data::poland_street_prefixes, [&generatedStreetPrefix](auto streetPrefix) {
-            return streetPrefix == generatedStreetPrefix;
-        }));
-    ASSERT_TRUE(faker::testing::any_of(location::data::poland_street_names,
-        [&generatedStreetName](auto streetName) { return streetName == generatedStreetName; }));
+    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::all_countries, country);
 }
 
-TEST_F(LocationTest, shouldGeneratePolandStreetAddress)
+TEST_F(LocationTest, should_generate_country_code)
 {
-    const auto generatedStreetAddress = location::street_address(location::address_country::poland);
+    const auto country_code = location::country_code();
 
-    ASSERT_TRUE(faker::testing::any_of(
-        location::data::poland_street_prefixes, [&generatedStreetAddress](auto prefix) {
-            return generatedStreetAddress.find(prefix) != std::string::npos;
-        }));
-    ASSERT_TRUE(faker::testing::any_of(
-        location::data::poland_street_names, [&generatedStreetAddress](auto street) {
-            return generatedStreetAddress.find(street) != std::string::npos;
-        }));
+    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::country_codes, country_code);
 }
 
-TEST_F(LocationTest, shouldGenerateRussiaStreet)
+TEST_F(LocationTest, should_generate_latitude)
 {
-    const auto generatedStreet = location::street(location::address_country::russia);
+    const auto latitude_default_prec = location::latitude();
+    FAKER_EXPECT_BETWEEN(std::stof(latitude_default_prec), -90, 90);
+    FAKER_EXPECT_REGEX_MATCHES(latitude_default_prec, R"(^-?\d+\.\d{4}$)");
 
-    const auto generatedStreetElements = utils::split(generatedStreet, " ");
-
-    const auto& generatedStreetPrefix = generatedStreetElements[0];
-    const auto& generatedStreetSuffix
-        = utils::join({ generatedStreetElements.begin() + 1, generatedStreetElements.end() });
-
-    std::vector<std::string_view> firstNames { person::data::russian_male_first_names.begin(),
-        person::data::russian_male_first_names.end() };
-    firstNames.insert(firstNames.end(), person::data::russian_female_first_names.begin(),
-        person::data::russian_female_first_names.end());
-
-    std::vector<std::string_view> lastNames { person::data::russian_male_last_names.begin(),
-        person::data::russian_male_last_names.end() };
-    firstNames.insert(firstNames.end(), person::data::russian_female_last_names.begin(),
-        person::data::russian_female_last_names.end());
-
-    ASSERT_TRUE(faker::testing::any_of(
-        location::data::russia_street_prefixes, [&generatedStreetPrefix](auto streetPrefix) {
-            return streetPrefix == generatedStreetPrefix;
-        }));
-    ASSERT_TRUE(
-        faker::testing::any_of(firstNames,
-            [&generatedStreetSuffix](auto firstName) { return firstName == generatedStreetSuffix; })
-        || faker::testing::any_of(lastNames,
-            [&generatedStreetSuffix](auto lastName) { return lastName == generatedStreetSuffix; })
-        || faker::testing::any_of(
-            location::data::russia_street_names, [&generatedStreetSuffix](auto streetName) {
-                return streetName == generatedStreetSuffix;
-            }));
+    const auto latitude_custom_prec = location::latitude(precision_t::three_dp);
+    FAKER_EXPECT_BETWEEN(std::stof(latitude_custom_prec), -90, 90);
+    FAKER_EXPECT_REGEX_MATCHES(latitude_custom_prec, R"(^-?\d+\.\d{3}$)");
 }
 
-TEST_F(LocationTest, shouldGenerateRussiaStreetAddress)
+TEST_F(LocationTest, should_generate_longitude)
 {
-    const auto generatedStreetAddress = location::street_address(location::address_country::russia);
+    const auto longitude_default_prec = location::longitude();
+    FAKER_EXPECT_BETWEEN(std::stof(longitude_default_prec), -180, 180);
+    FAKER_EXPECT_REGEX_MATCHES(longitude_default_prec, R"(^-?\d+\.\d{4}$)");
 
-    std::vector<std::string_view> firstNames { person::data::russian_male_first_names.begin(),
-        person::data::russian_male_first_names.end() };
-    firstNames.insert(firstNames.end(), person::data::russian_female_first_names.begin(),
-        person::data::russian_female_first_names.end());
-
-    std::vector<std::string_view> lastNames { person::data::russian_male_last_names.begin(),
-        person::data::russian_male_last_names.end() };
-    lastNames.insert(lastNames.end(), person::data::russian_female_last_names.begin(),
-        person::data::russian_female_last_names.end());
-
-    ASSERT_TRUE(faker::testing::any_of(
-        location::data::russia_street_prefixes, [&generatedStreetAddress](auto prefix) {
-            return generatedStreetAddress.find(prefix) != std::string::npos;
-        }));
-    ASSERT_TRUE(faker::testing::any_of(firstNames,
-                    [&generatedStreetAddress](auto firstName) {
-                        return generatedStreetAddress.find(firstName) != std::string::npos;
-                    })
-        || faker::testing::any_of(lastNames,
-            [&generatedStreetAddress](auto lastName) {
-                return generatedStreetAddress.find(lastName) != std::string::npos;
-            })
-        || faker::testing::any_of(
-            location::data::russia_street_names, [&generatedStreetAddress](auto streetName) {
-                return generatedStreetAddress.find(streetName) != std::string::npos;
-            }));
+    const auto longitude_custom_prec = location::longitude(precision_t::six_dp);
+    FAKER_EXPECT_BETWEEN(std::stof(longitude_custom_prec), -180, 180);
+    FAKER_EXPECT_REGEX_MATCHES(longitude_custom_prec, R"(^-?\d+\.\d{6}$)");
 }
 
-TEST_F(LocationTest, shouldGenerateFranceStreet)
+TEST_F(LocationTest, should_generate_direction)
 {
-    const auto generatedStreet = location::street(location::address_country::france);
+    const auto direction = location::direction();
 
-    const auto generatedStreetElements = utils::split(generatedStreet, " ");
-
-    const auto& generatedStreetPrefix = generatedStreetElements[0];
-    const auto& generatedStreetSuffix
-        = utils::join({ generatedStreetElements.begin() + 1, generatedStreetElements.end() });
-
-    ASSERT_GE(generatedStreetElements.size(), 2);
-    ASSERT_TRUE(faker::testing::any_of(
-        location::data::france_street_prefixes, [&generatedStreetPrefix](auto streetPrefix) {
-            return streetPrefix == generatedStreetPrefix;
-        }));
-    ASSERT_TRUE(faker::testing::any_of(
-        location::data::france_street_suffixes, [&generatedStreetSuffix](auto streetSuffix) {
-            return streetSuffix == generatedStreetSuffix;
-        }));
+    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::directions, direction);
 }
 
-TEST_F(LocationTest, shouldGenerateFranceStreetAddress)
+TEST_F(LocationTest, should_generate_time_zone)
 {
-    const auto generatedStreetAddress = location::street_address(location::address_country::france);
+    const auto time_zone = location::time_zone();
 
-    const auto generatedStreetAddressElements = utils::split(generatedStreetAddress, " ");
-
-    const auto& generatedBuildingNumber = generatedStreetAddressElements[0];
-    const auto& generatedStreetPrefix = generatedStreetAddressElements[1];
-    const auto& generatedStreetSuffix = utils::join(
-        { generatedStreetAddressElements.begin() + 2, generatedStreetAddressElements.end() });
-
-    ASSERT_GE(generatedStreetAddressElements.size(), 3);
-    ASSERT_TRUE(!generatedBuildingNumber.empty() && generatedBuildingNumber.size() <= 4);
-    ASSERT_TRUE(checkIfAllCharactersAreNumeric(generatedBuildingNumber));
-    ASSERT_TRUE(
-        faker::testing::contains(location::data::france_street_prefixes, generatedStreetPrefix));
-    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::france_street_suffixes, generatedStreetSuffix);
-}
-
-TEST_F(LocationTest, shouldGenerateCountry)
-{
-    const auto generatedCountry = location::country_name();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::all_countries, generatedCountry);
-}
-
-TEST_F(LocationTest, shouldGenerateCountryCode)
-{
-    const auto generatedCountryCode = location::country_code();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::country_codes, generatedCountryCode);
-}
-
-TEST_F(LocationTest, shouldGenerateLatitude)
-{
-    const auto latitude = location::latitude();
-
-    auto offset = latitude.size();
-    const auto latitudeAsFloat = std::stof(latitude, &offset);
-
-    const auto generatedLatitudeParts = utils::split(latitude, ".");
-
-    ASSERT_EQ(generatedLatitudeParts.size(), 2);
-    ASSERT_EQ(generatedLatitudeParts[1].size(), 4);
-    ASSERT_GE(latitudeAsFloat, -90);
-    ASSERT_LE(latitudeAsFloat, 90);
-}
-
-TEST_F(LocationTest, shouldGenerateLatitudeWithSpecifiedPrecision)
-{
-    const auto latitude = location::latitude(precision_t::three_dp);
-
-    auto offset = latitude.size();
-    const auto latitudeAsFloat = std::stof(latitude, &offset);
-
-    const auto generatedLatitudeParts = utils::split(latitude, ".");
-
-    ASSERT_EQ(generatedLatitudeParts.size(), 2);
-    ASSERT_EQ(generatedLatitudeParts[1].size(), 3);
-    ASSERT_GE(latitudeAsFloat, -90);
-    ASSERT_LE(latitudeAsFloat, 90);
-}
-
-TEST_F(LocationTest, shouldGenerateLongitude)
-{
-    const auto longitude = location::longitude();
-
-    auto offset = longitude.size();
-    const auto longitudeAsFloat = std::stof(longitude, &offset);
-
-    const auto generatedLongitudeParts = utils::split(longitude, ".");
-
-    ASSERT_EQ(generatedLongitudeParts.size(), 2);
-    ASSERT_EQ(generatedLongitudeParts[1].size(), 4);
-    ASSERT_GE(longitudeAsFloat, -180);
-    ASSERT_LE(longitudeAsFloat, 180);
-}
-
-TEST_F(LocationTest, shouldGenerateLongitudeWithSpecifiedPrecision)
-{
-    const auto longitude = location::longitude(precision_t::six_dp);
-
-    auto offset = longitude.size();
-    const auto longitudeAsFloat = std::stof(longitude, &offset);
-
-    const auto generatedLongitudeParts = utils::split(longitude, ".");
-
-    ASSERT_EQ(generatedLongitudeParts.size(), 2);
-    ASSERT_EQ(generatedLongitudeParts[1].size(), 6);
-    ASSERT_GE(longitudeAsFloat, -180);
-    ASSERT_LE(longitudeAsFloat, 180);
-}
-
-TEST_F(LocationTest, shouldGenerateDirection)
-{
-    const auto generatedDirection = location::direction();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::directions, generatedDirection);
-}
-
-TEST_F(LocationTest, shouldGenerateTimeZone)
-{
-    const auto generatedTimeZone = location::time_zone();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::time_zones, generatedTimeZone);
-}
-
-TEST_F(LocationTest, shouldGenerateUkraineStreet)
-{
-    const auto generatedStreet = location::street(location::address_country::ukraine);
-
-    const auto generatedStreetElements = utils::split(generatedStreet, " ");
-
-    const auto& generatedStreetPrefix = generatedStreetElements[0];
-    const auto& generatedStreetSuffix
-        = utils::join({ generatedStreetElements.begin() + 1, generatedStreetElements.end() });
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::ukraine_street_prefixes, generatedStreetPrefix);
-
-    std::vector<std::string_view> firstNames { person::data::ukrainian_male_first_names.begin(),
-        person::data::ukrainian_male_first_names.end() };
-    firstNames.insert(firstNames.end(), person::data::ukrainian_female_first_names.begin(),
-        person::data::ukrainian_female_first_names.end());
-
-    std::vector<std::string_view> lastNames { person::data::ukrainian_males_last_names.begin(),
-        person::data::ukrainian_males_last_names.end() };
-    lastNames.insert(lastNames.end(), person::data::ukrainian_female_last_names.begin(),
-        person::data::ukrainian_female_last_names.end());
-
-    ASSERT_TRUE(faker::testing::any_of(firstNames,
-                    [&generatedStreetSuffix](auto firstName) {
-                        return generatedStreetSuffix.find(firstName) != std::string::npos;
-                    })
-        || faker::testing::any_of(lastNames,
-            [&generatedStreetSuffix](auto lastName) {
-                return generatedStreetSuffix.find(lastName) != std::string::npos;
-            })
-        || faker::testing::any_of(
-            location::data::ukraine_street_names, [&generatedStreetSuffix](auto streetName) {
-                return generatedStreetSuffix.find(streetName) != std::string::npos;
-            }));
-}
-
-TEST_F(LocationTest, shouldGenerateUkraineStreetAddress)
-{
-    const auto generatedStreetAddress
-        = location::street_address(location::address_country::ukraine);
-
-    ASSERT_TRUE(faker::testing::any_of(
-        location::data::ukraine_street_prefixes, [&generatedStreetAddress](auto prefix) {
-            return generatedStreetAddress.find(prefix) != std::string::npos;
-        }));
-
-    std::vector<std::string_view> firstNames { person::data::ukrainian_male_first_names.begin(),
-        person::data::ukrainian_male_first_names.end() };
-    firstNames.insert(firstNames.end(), person::data::ukrainian_female_first_names.begin(),
-        person::data::ukrainian_female_first_names.end());
-
-    std::vector<std::string_view> lastNames { person::data::ukrainian_males_last_names.begin(),
-        person::data::ukrainian_males_last_names.end() };
-    lastNames.insert(lastNames.end(), person::data::ukrainian_female_last_names.begin(),
-        person::data::ukrainian_female_last_names.end());
-
-    ASSERT_TRUE(faker::testing::any_of(firstNames,
-                    [&generatedStreetAddress](auto firstName) {
-                        return generatedStreetAddress.find(firstName) != std::string::npos;
-                    })
-        || faker::testing::any_of(lastNames,
-            [&generatedStreetAddress](auto lastName) {
-                return generatedStreetAddress.find(lastName) != std::string::npos;
-            })
-        || faker::testing::any_of(
-            location::data::ukraine_street_names, [&generatedStreetAddress](auto streetName) {
-                return generatedStreetAddress.find(streetName) != std::string::npos;
-            }));
-}
-
-TEST_F(LocationTest, shouldGenerateItalyStreet)
-{
-    const auto generatedStreet = location::street(location::address_country::italy);
-
-    const auto generatedStreetElements = utils::split(generatedStreet, " ");
-
-    const auto& generatedStreetPrefix = generatedStreetElements[0];
-    const auto& generatedStreetSuffix
-        = utils::join({ generatedStreetElements.begin() + 1, generatedStreetElements.end() });
-
-    ASSERT_TRUE(faker::testing::any_of(
-        location::data::italy_street_prefixes, [&generatedStreetPrefix](auto streetPrefix) {
-            return streetPrefix == generatedStreetPrefix;
-        }));
-
-    std::vector<std::string_view> firstNames { person::data::italian_male_first_names.begin(),
-        person::data::italian_male_first_names.end() };
-    firstNames.insert(firstNames.end(), person::data::italian_female_first_names.begin(),
-        person::data::italian_female_first_names.end());
-
-    std::vector<std::string_view> lastNames { person::data::italian_last_names.begin(),
-        person::data::italian_last_names.end() };
-
-    ASSERT_TRUE(faker::testing::any_of(firstNames, [&generatedStreetSuffix](auto firstName) {
-        return generatedStreetSuffix.find(firstName) != std::string::npos;
-    }) || faker::testing::any_of(lastNames, [&generatedStreetSuffix](auto lastName) {
-        return generatedStreetSuffix.find(lastName) != std::string::npos;
-    }));
-}
-
-TEST_F(LocationTest, shouldGenerateItalyStreetAddress)
-{
-    const auto generatedStreetAddress = location::street_address(location::address_country::italy);
-
-    ASSERT_TRUE(faker::testing::any_of(
-        location::data::italy_street_prefixes, [&generatedStreetAddress](auto prefix) {
-            return generatedStreetAddress.find(prefix) != std::string::npos;
-        }));
-
-    std::vector<std::string_view> firstNames { person::data::italian_male_first_names.begin(),
-        person::data::italian_male_first_names.end() };
-    firstNames.insert(firstNames.end(), person::data::italian_female_first_names.begin(),
-        person::data::italian_female_first_names.end());
-
-    std::vector<std::string_view> lastNames { person::data::italian_last_names.begin(),
-        person::data::italian_last_names.end() };
-
-    ASSERT_TRUE(faker::testing::any_of(firstNames, [&generatedStreetAddress](auto firstName) {
-        return generatedStreetAddress.find(firstName) != std::string::npos;
-    }) || faker::testing::any_of(lastNames, [&generatedStreetAddress](auto lastName) {
-        return generatedStreetAddress.find(lastName) != std::string::npos;
-    }));
-}
-
-TEST_F(LocationTest, shouldGenerateGermanyStreet)
-{
-    const auto generatedStreet = location::street(location::address_country::germany);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::germany_street_names, generatedStreet);
-}
-
-TEST_F(LocationTest, shouldGenerateGermanyStreetAddress)
-{
-    const auto generatedStreetAddress
-        = location::street_address(location::address_country::germany);
-
-    ASSERT_TRUE(faker::testing::any_of(
-        location::data::germany_street_names, [&generatedStreetAddress](auto streetName) {
-            return generatedStreetAddress.find(streetName) != std::string::npos;
-        }));
-}
-
-TEST_F(LocationTest, shouldGenerateCzechStreet)
-{
-    const auto generatedStreet = location::street(location::address_country::czechia);
-
-    ASSERT_TRUE(faker::testing::any_of(location::data::czech_street_names,
-        [&generatedStreet](auto streetName) { return streetName == generatedStreet; }));
-}
-
-TEST_F(LocationTest, shouldGenerateCzechStreetAddress)
-{
-    const auto generatedStreetAddress
-        = location::street_address(location::address_country::czechia);
-
-    ASSERT_TRUE(faker::testing::any_of(
-        location::data::czech_street_names, [&generatedStreetAddress](auto streetName) {
-            return generatedStreetAddress.find(streetName) != std::string::npos;
-        }));
-}
-
-TEST_F(LocationTest, shouldGenerateAustraliaStreet)
-{
-    const auto generatedStreet = location::street(location::address_country::australia);
-
-    std::vector<std::string_view> firstNames { person::data::australian_male_first_names.begin(),
-        person::data::australian_male_first_names.end() };
-    firstNames.insert(firstNames.end(), person::data::australian_female_first_names.begin(),
-        person::data::australian_female_first_names.end());
-
-    std::vector<std::string_view> lastNames { person::data::australian_last_names.begin(),
-        person::data::australian_last_names.end() };
-
-    ASSERT_TRUE((faker::testing::any_of(firstNames,
-                     [&generatedStreet](auto firstName) {
-                         return generatedStreet.find(firstName) != std::string::npos;
-                     })
-                    || faker::testing::any_of(lastNames,
-                        [&generatedStreet](auto lastName) {
-                            return generatedStreet.find(lastName) != std::string::npos;
-                        }))
-        && faker::testing::any_of(
-            location::data::australia_street_suffixes, [&generatedStreet](auto streetSuffix) {
-                return generatedStreet.find(streetSuffix) != std::string::npos;
-            }));
-}
-
-TEST_F(LocationTest, shouldGenerateAustraliaStreetAddress)
-{
-    const auto generatedStreetAddress
-        = location::street_address(location::address_country::australia);
-
-    const auto generatedStreetAddressElements = utils::split(generatedStreetAddress, " ");
-
-    const auto& generatedBuildingNumber = generatedStreetAddressElements[0];
-    const auto& generatedStreetSuffix = utils::join(
-        { generatedStreetAddressElements.begin() + 1, generatedStreetAddressElements.end() });
-
-    std::vector<std::string_view> firstNames { person::data::australian_male_first_names.begin(),
-        person::data::australian_male_first_names.end() };
-    firstNames.insert(firstNames.end(), person::data::australian_female_first_names.begin(),
-        person::data::australian_female_first_names.end());
-
-    std::vector<std::string_view> lastNames { person::data::australian_last_names.begin(),
-        person::data::australian_last_names.end() };
-
-    ASSERT_TRUE(!generatedBuildingNumber.empty() && generatedBuildingNumber.size() <= 4);
-    ASSERT_TRUE(checkIfAllCharactersAreNumeric(generatedBuildingNumber));
-
-    ASSERT_TRUE((faker::testing::any_of(firstNames,
-                     [&generatedStreetSuffix](auto firstName) {
-                         return generatedStreetSuffix.find(firstName) != std::string::npos;
-                     })
-                    || faker::testing::any_of(lastNames,
-                        [&generatedStreetSuffix](auto lastName) {
-                            return generatedStreetSuffix.find(lastName) != std::string::npos;
-                        }))
-        && faker::testing::any_of(
-            location::data::australia_street_suffixes, [&generatedStreetSuffix](auto streetSuffix) {
-                return generatedStreetSuffix.find(streetSuffix) != std::string::npos;
-            }));
-}
-
-TEST_F(LocationTest, shouldGenerateIndiaStreet)
-{
-    const auto generatedStreet = location::street(location::address_country::india);
-
-    const auto generatedStreetElements = utils::split(generatedStreet, " ");
-
-    const auto& generatedStreetSuffix
-        = utils::join({ generatedStreetElements.begin() + 1, generatedStreetElements.end() });
-
-    ASSERT_GE(generatedStreetElements.size(), 2);
-    ASSERT_TRUE(faker::testing::any_of(
-        location::data::india_street_suffixes, [&generatedStreetSuffix](auto streetSuffix) {
-            return streetSuffix == generatedStreetSuffix;
-        }));
-}
-
-TEST_F(LocationTest, shouldGenerateIndiaStreetAddress)
-{
-    const auto generatedStreetAddress = location::street_address(location::address_country::india);
-
-    const auto generatedStreetAddressElements = utils::split(generatedStreetAddress, " ");
-
-    const auto& generatedBuildingNumber = generatedStreetAddressElements[0];
-    const auto& generatedStreetSuffix = utils::join(
-        { generatedStreetAddressElements.begin() + 2, generatedStreetAddressElements.end() });
-
-    ASSERT_GE(generatedStreetAddressElements.size(), 3);
-    ASSERT_TRUE(!generatedBuildingNumber.empty());
-    ASSERT_TRUE(checkIfAllCharactersAreNumeric(generatedBuildingNumber));
-    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::india_street_suffixes, generatedStreetSuffix);
-}
-
-TEST_F(LocationTest, shouldGenerateDenmarkStreet)
-{
-    const auto generatedStreet = location::street(location::address_country::denmark);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::denmark_street_names, generatedStreet);
-}
-
-TEST_F(LocationTest, shouldGenerateDenmarkStreetAddress)
-{
-    const auto generatedStreetAddress
-        = location::street_address(location::address_country::denmark);
-
-    ASSERT_TRUE(faker::testing::any_of(
-        location::data::denmark_street_names, [&generatedStreetAddress](auto streetName) {
-            return generatedStreetAddress.find(streetName) != std::string::npos;
-        }));
-}
-
-TEST_F(LocationTest, shouldGenerateSpainStreet)
-{
-    const auto generatedStreet = location::street(location::address_country::spain);
-
-    std::vector<std::string_view> firstNames { person::data::spanish_male_first_names.begin(),
-        person::data::spanish_male_first_names.end() };
-    firstNames.insert(firstNames.end(), person::data::spanish_female_first_names.begin(),
-        person::data::spanish_female_first_names.end());
-
-    std::vector<std::string_view> lastNames { person::data::spanish_last_names.begin(),
-        person::data::spanish_last_names.end() };
-
-    ASSERT_TRUE((faker::testing::any_of(firstNames,
-                     [&generatedStreet](auto firstName) {
-                         return generatedStreet.find(firstName) != std::string::npos;
-                     })
-                    || faker::testing::any_of(lastNames,
-                        [&generatedStreet](auto lastName) {
-                            return generatedStreet.find(lastName) != std::string::npos;
-                        }))
-        && faker::testing::any_of(
-            location::data::spain_street_suffixes, [&generatedStreet](auto streetSuffix) {
-                return generatedStreet.find(streetSuffix) != std::string::npos;
-            }));
-}
-
-TEST_F(LocationTest, shouldGenerateSpainStreetAddress)
-{
-    const auto generatedStreetAddress = location::street_address(location::address_country::spain);
-
-    ASSERT_TRUE(faker::testing::any_of(
-        location::data::spain_street_suffixes, [&generatedStreetAddress](auto suffix) {
-            return generatedStreetAddress.find(suffix) != std::string::npos;
-        }));
-
-    std::vector<std::string_view> firstNames { person::data::spanish_male_first_names.begin(),
-        person::data::spanish_male_first_names.end() };
-    firstNames.insert(firstNames.end(), person::data::spanish_female_first_names.begin(),
-        person::data::spanish_female_first_names.end());
-
-    std::vector<std::string_view> lastNames { person::data::spanish_last_names.begin(),
-        person::data::spanish_last_names.end() };
-
-    ASSERT_TRUE(faker::testing::any_of(firstNames, [&generatedStreetAddress](auto firstName) {
-        return generatedStreetAddress.find(firstName) != std::string::npos;
-    }) || faker::testing::any_of(lastNames, [&generatedStreetAddress](auto lastName) {
-        return generatedStreetAddress.find(lastName) != std::string::npos;
-    }));
-}
-
-TEST_F(LocationTest, shouldGenerateFinlandStreet)
-{
-    const auto generatedStreet = location::street(location::address_country::finland);
-
-    const auto generatedStreetElements = utils::split(generatedStreet, " ");
-
-    const auto& generatedStreetPrefix = generatedStreetElements[0];
-    const auto& generatedStreetSuffix = generatedStreetElements[1];
-
-    std::vector<std::string_view> firstNames { person::data::finnish_male_first_names.begin(),
-        person::data::finnish_male_first_names.end() };
-    firstNames.insert(firstNames.end(), person::data::finnish_female_first_names.begin(),
-        person::data::finnish_female_first_names.end());
-
-    std::vector<std::string_view> lastNames { person::data::finnish_last_names.begin(),
-        person::data::finnish_last_names.end() };
-
-    ASSERT_GE(generatedStreetElements.size(), 2);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::finland_street_suffixes, generatedStreetSuffix);
-
-    ASSERT_TRUE(faker::testing::any_of(firstNames, [&generatedStreetPrefix](auto firstName) {
-        return generatedStreetPrefix.find(firstName) != std::string::npos;
-    }) || faker::testing::any_of(lastNames, [&generatedStreetPrefix](auto lastName) {
-        return generatedStreetPrefix.find(lastName) != std::string::npos;
-    }));
-}
-
-TEST_F(LocationTest, shouldGenerateFinlandStreetAddress)
-{
-    const auto generatedStreetAddress
-        = location::street_address(location::address_country::finland);
-
-    ASSERT_TRUE(faker::testing::any_of(
-        location::data::finland_street_suffixes, [&generatedStreetAddress](auto suffix) {
-            return generatedStreetAddress.find(suffix) != std::string::npos;
-        }));
-
-    std::vector<std::string_view> firstNames { person::data::finnish_male_first_names.begin(),
-        person::data::finnish_male_first_names.end() };
-    firstNames.insert(firstNames.end(), person::data::finnish_female_first_names.begin(),
-        person::data::finnish_female_first_names.end());
-
-    std::vector<std::string_view> lastNames { person::data::finnish_last_names.begin(),
-        person::data::finnish_last_names.end() };
-
-    ASSERT_TRUE(faker::testing::any_of(firstNames, [&generatedStreetAddress](auto firstName) {
-        return generatedStreetAddress.find(firstName) != std::string::npos;
-    }) || faker::testing::any_of(lastNames, [&generatedStreetAddress](auto lastName) {
-        return generatedStreetAddress.find(lastName) != std::string::npos;
-    }));
-}
-
-TEST_F(LocationTest, shouldGenerateEstoniaStreet)
-{
-    const auto generatedStreet = location::street(location::address_country::estonia);
-
-    ASSERT_TRUE(faker::testing::any_of(
-        location::data::estonia_street_names, [&generatedStreet](auto streetName) {
-            return generatedStreet.find(streetName) != std::string::npos;
-        }));
-}
-
-TEST_F(LocationTest, shouldGenerateEstoniaStreetAddress)
-{
-    const auto generatedStreetAddress
-        = location::street_address(location::address_country::estonia);
-
-    ASSERT_TRUE(faker::testing::any_of(
-        location::data::estonia_street_names, [&generatedStreetAddress](auto streetName) {
-            return generatedStreetAddress.find(streetName) != std::string::npos;
-        }));
+    FAKER_EXPECT_CONTAINER_CONTAINS(location::data::time_zones, time_zone);
 }

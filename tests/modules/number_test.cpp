@@ -34,20 +34,20 @@ TEST(NumberTest, should_throw_on_invalid_range)
 TEST(NumberTest, should_generate_hex_number)
 {
     auto result = number::hex();
-    EXPECT_EQ(result.size(), 1);
+    EXPECT_EQ(result.size(), 1u);
     EXPECT_TRUE(std::isxdigit(result[0]));
 
     result = number::hex(100, 255);
-    EXPECT_EQ(result.size(), 2);
+    EXPECT_EQ(result.size(), 2u);
     EXPECT_TRUE(std::isxdigit(result[0]));
     EXPECT_TRUE(std::isxdigit(result[1]));
 
     result = number::hex(10, 15);
-    EXPECT_EQ(result.size(), 1);
+    EXPECT_EQ(result.size(), 1u);
     EXPECT_TRUE(std::isxdigit(result[0]));
 
     result = number::hex(30, 40);
-    EXPECT_EQ(result.size(), 2);
+    EXPECT_EQ(result.size(), 2u);
     EXPECT_TRUE(std::isxdigit(result[0]));
     EXPECT_TRUE(std::isxdigit(result[1]));
 }

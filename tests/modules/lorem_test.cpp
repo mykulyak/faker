@@ -27,7 +27,7 @@ TEST(LoremTest, should_generate_words)
     auto words = lorem::words(5);
 
     auto word_list = utils::split(words, " ");
-    EXPECT_EQ(word_list.size(), 5);
+    EXPECT_EQ(word_list.size(), 5u);
     EXPECT_TRUE(contains_only_valid_words(word_list));
 }
 
@@ -39,7 +39,7 @@ TEST(LoremTest, should_generate_sentence)
     FAKER_EXPECT_STRING_ENDS_WITH(sentence, ".");
 
     const auto word_list = utils::split(sentence.substr(0, sentence.size() - 1), " ");
-    FAKER_EXPECT_BETWEEN(word_list.size(), 3, 10);
+    FAKER_EXPECT_BETWEEN(word_list.size(), 3u, 10u);
     EXPECT_TRUE(contains_only_valid_words(word_list));
 }
 
@@ -55,7 +55,7 @@ TEST(LoremTest, should_generate_sentences)
         EXPECT_TRUE(std::isupper(sentence[0]));
 
         const auto word_list = utils::split(sentence, " ");
-        FAKER_EXPECT_BETWEEN(word_list.size(), 3, 10);
+        FAKER_EXPECT_BETWEEN(word_list.size(), 3u, 10u);
         EXPECT_TRUE(contains_only_valid_words(word_list));
     }
 }
@@ -65,7 +65,7 @@ TEST(LoremTest, should_generate_slug)
     const auto slug = lorem::slug(3);
 
     const auto word_list = utils::split(slug, "-");
-    EXPECT_EQ(word_list.size(), 3);
+    EXPECT_EQ(word_list.size(), 3u);
     EXPECT_TRUE(contains_only_valid_words(word_list));
 }
 
@@ -81,7 +81,7 @@ TEST(LoremTest, should_generate_paragraph)
         EXPECT_TRUE(std::isupper(sentence[0]));
 
         const auto word_list = utils::split(sentence, " ");
-        FAKER_EXPECT_BETWEEN(word_list.size(), 3, 10);
+        FAKER_EXPECT_BETWEEN(word_list.size(), 3u, 10u);
         EXPECT_TRUE(contains_only_valid_words(word_list));
     }
 }
@@ -101,7 +101,7 @@ TEST(LoremTest, should_generate_paragraphs)
             EXPECT_TRUE(std::isupper(sentence[0]));
 
             const auto word_list = utils::split(sentence, " ");
-            FAKER_EXPECT_BETWEEN(word_list.size(), 3, 10);
+            FAKER_EXPECT_BETWEEN(word_list.size(), 3u, 10u);
             EXPECT_TRUE(contains_only_valid_words(word_list));
         }
     }

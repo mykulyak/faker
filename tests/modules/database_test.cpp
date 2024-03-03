@@ -37,7 +37,7 @@ TEST(DatabaseTest, should_generate_mongodb_object_id)
 {
     auto object_id = database::mongodb_object_id();
 
-    EXPECT_EQ(object_id.size(), 24);
+    EXPECT_EQ(object_id.size(), 24u);
     EXPECT_TRUE(faker::testing::all_of(object_id,
         [](char ch) { return string::data::hex_lower_digits.find(ch) != std::string::npos; }));
 }

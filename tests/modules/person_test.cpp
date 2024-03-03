@@ -1,6 +1,5 @@
 #include "../bio_helper.h"
 #include "../test_helpers.h"
-#include <algorithm>
 #include <array>
 #include <common/strings.h>
 #include <faker/person.h>
@@ -12,7 +11,7 @@ using namespace faker;
 namespace {
 const std::vector<std::string> sexes { "Male", "Female" };
 
-const std::unordered_map<country_t, std::string> generatedTestName {
+const std::unordered_map<country_t, std::string> generated_country_test_names {
     { country_t::england, "shouldGenerateEnglishName" },
     { country_t::france, "shouldGenerateFrenchName" },
     { country_t::germany, "shouldGenerateGermanName" },
@@ -75,170 +74,6 @@ const std::unordered_map<country_t, std::string> generatedTestName {
     { country_t::kazakhstan, "shouldGenerateKazakhName" },
     { country_t::maldives, "shouldGenerateMaldivianName" },
 };
-}
-
-class PersonTest : public TestWithParam<country_t> {
-public:
-    PersonTest()
-    {
-        initializePrefixes();
-
-        initializeSuffixes();
-
-        initializeMiddleNames();
-    }
-
-    void initializePrefixes()
-    {
-        for (const auto& [_, peopleNames] : person::data::people_names) {
-            malesPrefixes.insert(malesPrefixes.end(), peopleNames.males_names.prefixes.begin(),
-                peopleNames.males_names.prefixes.end());
-
-            femalesPrefixes.insert(femalesPrefixes.end(), peopleNames.female_names.prefixes.begin(),
-                peopleNames.female_names.prefixes.end());
-
-            allPrefixes.insert(allPrefixes.end(), peopleNames.males_names.prefixes.begin(),
-                peopleNames.males_names.prefixes.end());
-            allPrefixes.insert(allPrefixes.end(), peopleNames.female_names.prefixes.begin(),
-                peopleNames.female_names.prefixes.end());
-        }
-    }
-
-    void initializeSuffixes()
-    {
-        for (const auto& [_, peopleNames] : person::data::people_names) {
-            malesSuffixes.insert(malesSuffixes.end(), peopleNames.males_names.suffixes.begin(),
-                peopleNames.males_names.suffixes.end());
-
-            femalesSuffixes.insert(femalesSuffixes.end(), peopleNames.female_names.suffixes.begin(),
-                peopleNames.female_names.suffixes.end());
-
-            allSuffixes.insert(allSuffixes.end(), peopleNames.males_names.suffixes.begin(),
-                peopleNames.males_names.suffixes.end());
-            allSuffixes.insert(allSuffixes.end(), peopleNames.female_names.suffixes.begin(),
-                peopleNames.female_names.suffixes.end());
-        }
-    }
-
-    void initializeMiddleNames()
-    {
-        for (const auto& [_, peopleNames] : person::data::people_names) {
-            malesMiddleNames.insert(malesMiddleNames.end(),
-                peopleNames.males_names.middle_names.begin(),
-                peopleNames.males_names.middle_names.end());
-
-            femalesMiddleNames.insert(femalesMiddleNames.end(),
-                peopleNames.female_names.middle_names.begin(),
-                peopleNames.female_names.middle_names.end());
-
-            allMiddleNames.insert(allMiddleNames.end(),
-                peopleNames.males_names.middle_names.begin(),
-                peopleNames.males_names.middle_names.end());
-            allMiddleNames.insert(allMiddleNames.end(),
-                peopleNames.female_names.middle_names.begin(),
-                peopleNames.female_names.middle_names.end());
-        }
-    }
-
-    std::vector<std::string> allPrefixes;
-    std::vector<std::string> malesPrefixes;
-    std::vector<std::string> femalesPrefixes;
-    std::vector<std::string> allSuffixes;
-    std::vector<std::string> malesSuffixes;
-    std::vector<std::string> femalesSuffixes;
-    std::vector<std::string> allMiddleNames;
-    std::vector<std::string> malesMiddleNames;
-    std::vector<std::string> femalesMiddleNames;
-};
-
-TEST_P(PersonTest, shouldGenerateFirstName)
-{
-    const auto country = GetParam();
-    const auto& peopleNames = person::data::people_names.at(country);
-    auto firstNames = faker::testing::make_vector(
-        peopleNames.males_names.first_names, peopleNames.female_names.first_names);
-
-    const auto generatedFirstName = person::first_name(country);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(firstNames, generatedFirstName);
-}
-
-TEST_P(PersonTest, shouldGenerateMaleFirstName)
-{
-    const auto country = GetParam();
-    const auto& malesFirstNames = person::data::people_names.at(country).males_names.first_names;
-
-    const auto generatedFirstName = person::first_name(country, person::sex_t::male);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(malesFirstNames, generatedFirstName);
-}
-
-TEST_P(PersonTest, shouldGenerateFemaleFirstName)
-{
-    const auto country = GetParam();
-    const auto& femalesFirstNames = person::data::people_names.at(country).female_names.first_names;
-
-    const auto generatedFirstName = person::first_name(country, person::sex_t::female);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(femalesFirstNames, generatedFirstName);
-}
-
-TEST_P(PersonTest, shouldGenerateLastNameMale)
-{
-    const auto country = GetParam();
-    const auto& malesLastNames = person::data::people_names.at(country).males_names.last_names;
-
-    const auto generatedLastName = person::last_name(country, person::sex_t::male);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(malesLastNames, generatedLastName);
-}
-
-TEST_P(PersonTest, shouldGenerateLastNameFemale)
-{
-    const auto country = GetParam();
-    const auto& femalesLastNames = person::data::people_names.at(country).female_names.last_names;
-
-    const auto generatedLastName = person::last_name(country, person::sex_t::female);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(femalesLastNames, generatedLastName);
-}
-
-TEST_P(PersonTest, shouldGenerateFullName)
-{
-    const auto country = GetParam();
-    const auto& peopleNames = person::data::people_names.at(country);
-    auto firstNames = faker::testing::make_vector(
-        peopleNames.males_names.first_names, peopleNames.female_names.first_names);
-    auto lastNames = faker::testing::make_vector(
-        peopleNames.males_names.last_names, peopleNames.female_names.last_names);
-
-    const auto generatedFullName = person::full_name(country);
-
-    FAKER_EXPECT_STRING_CONTAINS(generatedFullName, firstNames);
-    FAKER_EXPECT_STRING_CONTAINS(generatedFullName, lastNames);
-}
-
-TEST_P(PersonTest, shouldGenerateMaleFullName)
-{
-    const auto country = GetParam();
-    const auto& peopleNames = person::data::people_names.at(country);
-
-    const auto generatedFullName = person::full_name(country, person::sex_t::male);
-
-    FAKER_EXPECT_STRING_CONTAINS(generatedFullName, peopleNames.males_names.first_names);
-    FAKER_EXPECT_STRING_CONTAINS(generatedFullName, peopleNames.males_names.last_names);
-}
-
-TEST_P(PersonTest, shouldGenerateFemaleFullName)
-{
-    const auto country = GetParam();
-    const auto& peopleNames = person::data::people_names.at(country);
-
-    const auto generatedFullName = person::full_name(country, person::sex_t::female);
-
-    FAKER_EXPECT_STRING_CONTAINS(generatedFullName, peopleNames.female_names.first_names);
-    FAKER_EXPECT_STRING_CONTAINS(generatedFullName, peopleNames.female_names.last_names);
-}
 
 const std::array<country_t, 61> countries {
     country_t::usa,
@@ -304,150 +139,7 @@ const std::array<country_t, 61> countries {
     country_t::maldives,
 };
 
-INSTANTIATE_TEST_SUITE_P(TestPersonNamesByCountries, PersonTest, ValuesIn(countries),
-    [](const TestParamInfo<country_t>& info) { return generatedTestName.at(info.param); });
-
-TEST_F(PersonTest, shouldGenerateMiddleName)
-{
-    const auto generatedMiddleName = person::middle_name();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(allMiddleNames, generatedMiddleName);
-}
-
-TEST_F(PersonTest, shouldGeneratePrefix)
-{
-    const auto generatedPrefix = person::prefix();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(allPrefixes, generatedPrefix);
-}
-
-TEST_F(PersonTest, shouldGenerateMalePrefix)
-{
-    const auto generatedPrefix = person::prefix(person::sex_t::male);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(malesPrefixes, generatedPrefix);
-}
-
-TEST_F(PersonTest, shouldGenerateFemalePrefix)
-{
-    const auto generatedPrefix = person::prefix(person::sex_t::female);
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(femalesPrefixes, generatedPrefix);
-}
-
-TEST_F(PersonTest, shouldGenerateSuffix)
-{
-    const auto generatedSuffix = person::suffix();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(allSuffixes, generatedSuffix);
-}
-
-TEST_F(PersonTest, shouldGenerateSex)
-{
-    const auto generatedSex = person::sex();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(sexes, generatedSex);
-}
-
-TEST_F(PersonTest, shouldGenerateGender)
-{
-    const auto generatedGender = person::gender();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::genders, generatedGender);
-}
-
-TEST_F(PersonTest, shouldGenerateJobDescriptor)
-{
-    const auto generatedJobDescriptor = person::job_descriptor();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::job_descriptors, generatedJobDescriptor);
-}
-
-TEST_F(PersonTest, shouldGenerateJobArea)
-{
-    const auto generatedJobArea = person::job_area();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::job_areas, generatedJobArea);
-}
-
-TEST_F(PersonTest, shouldGenerateJobType)
-{
-    const auto generatedJobType = person::job_type();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::job_types, generatedJobType);
-}
-
-TEST_F(PersonTest, shouldGenerateJobTitle)
-{
-    const auto generatedJobTitle = person::job_title();
-
-    const auto jobTitleElements = utils::split(generatedJobTitle, " ");
-
-    const auto& generatedJobDescriptor = jobTitleElements[0];
-    const auto& generatedJobArea = jobTitleElements[1];
-    const auto& generatedJobType = jobTitleElements[2];
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::job_descriptors, generatedJobDescriptor);
-    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::job_areas, generatedJobArea);
-    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::job_types, generatedJobType);
-}
-
-TEST_F(PersonTest, shouldGenerateHobby)
-{
-    const auto generatedHobby = person::hobby();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::hobbies, generatedHobby);
-}
-
-TEST_F(PersonTest, shouldGenerateBio)
-{
-    const auto generatedBio = person::bio();
-
-    ASSERT_TRUE(BioHelper::checkTokenFormat(generatedBio));
-}
-
-TEST_F(PersonTest, shouldGenerateLanguage)
-{
-    auto generatedLanguage = person::language();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::languages, generatedLanguage);
-}
-
-TEST_F(PersonTest, shouldGenerateNationality)
-{
-    auto generatedNationality = person::nationality();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::nationalities, generatedNationality);
-}
-
-TEST_F(PersonTest, shouldGenerateWesternZodiacs)
-{
-    auto generatedWesternZodiacs = person::western_zodiac();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::western_zodiacs, generatedWesternZodiacs);
-}
-
-TEST_F(PersonTest, shouldGenerateChineseZodiacs)
-{
-    const auto generatedChineseZodiacs = person::chinese_zodiac();
-
-    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::chinese_zodiacs, generatedChineseZodiacs);
-}
-
-class PersonSexSuite : public TestWithParam<std::pair<person::language_t, person::sex_t>> { };
-
-TEST_P(PersonSexSuite, shouldTranslateSexCorrectly)
-{
-    const auto language = GetParam().first;
-    const auto sex = GetParam().second;
-
-    const auto expectedTranslation = person::data::sex_translations.at(language).at(sex);
-    const auto actualTranslation = to_string(sex, language);
-
-    ASSERT_EQ(expectedTranslation, actualTranslation);
-}
-
-std::vector<std::pair<person::language_t, person::sex_t>> languageSexPairs
+std::vector<std::pair<person::language_t, person::sex_t>> language_sex_pairs
     = { { person::language_t::english, person::sex_t::male },
           { person::language_t::english, person::sex_t::female },
           { person::language_t::polish, person::sex_t::male },
@@ -517,7 +209,7 @@ std::vector<std::pair<person::language_t, person::sex_t>> languageSexPairs
           { person::language_t::estonian, person::sex_t::male },
           { person::language_t::estonian, person::sex_t::female } };
 
-std::string_view toString(person::language_t language)
+std::string_view to_string(person::language_t language)
 {
     switch (language) {
     case person::language_t::english:
@@ -593,30 +285,7 @@ std::string_view toString(person::language_t language)
     }
 }
 
-INSTANTIATE_TEST_SUITE_P(TestPersonSexTranslation, PersonSexSuite, ValuesIn(languageSexPairs),
-    [](const TestParamInfo<PersonSexSuite::ParamType>& info) {
-        std::string result;
-        result += toString(info.param.first);
-        result += '_';
-        result += to_string(info.param.second);
-        return result;
-    });
-
-class PersonSsnSuite : public TestWithParam<person::ssn_country_t> { };
-
-// TODO: add more precise tests
-TEST_P(PersonSsnSuite, shouldGenerateSsn)
-{
-    const auto country = GetParam();
-
-    const auto ssn = person::ssn(country);
-
-    const auto expectedSsnLength = person::data::ssn_lengths.at(country);
-
-    ASSERT_EQ(ssn.size(), expectedSsnLength);
-}
-
-std::string_view toString(person::ssn_country_t country)
+std::string_view to_string(person::ssn_country_t country)
 {
     switch (country) {
     case person::ssn_country_t::usa:
@@ -640,11 +309,266 @@ std::string_view toString(person::ssn_country_t country)
     }
 }
 
+}
+
+class PersonTest : public TestWithParam<country_t> {
+public:
+    PersonTest()
+    {
+        for (const auto& [_, names_data] : person::data::people_names) {
+            male_prefixes.insert(male_prefixes.end(), names_data.males_names.prefixes.begin(),
+                names_data.males_names.prefixes.end());
+
+            female_prefixes.insert(female_prefixes.end(), names_data.female_names.prefixes.begin(),
+                names_data.female_names.prefixes.end());
+
+            all_prefixes.insert(all_prefixes.end(), names_data.males_names.prefixes.begin(),
+                names_data.males_names.prefixes.end());
+            all_prefixes.insert(all_prefixes.end(), names_data.female_names.prefixes.begin(),
+                names_data.female_names.prefixes.end());
+
+            male_suffixes.insert(male_suffixes.end(), names_data.males_names.suffixes.begin(),
+                names_data.males_names.suffixes.end());
+
+            female_suffixes.insert(female_suffixes.end(), names_data.female_names.suffixes.begin(),
+                names_data.female_names.suffixes.end());
+
+            all_suffixes.insert(all_suffixes.end(), names_data.males_names.suffixes.begin(),
+                names_data.males_names.suffixes.end());
+            all_suffixes.insert(all_suffixes.end(), names_data.female_names.suffixes.begin(),
+                names_data.female_names.suffixes.end());
+
+            male_middle_names.insert(male_middle_names.end(),
+                names_data.males_names.middle_names.begin(),
+                names_data.males_names.middle_names.end());
+
+            female_middle_names.insert(female_middle_names.end(),
+                names_data.female_names.middle_names.begin(),
+                names_data.female_names.middle_names.end());
+
+            all_middle_names.insert(all_middle_names.end(),
+                names_data.males_names.middle_names.begin(),
+                names_data.males_names.middle_names.end());
+            all_middle_names.insert(all_middle_names.end(),
+                names_data.female_names.middle_names.begin(),
+                names_data.female_names.middle_names.end());
+        }
+    }
+
+    std::vector<std::string> all_prefixes;
+    std::vector<std::string> male_prefixes;
+    std::vector<std::string> female_prefixes;
+    std::vector<std::string> all_suffixes;
+    std::vector<std::string> male_suffixes;
+    std::vector<std::string> female_suffixes;
+    std::vector<std::string> all_middle_names;
+    std::vector<std::string> male_middle_names;
+    std::vector<std::string> female_middle_names;
+};
+
+TEST_P(PersonTest, should_generate_first_name)
+{
+    const auto country = GetParam();
+
+    const auto first_name = person::first_name(country);
+    const auto male_first_name = person::first_name(country, person::sex_t::male);
+    const auto female_first_name = person::first_name(country, person::sex_t::female);
+
+    const auto& people_names = person::data::people_names.at(country);
+    EXPECT_TRUE(faker::testing::contains(people_names.males_names.first_names, first_name)
+        || faker::testing::contains(people_names.female_names.first_names, first_name));
+    FAKER_EXPECT_CONTAINER_CONTAINS(people_names.males_names.first_names, male_first_name);
+    FAKER_EXPECT_CONTAINER_CONTAINS(people_names.female_names.first_names, female_first_name);
+}
+
+TEST_P(PersonTest, should_generate_last_name)
+{
+    const auto country = GetParam();
+
+    const auto last_male_name = person::last_name(country, person::sex_t::male);
+    const auto last_female_name = person::last_name(country, person::sex_t::female);
+
+    const auto& person_names = person::data::people_names.at(country);
+    FAKER_EXPECT_CONTAINER_CONTAINS(person_names.males_names.last_names, last_male_name);
+    FAKER_EXPECT_CONTAINER_CONTAINS(person_names.female_names.last_names, last_female_name);
+}
+
+TEST_P(PersonTest, should_generate_full_name)
+{
+    const auto country = GetParam();
+
+    const auto full_name = person::full_name(country);
+    const auto male_full_name = person::full_name(country, person::sex_t::male);
+    const auto female_full_name = person::full_name(country, person::sex_t::female);
+
+    const auto& people_names = person::data::people_names.at(country);
+    EXPECT_TRUE(faker::testing::contains(full_name, people_names.males_names.first_names)
+        || faker::testing::contains(full_name, people_names.female_names.first_names));
+    EXPECT_TRUE(faker::testing::contains(full_name, people_names.males_names.last_names)
+        || faker::testing::contains(full_name, people_names.female_names.last_names));
+
+    FAKER_EXPECT_STRING_CONTAINS(male_full_name, people_names.males_names.first_names);
+    FAKER_EXPECT_STRING_CONTAINS(male_full_name, people_names.males_names.last_names);
+
+    FAKER_EXPECT_STRING_CONTAINS(female_full_name, people_names.female_names.first_names);
+    FAKER_EXPECT_STRING_CONTAINS(female_full_name, people_names.female_names.last_names);
+}
+
+INSTANTIATE_TEST_SUITE_P(TestPersonNamesByCountries, PersonTest, ValuesIn(countries),
+    [](const TestParamInfo<country_t>& info) {
+        return generated_country_test_names.at(info.param);
+    });
+
+TEST_F(PersonTest, should_generate_middle_name)
+{
+    const auto middle_name = person::middle_name();
+
+    FAKER_EXPECT_CONTAINER_CONTAINS(all_middle_names, middle_name);
+}
+
+TEST_F(PersonTest, should_generate_prefix)
+{
+    const auto perfix = person::prefix();
+    const auto male_prefix = person::prefix(person::sex_t::male);
+    const auto female_prefix = person::prefix(person::sex_t::female);
+
+    FAKER_EXPECT_CONTAINER_CONTAINS(all_prefixes, perfix);
+    FAKER_EXPECT_CONTAINER_CONTAINS(male_prefixes, male_prefix);
+    FAKER_EXPECT_CONTAINER_CONTAINS(female_prefixes, female_prefix);
+}
+
+TEST_F(PersonTest, should_generate_suffix)
+{
+    const auto suffix = person::suffix();
+
+    FAKER_EXPECT_CONTAINER_CONTAINS(all_suffixes, suffix);
+}
+
+TEST_F(PersonTest, should_generate_sex)
+{
+    const auto sex = person::sex();
+
+    FAKER_EXPECT_CONTAINER_CONTAINS(sexes, sex);
+}
+
+TEST_F(PersonTest, should_generate_gender)
+{
+    const auto gender = person::gender();
+
+    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::genders, gender);
+}
+
+TEST_F(PersonTest, should_generate_job_descriptor)
+{
+    const auto job_descriptor = person::job_descriptor();
+
+    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::job_descriptors, job_descriptor);
+}
+
+TEST_F(PersonTest, should_generate_job_area)
+{
+    const auto job_area = person::job_area();
+
+    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::job_areas, job_area);
+}
+
+TEST_F(PersonTest, should_generate_job_type)
+{
+    const auto job_type = person::job_type();
+
+    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::job_types, job_type);
+}
+
+TEST_F(PersonTest, should_generate_job_title)
+{
+    const auto job_title = person::job_title();
+
+    const auto job_title_parts = utils::split(job_title, " ");
+    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::job_descriptors, job_title_parts[0]);
+    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::job_areas, job_title_parts[1]);
+    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::job_types, job_title_parts[2]);
+}
+
+TEST_F(PersonTest, should_generate_hobby)
+{
+    const auto hobby = person::hobby();
+
+    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::hobbies, hobby);
+}
+
+TEST_F(PersonTest, should_generate_bio)
+{
+    const auto bio = person::bio();
+
+    ASSERT_TRUE(faker::testing::check_bio_format(bio));
+}
+
+TEST_F(PersonTest, should_generate_language)
+{
+    auto language = person::language();
+
+    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::languages, language);
+}
+
+TEST_F(PersonTest, should_generate_nationality)
+{
+    auto nationality = person::nationality();
+
+    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::nationalities, nationality);
+}
+
+TEST_F(PersonTest, should_generate_western_zodiacs)
+{
+    auto western_zodiacs = person::western_zodiac();
+
+    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::western_zodiacs, western_zodiacs);
+}
+
+TEST_F(PersonTest, should_generate_chinese_zodiacs)
+{
+    const auto chinese_zodiacs = person::chinese_zodiac();
+
+    FAKER_EXPECT_CONTAINER_CONTAINS(person::data::chinese_zodiacs, chinese_zodiacs);
+}
+
+class PersonSexSuite : public TestWithParam<std::pair<person::language_t, person::sex_t>> { };
+
+TEST_P(PersonSexSuite, should_correctly_translate_sex)
+{
+    const auto language = GetParam().first;
+    const auto sex = GetParam().second;
+
+    auto translation = to_string(sex, language);
+
+    ASSERT_EQ(translation, person::data::sex_translations.at(language).at(sex));
+}
+
+INSTANTIATE_TEST_SUITE_P(TestPersonSexTranslation, PersonSexSuite, ValuesIn(language_sex_pairs),
+    [](const TestParamInfo<PersonSexSuite::ParamType>& info) {
+        std::string result;
+        result += to_string(info.param.first);
+        result += '_';
+        result += to_string(info.param.second);
+        return result;
+    });
+
+class PersonSsnSuite : public TestWithParam<person::ssn_country_t> { };
+
+// TODO: add more precise tests
+TEST_P(PersonSsnSuite, should_generate_ssn)
+{
+    const auto country = GetParam();
+
+    const auto ssn = person::ssn(country);
+
+    ASSERT_EQ(ssn.size(), person::data::ssn_lengths.at(country));
+}
+
 INSTANTIATE_TEST_SUITE_P(TestPersonSsn, PersonSsnSuite,
     ValuesIn(person::data::supported_ssn_countries),
     [](const TestParamInfo<PersonSsnSuite::ParamType>& info) {
         std::string result("shouldGenerate");
-        result += toString(info.param);
+        result += to_string(info.param);
         result += "Ssn";
         return result;
     });

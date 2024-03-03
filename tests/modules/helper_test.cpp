@@ -111,14 +111,14 @@ TEST(HelperTest, should_regexp_style_string_parse)
     std::string input = "#{5}[2-4]test[1-3]";
     std::string result = random::regexp_style_string_parse(input);
 
-    EXPECT_EQ(result.size(), 11);
+    EXPECT_EQ(result.size(), 11u);
 }
 
 TEST(HelperTest, should_replace_credit_card_symbols)
 {
     // Test with the default format "6453-####-####-####-###L"
     std::string result_default = random::replace_credit_card_symbols();
-    EXPECT_EQ(result_default.size(), 24);
+    EXPECT_EQ(result_default.size(), 24u);
     EXPECT_EQ(result_default[4], '-');
     EXPECT_EQ(result_default[9], '-');
     EXPECT_EQ(result_default[14], '-');

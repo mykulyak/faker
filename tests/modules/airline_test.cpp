@@ -51,11 +51,11 @@ TEST(AirlineTest, should_generate_record_locator)
     auto locator_without_numbers = airline::record_locator(false);
     auto locator_with_numbers = airline::record_locator(true);
 
-    EXPECT_EQ(locator_without_numbers.size(), 6);
+    EXPECT_EQ(locator_without_numbers.size(), 6u);
     EXPECT_TRUE(
         faker::testing::all_of(locator_without_numbers, [](char c) { return std::isalpha(c); }));
 
-    EXPECT_EQ(locator_with_numbers.size(), 6);
+    EXPECT_EQ(locator_with_numbers.size(), 6u);
     EXPECT_TRUE(
         faker::testing::all_of(locator_with_numbers, [](char c) { return std::isalnum(c); }));
 }
@@ -64,7 +64,7 @@ TEST(AirlineTest, should_generate_regional_seat_number)
 {
     auto seat_number = airline::seat(airline::aircraft_type::regional);
 
-    FAKER_EXPECT_BETWEEN(seat_number.size(), 2, 3);
+    FAKER_EXPECT_BETWEEN(seat_number.size(), 2u, 3u);
 
     EXPECT_TRUE(contains_number_in_range(seat_number, 1,
         airline::data::aircraft_type_max_rows.at(airline::aircraft_type::regional)));
@@ -77,7 +77,7 @@ TEST(AirlineTest, should_generate_narrow_body_seat_number)
 {
     auto seat_number = airline::seat(airline::aircraft_type::narrow_body);
 
-    FAKER_EXPECT_BETWEEN(seat_number.size(), 2, 3);
+    FAKER_EXPECT_BETWEEN(seat_number.size(), 2u, 3u);
 
     EXPECT_TRUE(contains_number_in_range(seat_number, 1,
         airline::data::aircraft_type_max_rows.at(airline::aircraft_type::narrow_body)));
@@ -90,7 +90,7 @@ TEST(AirlineTest, should_generate_wide_body_seat_number)
 {
     auto seat_number = airline::seat(airline::aircraft_type::wide_body);
 
-    FAKER_EXPECT_BETWEEN(seat_number.size(), 2, 3);
+    FAKER_EXPECT_BETWEEN(seat_number.size(), 2u, 3u);
 
     EXPECT_TRUE(contains_number_in_range(seat_number, 1,
         airline::data::aircraft_type_max_rows.at(airline::aircraft_type::wide_body)));
@@ -103,7 +103,7 @@ TEST(AirlineTest, should_generate_flight_number)
 {
     auto flight_number = airline::flight_number();
 
-    EXPECT_EQ(flight_number.size(), 4);
+    EXPECT_EQ(flight_number.size(), 4u);
     FAKER_EXPECT_BETWEEN(std::stoi(flight_number), 1000, 9999);
 }
 
@@ -125,5 +125,5 @@ TEST(AirlineTest, should_generate_flight_number_by_range)
 {
     auto flight_number_with_variable_length = airline::flight_number_by_range(false, 1, 6);
 
-    FAKER_EXPECT_BETWEEN(flight_number_with_variable_length.size(), 1, 6);
+    FAKER_EXPECT_BETWEEN(flight_number_with_variable_length.size(), 1u, 6u);
 }

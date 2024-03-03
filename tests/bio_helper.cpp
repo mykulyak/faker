@@ -5,101 +5,105 @@
 #include <regex>
 #include <vector>
 
-namespace faker {
+namespace faker::testing {
 
-template <typename ContainerT>
-bool findBioPart(const ContainerT& cont, std::smatch::const_reference match)
-{
-    std::string_view matchView(&*match.first, match.length());
-    return std::find(cont.begin(), cont.end(), matchView) != cont.end();
+namespace {
+
+    template <typename ContainerT>
+    bool find_bio_part(const ContainerT& cont, std::smatch::const_reference match)
+    {
+        std::string_view match_view(&*match.first, match.length());
+        return std::find(cont.begin(), cont.end(), match_view) != cont.end();
+    }
+
 }
 
-bool BioHelper::checkTokenFormat(const std::string& bio)
+bool check_bio_format(const std::string& bio)
 {
-    const std::regex firstRegex { R"(^(\w+\s?\w+)$)" };
-    const std::regex secondRegex { R"(^(\w+\s?\w+), (\w+\s?\w+)$)" };
-    const std::regex thirdRegex { R"(^(\w+\s?\w+), (\w+\s?\w+), (\w+\s?\w+)$)" };
-    const std::regex fourthRegex { R"(^(\w+\s?\w+), (\w+\s?\w+), (\w+\s?\w+), (\S+)$)" };
-    const std::regex fifthRegex { R"(^(\w+\-?\w+) (\w+)$)" };
-    const std::regex sixthRegex { R"(^(\w+\-?\w+) (\w+) (\S+)$)" };
-    const std::regex seventhRegex { R"(^(\w+\-?\w+) (\w+), (\w+\s?\w+)$)" };
-    const std::regex eigthRegex { R"(^(\w+\-?\w+) (\w+), (\w+\s?\w+) (\S+)$)" };
+    const std::regex re_format_1 { R"(^(\w+\s?\w+)$)" };
+    const std::regex re_format_2 { R"(^(\w+\s?\w+), (\w+\s?\w+)$)" };
+    const std::regex re_format_3 { R"(^(\w+\s?\w+), (\w+\s?\w+), (\w+\s?\w+)$)" };
+    const std::regex re_format_4 { R"(^(\w+\s?\w+), (\w+\s?\w+), (\w+\s?\w+), (\S+)$)" };
+    const std::regex re_format_5 { R"(^(\w+\-?\w+) (\w+)$)" };
+    const std::regex re_format_6 { R"(^(\w+\-?\w+) (\w+) (\S+)$)" };
+    const std::regex re_format_7 { R"(^(\w+\-?\w+) (\w+), (\w+\s?\w+)$)" };
+    const std::regex re_format_8 { R"(^(\w+\-?\w+) (\w+), (\w+\s?\w+) (\S+)$)" };
 
     std::smatch matches;
 
-    if (std::regex_match(std::begin(bio), std::end(bio), matches, firstRegex)) {
+    if (std::regex_match(std::begin(bio), std::end(bio), matches, re_format_1)) {
         // In this case the bio is in the format {bio_part} so check that the value is present in
         // the bio_part vector.
-        if (findBioPart(person::data::bio_parts, matches[0])) {
+        if (find_bio_part(person::data::bio_parts, matches[0])) {
             return true;
         }
     }
 
-    if (std::regex_match(bio, matches, secondRegex)) {
+    if (std::regex_match(bio, matches, re_format_2)) {
         // In this case the bio is in the format {bio_part}, {bio_part} so check that the value is
         // present in the bio_part vector.
-        if (findBioPart(person::data::bio_parts, matches[1])
-            && findBioPart(person::data::bio_parts, matches[2])) {
+        if (find_bio_part(person::data::bio_parts, matches[1])
+            && find_bio_part(person::data::bio_parts, matches[2])) {
             return true;
         }
     }
 
-    if (std::regex_match(bio, matches, thirdRegex)) {
+    if (std::regex_match(bio, matches, re_format_3)) {
         // In this case the bio is in the format {bio_part}, {bio_part}, {bio_part} so check that
         // the value is present in the bio_part vector.
-        if (findBioPart(person::data::bio_parts, matches[1])
-            && findBioPart(person::data::bio_parts, matches[2])
-            && findBioPart(person::data::bio_parts, matches[3])) {
+        if (find_bio_part(person::data::bio_parts, matches[1])
+            && find_bio_part(person::data::bio_parts, matches[2])
+            && find_bio_part(person::data::bio_parts, matches[3])) {
             return true;
         }
     }
 
-    if (std::regex_match(bio, matches, fourthRegex)) {
+    if (std::regex_match(bio, matches, re_format_4)) {
         // In this case the bio is in the format {bio_part}, {bio_part}, {bio_part}, {emoji} so
         // check that the value is present in the bio_part vector.
-        if (findBioPart(person::data::bio_parts, matches[1])
-            && findBioPart(person::data::bio_parts, matches[2])
-            && findBioPart(person::data::bio_parts, matches[3])
+        if (find_bio_part(person::data::bio_parts, matches[1])
+            && find_bio_part(person::data::bio_parts, matches[2])
+            && find_bio_part(person::data::bio_parts, matches[3])
             && internet::is_valid_emoji(matches[4])) {
             return true;
         }
     }
 
-    if (std::regex_match(bio, matches, fifthRegex)) {
+    if (std::regex_match(bio, matches, re_format_5)) {
         // In this case the bio is in the format {noun} {bio_supporter} so check that the value is
         // present in the bio_part vector.
-        if (findBioPart(word::data::nouns, matches[1])
-            && findBioPart(person::data::bio_supporters, matches[2])) {
+        if (find_bio_part(word::data::nouns, matches[1])
+            && find_bio_part(person::data::bio_supporters, matches[2])) {
             return true;
         }
     }
 
-    if (std::regex_match(bio, matches, sixthRegex)) {
+    if (std::regex_match(bio, matches, re_format_6)) {
         // In this case the bio is in the format {noun} {bio_supporter} {emoji} so check that the
         // value is present in the bio_part vector.
-        if (findBioPart(word::data::nouns, matches[1])
-            && findBioPart(person::data::bio_supporters, matches[2])
+        if (find_bio_part(word::data::nouns, matches[1])
+            && find_bio_part(person::data::bio_supporters, matches[2])
             && internet::is_valid_emoji(matches[3])) {
             return true;
         }
     }
 
-    if (std::regex_match(bio, matches, seventhRegex)) {
+    if (std::regex_match(bio, matches, re_format_7)) {
         // In this case the bio is in the format {noun} {bio_supporter}, {bio_part} so check that
         // the value is present in the bio_part vector.
-        if (findBioPart(word::data::nouns, matches[1])
-            && findBioPart(person::data::bio_supporters, matches[2])
-            && findBioPart(person::data::bio_parts, matches[3])) {
+        if (find_bio_part(word::data::nouns, matches[1])
+            && find_bio_part(person::data::bio_supporters, matches[2])
+            && find_bio_part(person::data::bio_parts, matches[3])) {
             return true;
         }
     }
 
-    if (std::regex_match(bio, matches, eigthRegex)) {
+    if (std::regex_match(bio, matches, re_format_8)) {
         // In this case the bio is in the format {noun} {bio_supporter}, {bio_part} {emoji} so check
         // that the value is present in the bio_part vector.
-        if (findBioPart(word::data::nouns, matches[1])
-            && findBioPart(person::data::bio_supporters, matches[2])
-            && findBioPart(person::data::bio_parts, matches[3])
+        if (find_bio_part(word::data::nouns, matches[1])
+            && find_bio_part(person::data::bio_supporters, matches[2])
+            && find_bio_part(person::data::bio_parts, matches[3])
             && internet::is_valid_emoji(matches[4])) {
             return true;
         }

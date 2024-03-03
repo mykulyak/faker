@@ -184,8 +184,8 @@ TEST_F(FinanceTest, should_generate_amount)
     const auto amount = finance::amount();
 
     const auto amount_parts = utils::split(amount, ".");
-    EXPECT_EQ(amount_parts.size(), 2);
-    EXPECT_EQ(amount_parts[1].size(), 2);
+    EXPECT_EQ(amount_parts.size(), 2u);
+    EXPECT_EQ(amount_parts[1].size(), 2u);
 
     FAKER_EXPECT_BETWEEN(std::stof(amount.data()), 0, 1000);
 }
@@ -217,8 +217,8 @@ TEST_F(FinanceTest, should_generate_amount_with_symbol)
     FAKER_EXPECT_STRING_STARTS_WITH(amount, "$");
 
     const auto amount_parts = utils::split(amount, ".");
-    EXPECT_EQ(amount_parts.size(), 2);
-    EXPECT_EQ(amount_parts[1].size(), 4);
+    EXPECT_EQ(amount_parts.size(), 2u);
+    EXPECT_EQ(amount_parts[1].size(), 4u);
 
     FAKER_EXPECT_BETWEEN(std::stof(amount.substr(1)), 150, 450);
 }
@@ -236,10 +236,10 @@ TEST_F(FinanceTest, should_generate_account_number)
     const auto account_number_with_default_len = finance::account_number();
     const auto account_number_with_custom_len = finance::account_number(26);
 
-    EXPECT_EQ(account_number_with_default_len.size(), 8);
+    EXPECT_EQ(account_number_with_default_len.size(), 8u);
     EXPECT_TRUE(contains_only_digits(account_number_with_default_len));
 
-    EXPECT_EQ(account_number_with_custom_len.size(), 26);
+    EXPECT_EQ(account_number_with_custom_len.size(), 26u);
     EXPECT_TRUE(contains_only_digits(account_number_with_custom_len));
 }
 
@@ -248,10 +248,10 @@ TEST_F(FinanceTest, should_generate_pin_number)
     const auto pin_with_default_len = finance::pin();
     const auto pin_with_custom_len = finance::pin(8);
 
-    EXPECT_EQ(pin_with_default_len.size(), 4);
+    EXPECT_EQ(pin_with_default_len.size(), 4u);
     EXPECT_TRUE(contains_only_digits(pin_with_default_len));
 
-    EXPECT_EQ(pin_with_custom_len.size(), 8);
+    EXPECT_EQ(pin_with_custom_len.size(), 8u);
     EXPECT_TRUE(contains_only_digits(pin_with_custom_len));
 }
 
@@ -259,7 +259,7 @@ TEST_F(FinanceTest, should_generate_routing_number)
 {
     const auto routing_number = finance::routing_number();
 
-    EXPECT_EQ(routing_number.size(), 9);
+    EXPECT_EQ(routing_number.size(), 9u);
     EXPECT_TRUE(contains_only_digits(routing_number));
 }
 
@@ -300,7 +300,7 @@ TEST_F(FinanceTest, should_generate_credit_card_cvv)
 {
     const auto cvv = finance::credit_card_cvv();
 
-    EXPECT_EQ(cvv.size(), 3);
+    EXPECT_EQ(cvv.size(), 3u);
     EXPECT_TRUE(contains_only_digits(cvv));
 }
 
@@ -308,7 +308,7 @@ TEST_F(FinanceTest, should_generate_bitcoin_address)
 {
     const auto bitcoin_address = finance::bitcoin_address();
 
-    FAKER_EXPECT_BETWEEN(bitcoin_address.size(), 27, 34);
+    FAKER_EXPECT_BETWEEN(bitcoin_address.size(), 27u, 34u);
 
     EXPECT_TRUE(faker::testing::starts_with(bitcoin_address, "1")
         || faker::testing::starts_with(bitcoin_address, "3"));
@@ -320,7 +320,7 @@ TEST_F(FinanceTest, should_generate_litecoin_address)
 {
     const auto litecoin_address = finance::litecoin_address();
 
-    FAKER_EXPECT_BETWEEN(litecoin_address.size(), 27, 34);
+    FAKER_EXPECT_BETWEEN(litecoin_address.size(), 27u, 34u);
 
     EXPECT_TRUE(faker::testing::starts_with(litecoin_address, "L")
         || faker::testing::starts_with(litecoin_address, "M")
@@ -333,7 +333,7 @@ TEST_F(FinanceTest, should_generate_ethereum_address)
 {
     const auto ethereum_address = finance::ethereum_address();
 
-    EXPECT_EQ(ethereum_address.size(), 42);
+    EXPECT_EQ(ethereum_address.size(), 42u);
     EXPECT_EQ(ethereum_address.substr(0, 2), "0x");
     EXPECT_TRUE(faker::testing::any_of(ethereum_address.substr(2),
         [](char ch) { return string::data::hex_lower_digits.find(ch) != std::string::npos; }));
@@ -344,7 +344,7 @@ TEST_F(FinanceTest, should_generate_expiration_date)
     const auto expiration_date = finance::credit_card_expiration_date();
 
     int tenth_place_year = std::stoi(expiration_date.substr(3, 2));
-    EXPECT_TRUE(tenth_place_year >= 24);
+    EXPECT_GE(tenth_place_year, 24);
 }
 
 class FinanceBicTest : public TestWithParam<finance::bic_country> { };

@@ -37,21 +37,21 @@ TEST(BookTest, should_generate_isbn)
 {
     auto any_isbn = book::isbn();
 
-    EXPECT_EQ(any_isbn.size(), 17);
+    EXPECT_EQ(any_isbn.size(), 17u);
 
     auto number_groups = utils::split(any_isbn, "-");
-    EXPECT_EQ(number_groups[0].size(), 3);
-    EXPECT_EQ(number_groups[1].size(), 2);
-    EXPECT_EQ(number_groups[2].size(), 2);
-    EXPECT_EQ(number_groups[3].size(), 5);
-    EXPECT_EQ(number_groups[4].size(), 1);
+    EXPECT_EQ(number_groups[0].size(), 3u);
+    EXPECT_EQ(number_groups[1].size(), 2u);
+    EXPECT_EQ(number_groups[2].size(), 2u);
+    EXPECT_EQ(number_groups[3].size(), 5u);
+    EXPECT_EQ(number_groups[4].size(), 1u);
 }
 
 TEST(BookTest, should_generate_release_year)
 {
     auto any_year = book::release_year();
 
-    FAKER_EXPECT_BETWEEN(any_year, 1940, 2024);
+    FAKER_EXPECT_BETWEEN(any_year, 1940u, 2024u);
 }
 
 TEST(BookTest, should_generate_translator)
@@ -72,7 +72,7 @@ TEST(BookTest, should_generate_page)
 {
     auto any_page = book::page();
 
-    FAKER_EXPECT_BETWEEN(any_page, 50, 999);
+    FAKER_EXPECT_BETWEEN(any_page, 50u, 999u);
 }
 
 TEST(BookTest, should_generate_series)

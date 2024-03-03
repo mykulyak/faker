@@ -1,7 +1,6 @@
 #include "../test_helpers.h"
 #include <faker/vehicle.h>
 #include <modules/vehicle_data.h>
-#include <regex>
 
 using namespace faker;
 
@@ -63,16 +62,13 @@ TEST(VehicleTest, should_generate_vin)
 {
     auto vin = vehicle::vin();
 
-    std::regex vin_regex("[A-HJ-NPR-Z0-9]{10}[A-HJ-NPR-Z0-9]{1}[A-HJ-NPR-Z0-9]{1}[0-9]{5}");
-
-    EXPECT_TRUE(std::regex_match(vin, vin_regex));
+    FAKER_EXPECT_REGEX_MATCHES(
+        vin, "[A-HJ-NPR-Z0-9]{10}[A-HJ-NPR-Z0-9]{1}[A-HJ-NPR-Z0-9]{1}[0-9]{5}");
 }
 
 TEST(VehicleTest, should_generate_vrm)
 {
     auto vrm = vehicle::vrm();
 
-    std::regex vrm_regex("[A-Z]{2}[0-9]{2}[A-Z]{3}");
-
-    EXPECT_TRUE(std::regex_match(vrm, vrm_regex));
+    FAKER_EXPECT_REGEX_MATCHES(vrm, "[A-Z]{2}[0-9]{2}[A-Z]{3}");
 }

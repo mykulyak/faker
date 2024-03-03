@@ -61,12 +61,12 @@ TEST(ColorTest, should_generate_hex)
     auto hex = color::hex();
     auto hex_0x_upper = color::hex(hex_case_t::upper, hex_prefix_t::zero_x, true);
 
-    EXPECT_EQ(hex.size(), 7);
+    EXPECT_EQ(hex.size(), 7u);
     FAKER_EXPECT_STRING_STARTS_WITH(hex, "#");
     EXPECT_TRUE(faker::testing::all_of(std::string_view(hex).substr(1),
         [&](char ch) { return string::data::hex_lower_digits.find(ch) != std::string::npos; }));
 
-    ASSERT_EQ(hex_0x_upper.size(), 10);
+    ASSERT_EQ(hex_0x_upper.size(), 10u);
     FAKER_EXPECT_STRING_STARTS_WITH(hex_0x_upper, "0x");
     EXPECT_TRUE(faker::testing::all_of(std::string_view(hex_0x_upper).substr(2),
         [&](char ch) { return string::data::hex_upper_digits.find(ch) != std::string::npos; }));

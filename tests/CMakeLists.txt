@@ -51,6 +51,8 @@ if (NOT USE_CXX20)
 target_include_directories(test_faker PRIVATE ${TCB_SPAN_INCLUDE_DIRS})
 endif()
 
+turn_on_warnings(test_faker)
+
 target_link_libraries(
     test_faker 
     PRIVATE 

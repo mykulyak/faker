@@ -49,7 +49,7 @@ TEST(PhoneTest, should_generate_imei)
 
     imei.erase(std::remove(imei.begin(), imei.end(), '-'), imei.end());
 
-    EXPECT_EQ(imei.size(), 15);
+    EXPECT_EQ(imei.size(), 15u);
     EXPECT_TRUE(contains_one_or_more_digits_or_special_chars(imei));
 }
 

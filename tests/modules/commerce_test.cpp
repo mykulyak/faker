@@ -26,8 +26,8 @@ TEST(CommerceTest, should_generate_price)
     auto any_price = commerce::price(100, 10000);
 
     auto price_parts = utils::split(any_price, ".");
-    EXPECT_EQ(price_parts.size(), 2);
-    EXPECT_EQ(price_parts[1].size(), 2);
+    EXPECT_EQ(price_parts.size(), 2u);
+    EXPECT_EQ(price_parts[1].size(), 2u);
 
     FAKER_EXPECT_BETWEEN(std::stof(any_price), 100, 10000);
 }
@@ -37,10 +37,10 @@ TEST(CommerceTest, should_generate_sku)
     auto sku_default_length = commerce::sku();
     auto sku_fixed_length = commerce::sku(8);
 
-    EXPECT_EQ(sku_default_length.size(), 4);
+    EXPECT_EQ(sku_default_length.size(), 4u);
     EXPECT_TRUE(string_contains_only_digits(sku_default_length));
 
-    EXPECT_EQ(sku_fixed_length.size(), 8);
+    EXPECT_EQ(sku_fixed_length.size(), 8u);
     EXPECT_TRUE(string_contains_only_digits(sku_fixed_length));
 }
 
@@ -88,7 +88,7 @@ TEST(CommerceTest, should_generate_ean13)
         }
     }
 
-    EXPECT_EQ(any_ean13.size(), 13);
+    EXPECT_EQ(any_ean13.size(), 13u);
     EXPECT_TRUE(sum % 10 == 0);
 }
 
@@ -105,7 +105,7 @@ TEST(CommerceTest, should_generate_ean8)
         }
     }
 
-    EXPECT_EQ(ean8.size(), 8);
+    EXPECT_EQ(ean8.size(), 8u);
     EXPECT_TRUE(sum % 10 == 0);
 }
 
@@ -122,7 +122,7 @@ TEST(CommerceTest, should_generate_isbn13)
         }
     }
 
-    EXPECT_EQ(isbn13.size(), 13);
+    EXPECT_EQ(isbn13.size(), 13u);
     EXPECT_TRUE(sum % 10 == 0);
 }
 
@@ -144,7 +144,7 @@ TEST(CommerceTest, should_generate_isbn10)
         }
     }
 
-    EXPECT_EQ(isbn10.size(), 10);
+    EXPECT_EQ(isbn10.size(), 10u);
     EXPECT_TRUE(sum % 11 == 0);
 }
 
@@ -152,7 +152,7 @@ TEST(CommerceTest, should_generate_product_id)
 {
     auto product_id = commerce::product_id();
 
-    EXPECT_EQ(product_id.length(), 10);
+    EXPECT_EQ(product_id.size(), 10u);
     EXPECT_TRUE(faker::testing::all_of(product_id, [](auto c) { return std::isalnum(c); }));
 }
 

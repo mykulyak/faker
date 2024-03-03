@@ -20,7 +20,7 @@ bool is_valid_cron_expr(const std::string& value)
 
 TEST(SystemTest, should_generate_filename)
 {
-    auto filename_fixed_ext_count = system::filename({ 3 });
+    auto filename_fixed_ext_count = system::filename({ 3u, { 1u, 1u } });
     std::cout << filename_fixed_ext_count << std::endl;
     EXPECT_FALSE(filename_fixed_ext_count.empty());
     // some mime types contain '.' in them, hence >=
@@ -145,7 +145,7 @@ TEST(SystemTest, NetworkInterfaceMethodTest)
 
     EXPECT_FALSE(result_any.empty());
     EXPECT_FALSE(result_fixed_type.empty());
-    EXPECT_EQ(result_fixed_schema.size(), 15);
+    EXPECT_EQ(result_fixed_schema.size(), 15u);
     EXPECT_FALSE(result_fixed_type_and_schema.empty());
 }
 

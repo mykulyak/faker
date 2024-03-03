@@ -27,12 +27,12 @@ TEST(GitTest, should_generate_branch)
 {
     const auto branch = git::branch();
 
-    FAKER_EXPECT_BETWEEN(faker::utils::split(branch, "-").size(), 2, 7);
+    FAKER_EXPECT_BETWEEN(faker::utils::split(branch, "-").size(), 2u, 7u);
 }
 
 TEST(GitTest, should_generate_branch_with_max_issue_number)
 {
-    auto max_issue_number = number::integer(2u, 100u);
+    int max_issue_number = number::integer(2u, 100u);
 
     auto branch_name = git::branch(max_issue_number);
 
