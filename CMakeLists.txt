@@ -15,8 +15,8 @@ endif()
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include(scripts/cmake/ClangFormat.cmake)
-include(scripts/cmake/SafetyFeatures.cmake)
+include(cmake/ClangFormat.cmake)
+include(cmake/SafetyFeatures.cmake)
 
 # 3rd party dependencies
 
