@@ -11,7 +11,7 @@ template <typename T> using span = std::span<T>;
 
 #else
 
-#include <tcb/span.hpp>
+#include "tcb_span.h"
 
 namespace faker::utils {
 template <typename T> using span = tcb::span<T>;

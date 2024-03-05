@@ -23,23 +23,10 @@ include(cmake/SafetyFeatures.cmake)
 find_package(fmt CONFIG REQUIRED)
 find_package(GTest CONFIG REQUIRED)
 
-if (NOT USE_CXX20)
-    find_path(
-        TCB_SPAN_INCLUDE_DIRS 
-        "tcb/span.hpp" 
-        PATHS 
-            ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed/arm64-osx/include
-    )
-endif()
-
 enable_testing()
 
 add_library(faker STATIC)
 target_include_directories(faker PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-
-if (NOT USE_CXX20)
-    target_include_directories(faker PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed/arm64-osx/include)
-endif()
 
 target_link_libraries(faker PRIVATE fmt::fmt)
 
