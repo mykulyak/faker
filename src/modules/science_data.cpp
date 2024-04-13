@@ -84,4 +84,4 @@ const std::array<unit_info, 3> temperature_units = { {
     { "Fahrenheit", "°F", "Temperature" },
     { "Kelvin", "K", "Temperature" },
 } };
-};
+}

@@ -38,4 +38,4 @@ unit_info temperature_unit() { return random::element(data::temperature_units); 
 
 unit_info current_unit() { return random::element(data::current_units); }
 
-};
+}
