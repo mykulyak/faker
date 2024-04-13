@@ -9075,7 +9075,7 @@ const country_addresses_info czech_addresses { czech_zip_code_format, (czech_add
 
 // Denmark
 
-const std::array<std::string_view, 221> denmark_сities {
+const std::array<std::string_view, 221> denmark_cities {
     "Albertslund",
     "Arden",
     "Asnæs",
@@ -9484,7 +9484,7 @@ const std::array<std::string_view, 1> denmark_city_formats { "{cityName}" };
 
 const country_addresses_info denmark_addresses { denmark_zip_code_format, (denmark_address_formats),
     (denmark_secondary_address_formats), (denmark_street_formats), {}, (denmark_street_names), {},
-    (denmark_building_number_formats), (denmark_city_formats), {}, (denmark_сities), {},
+    (denmark_building_number_formats), (denmark_city_formats), {}, (denmark_cities), {},
     (denmark_states), {} };
 
 // Estonia
