@@ -8,6 +8,7 @@
 
 namespace faker::location {
 namespace {
+
     const data::country_addresses_info& get_country_addresses(address_country country)
     {
         switch (country) {
@@ -83,6 +84,7 @@ namespace {
             throw std::invalid_argument("Invalid country");
         }
     }
+
 }
 
 std::string_view country_name() { return random::element(data::all_countries); }

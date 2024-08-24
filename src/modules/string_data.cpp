@@ -1,6 +1,7 @@
 #include "string_data.h"
 
 namespace faker::string::data {
+
 const std::string_view ascii_upper_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const std::string_view ascii_lower_letters = "abcdefghijklmnopqrstuvwxyz";
 const std::string_view non_zero_digits = "123456789";
@@ -16,4 +17,5 @@ const std::string_view symbols = "~`!@#$%^&*()_-+={[}]|:;\"'<,>.?/";
 
 const std::string_view all_allowed_chars
     = R"(!"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|})";
+
 }

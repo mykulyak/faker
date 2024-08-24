@@ -5,7 +5,9 @@
 #include <string_view>
 
 namespace faker::color::data {
+
 extern const std::array<std::string_view, 31> colors;
+
 }
 
 #endif

@@ -4,6 +4,7 @@
 #include <string>
 
 namespace faker::weather {
+
 struct temperature_value {
     double metric;
     double imperial;
@@ -111,6 +112,7 @@ std::string_view description();
  * @endcode
  */
 int cloud_cover();
+
 }
 
 #endif

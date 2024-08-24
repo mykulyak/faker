@@ -1,6 +1,7 @@
 #include "hacker_data.h"
 
 namespace faker::hacker::data {
+
 const std::array<std::string_view, 16> abbreviations = {
     "e.g.",
     "i.e.",
@@ -110,4 +111,5 @@ const std::array<std::string_view, 16> verbs = {
     "program",
     "parse",
 };
+
 }

@@ -4,6 +4,7 @@
 #include <string_view>
 
 namespace faker::computer {
+
 /**
  * @brief Returns a random computer type.
  *

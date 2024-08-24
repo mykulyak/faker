@@ -1,6 +1,7 @@
 #include "vehicle_data.h"
 
 namespace faker::vehicle::data {
+
 const std::array<std::string_view, 10> bicycle_types
     = { "Road bike", "Mountain bike", "Hybrid bike", "City bike", "BMX bike", "Folding bike",
           "Recumbent bike", "Tandem bike", "Electric bike", "Cargo bike" };

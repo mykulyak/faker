@@ -14,6 +14,7 @@
 
 namespace faker::system {
 namespace {
+
     std::string_view extension(std::string_view mime_type)
     {
         const auto it = data::mime_types_extensions.find(mime_type);
@@ -36,6 +37,7 @@ namespace {
 
         return std::vector<std::string_view> { types.begin(), types.end() };
     }
+
 }
 
 std::string filename(const file_options_t& options)
@@ -250,4 +252,5 @@ std::string cron(cron_options_t options)
 
     return utils::format("{} {} {} {} {}", minute, hour, day, month, day_of_week);
 }
+
 }

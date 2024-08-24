@@ -1,6 +1,7 @@
 #include "food_data.h"
 
 namespace faker::food::data {
+
 const std::array<std::string_view, 47> alcoholic_beverages {
     "Beer",
     "Wine",
@@ -480,4 +481,5 @@ const std::array<std::string_view, 30> vegetables = {
     "Turnip",
     "Rutabaga",
 };
+
 }

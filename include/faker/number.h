@@ -5,6 +5,7 @@
 #include <string>
 
 namespace faker::number {
+
 /**
  * @brief Generates a random integer number in the given range, bounds included.
  *

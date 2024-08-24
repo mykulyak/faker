@@ -4,6 +4,7 @@
 #include <string>
 
 namespace faker::date {
+
 /**
  * @brief The format of the date, ISO 8601 or numerical timestamp.
  */
@@ -161,6 +162,7 @@ std::string_view month_name();
  * @endcode
  */
 std::string_view month_abbr_name();
+
 }
 
 #endif

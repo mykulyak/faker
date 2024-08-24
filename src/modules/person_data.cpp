@@ -1,6 +1,7 @@
 #include "person_data.h"
 
 namespace faker::person::data {
+
 const std::array<std::string_view, 41> bio_parts = {
     "Activist",
     "Artist",

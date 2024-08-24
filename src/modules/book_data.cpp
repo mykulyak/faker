@@ -1,6 +1,7 @@
 #include "book_data.h"
 
 namespace faker::book::data {
+
 const std::array<std::string_view, 100> authors = { "Shakespeare, William", "Smollett, T. (Tobias)",
     "Dumas, Alexandre", "Montgomery, L. M. (Lucy Maud)", "Melville, Herman", "Alcott, Louisa May",
     "Eliot, George", "Forster, E. M. (Edward Morgan)", "Austen, Jane", "Merrill, Frank T.",
@@ -182,4 +183,5 @@ const std::array<std::string_view, 15> translators = {
     "Maureen Freely",
     "Natasha Wimmer",
 };
+
 }

@@ -4,6 +4,7 @@
 #include <string_view>
 
 namespace faker::sport {
+
 /**
  * @brief Returns a random sport.
  *
@@ -58,6 +59,7 @@ std::string_view female_athlete();
  * @endcode
  */
 std::string_view sport_event();
+
 }
 
 #endif

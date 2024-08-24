@@ -12,6 +12,7 @@
 
 namespace faker::person {
 namespace {
+
     std::string_view middle_name(country_t country, std::optional<sex_t> sex)
     {
         const auto& names_data = data::people_names.at(country);
@@ -147,6 +148,7 @@ namespace {
 
         return std::vector<std::string_view> { unique_suffixes.begin(), unique_suffixes.end() };
     }
+
 }
 
 std::string_view to_string(sex_t sex, language_t language)

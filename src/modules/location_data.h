@@ -6,6 +6,7 @@
 #include <string_view>
 
 namespace faker::location::data {
+
 struct country_addresses_info {
     std::string_view zip_code_format;
     utils::span<const std::string_view> address_formats;

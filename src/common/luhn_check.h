@@ -4,6 +4,7 @@
 #include <string>
 
 namespace faker::utils {
+
 /**
  * @brief Returns luhn checksum value for the given value.
  *
@@ -31,6 +32,7 @@ bool luhn_check(const std::string& inputString);
  * @return the luhn check value for the given string.
  */
 int luhn_check_value(const std::string& inputString);
+
 }
 
 #endif

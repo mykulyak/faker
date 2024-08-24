@@ -5,6 +5,7 @@
 #include <string>
 
 namespace faker::phone {
+
 enum class phone_number_format_t {
     default_format,
     afghanistan,
@@ -309,6 +310,7 @@ std::string number(phone_number_format_t format);
  * @endcode
  */
 std::string imei();
+
 }
 
 #endif

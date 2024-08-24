@@ -4,6 +4,7 @@
 #include <string_view>
 
 namespace faker::animal {
+
 /**
  * @brief Returns a random species of bear.
  *
@@ -168,6 +169,7 @@ std::string_view snake();
  * @endcode
  */
 std::string_view type();
+
 }
 
 #endif

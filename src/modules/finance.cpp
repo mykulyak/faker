@@ -8,6 +8,7 @@
 #include <faker/string.h>
 
 namespace faker::finance {
+
 currency_info currency() { return random::element(data::currencies); }
 
 std::string_view currency_name() { return random::element(data::currencies).name; }
@@ -110,4 +111,5 @@ std::string credit_card_expiration_date()
     auto result = date::future(3);
     return result.substr(5, 2) + "/" + result.substr(2, 2);
 }
+
 }

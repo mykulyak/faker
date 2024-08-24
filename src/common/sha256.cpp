@@ -6,6 +6,7 @@
 
 namespace faker::utils {
 namespace {
+
     class SHA256 {
     public:
         SHA256();

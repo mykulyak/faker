@@ -13,6 +13,7 @@
 #include <vector>
 
 namespace faker::internet {
+
 namespace {
     const std::array<std::string_view, 2> web_protocols { "http", "https" };
     const std::array<std::string_view, 5> http_method_names { "GET", "POST", "DELETE", "PATCH",

@@ -1,6 +1,7 @@
 #include "music_data.h"
 
 namespace faker::music::data {
+
 const std::array<std::string_view, 298> artists = { "Beatles", "Elvis Presley", "Frank Sinatra",
     "Bing Crosby", "Michael Jackson / Jackson 5", "Louis Armstrong", "James Brown",
     "Billie Holiday", "Johnny Cash", "Duke Ellington", "Bob Dylan", "Ray Charles", "Chuck Berry",
@@ -316,4 +317,5 @@ const std::array<std::string_view, 971> song_names = { "White Christmas", "Hey J
     "Man in the Mirror", "Queen of Hearts", "Let's Groove", "Change the World", "You make Me Wanna",
     "Someday", "Eve of Destruction", "One of Us", "Honky Tonk", "Be Bop a Lula", "Two Hearts",
     "Paper Planes" };
+
 }

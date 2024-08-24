@@ -4,6 +4,7 @@
 #include <string_view>
 
 namespace faker::science {
+
 struct chemical_element_info {
     std::string_view name;
     std::string_view symbol;

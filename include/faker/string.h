@@ -307,6 +307,7 @@ std::string octal(unsigned length = 1);
  * @endcode
  */
 std::string octal(const std::vector<Spec>& specs, unsigned length = 1);
+
 }
 
 #endif

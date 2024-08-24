@@ -7,6 +7,7 @@
 #include <string>
 
 namespace faker::finance {
+
 enum class iban_country {
     austria,
     belgium,
@@ -273,6 +274,7 @@ std::string ethereum_address();
  * @endcode
  */
 std::string credit_card_expiration_date();
+
 }
 
 #endif

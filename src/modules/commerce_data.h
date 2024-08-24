@@ -5,6 +5,7 @@
 #include <string_view>
 
 namespace faker::commerce::data {
+
 constexpr unsigned min_discount_code_length = 6;
 constexpr unsigned max_discount_code_length = 12;
 constexpr double min_discount_amount = 10.;
@@ -22,6 +23,7 @@ extern const std::array<std::string_view, 18> product_descriptions;
 extern const std::array<std::string_view, 20> product_category_names;
 extern const std::array<std::string_view, 20> product_reviews;
 extern const std::array<std::string_view, 2> discount_types;
+
 }
 
 #endif

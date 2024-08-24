@@ -10,6 +10,7 @@
 #include <vector>
 
 namespace faker::person::data {
+
 extern const std::array<std::string_view, 41> bio_parts;
 extern const std::array<std::string_view, 7> bio_supporters;
 extern const std::array<std::string_view, 8> bio_formats;

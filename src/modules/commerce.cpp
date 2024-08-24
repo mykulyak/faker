@@ -7,6 +7,7 @@
 #include <faker/string.h>
 
 namespace faker::commerce {
+
 std::string_view department() { return random::element(data::departments); }
 
 std::string price(double min, double max) { return finance::amount(min, max); }

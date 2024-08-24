@@ -5,6 +5,7 @@
 #include <faker/string.h>
 
 namespace faker::airline {
+
 std::string_view aircraft_type_name() { return random::element(data::aircraft_types); }
 
 airplane_info airplane() { return random::element(data::airplanes); }
@@ -37,4 +38,5 @@ std::string flight_number_by_range(bool add_leading_zeros, unsigned min_length, 
 {
     return string::numeric(number::integer(min_length, max_length), add_leading_zeros);
 }
+
 }

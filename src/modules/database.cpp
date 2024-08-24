@@ -4,6 +4,7 @@
 #include <faker/string.h>
 
 namespace faker::database {
+
 std::string_view column_name() { return random::element(data::column_names); }
 
 std::string_view column_type() { return random::element(data::column_types); }
@@ -16,4 +17,5 @@ std::string mongodb_object_id()
 {
     return string::hexadecimal(24, hex_case_t::lower, hex_prefix_t::none);
 }
+
 }

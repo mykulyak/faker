@@ -3,6 +3,7 @@
 #include <faker/movie.h>
 
 namespace faker::movie {
+
 std::string_view genre() { return random::element(data::genres); }
 
 std::string_view movie_title() { return random::element(data::movies); }

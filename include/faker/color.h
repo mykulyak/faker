@@ -5,6 +5,7 @@
 #include <string>
 
 namespace faker::color {
+
 /**
  * @brief Returns a random color.
  *
@@ -120,6 +121,7 @@ std::string hsv();
  * @endcode
  */
 std::string yuv();
+
 }
 
 #endif

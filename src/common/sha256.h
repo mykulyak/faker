@@ -4,7 +4,9 @@
 #include <string>
 
 namespace faker::utils {
+
 std::string sha256(std::string_view message);
+
 }
 
 #endif

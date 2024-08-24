@@ -5,6 +5,7 @@
 #include <faker/weather.h>
 
 namespace faker::weather {
+
 temperature_value temperature()
 {
     double metric = number::decimal(10.0, 30.0);
@@ -38,4 +39,5 @@ int humidity() { return number::integer(0, 100); }
 std::string_view description() { return random::element(data::weather_descriptions); }
 
 int cloud_cover() { return number::integer(0, 100); }
+
 }

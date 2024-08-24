@@ -6,6 +6,7 @@
 #include <faker/number.h>
 
 namespace faker::lorem {
+
 std::string_view word() { return random::element(data::lorem_words); }
 
 std::string words(unsigned count)

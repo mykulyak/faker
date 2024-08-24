@@ -4,6 +4,7 @@
 #include <string>
 
 namespace faker::hacker {
+
 /**
  * @brief Returns a hacker abbreviation.
  *
@@ -70,6 +71,7 @@ std::string_view ingverb();
  * @endcode
  */
 std::string phrase();
+
 }
 
 #endif

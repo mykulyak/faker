@@ -4,6 +4,7 @@
 #include <string>
 
 namespace faker::airline {
+
 /**
  * @brief Enumeration representing different types of aircraft.
  */
@@ -162,6 +163,7 @@ std::string flight_number(bool add_leading_zeros = false, unsigned length = 4);
  */
 std::string flight_number_by_range(
     bool add_leading_zeros = false, unsigned min_length = 1, unsigned max_length = 4);
+
 }
 
 #endif

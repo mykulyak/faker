@@ -6,6 +6,7 @@
 #include <vector>
 
 namespace faker::utils {
+
 extern const std::string_view hex_digits;
 
 std::vector<std::string_view> split(std::string_view data, std::string_view sep = " ");
@@ -40,6 +41,7 @@ template <size_t N> static std::string to_hex(const std::array<uint8_t, N>& data
 
     return result;
 }
+
 }
 
 #endif

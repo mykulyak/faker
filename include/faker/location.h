@@ -5,6 +5,7 @@
 #include <string>
 
 namespace faker::location {
+
 // TODO: remove when address_country enum values will be same as Country values
 enum class address_country {
     usa,
@@ -201,6 +202,7 @@ std::string_view direction();
  * @endcode
  */
 std::string_view time_zone();
+
 }
 
 #endif

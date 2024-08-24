@@ -1,6 +1,7 @@
 #include "phone_data.h"
 
 namespace faker::phone::data {
+
 const std::array<std::string_view, 6> platforms = {
     "Android OS",
     "iOS",
@@ -249,4 +250,5 @@ const std::array<std::pair<phone_number_format_t, std::string_view>, 230> number
         { phone_number_format_t::yemen, "+967 (###) ###-####" },
         { phone_number_format_t::zambia, "+260 (###) ###-####" },
         { phone_number_format_t::zimbabwe, "+263 (###) ####" } } };
+
 }

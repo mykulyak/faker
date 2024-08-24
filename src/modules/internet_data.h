@@ -5,6 +5,7 @@
 #include <string_view>
 
 namespace faker::internet::data {
+
 extern const std::array<std::string_view, 6> domain_suffixes;
 extern const std::array<std::string_view, 4> email_hosts;
 extern const std::array<std::string_view, 3> email_example_hosts;
@@ -21,6 +22,7 @@ extern const std::array<std::string_view, 266> flag_emojis;
 extern const std::array<std::string_view, 45> http_media_types;
 extern const std::array<std::string_view, 41> http_request_headers;
 extern const std::array<std::string_view, 44> http_response_headers;
+
 }
 
 #endif

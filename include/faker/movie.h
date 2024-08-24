@@ -4,6 +4,7 @@
 #include <string_view>
 
 namespace faker::movie {
+
 /**
  * @brief Returns a random movie genre.
  *
@@ -69,6 +70,7 @@ std::string_view actor();
  * @endcode
  */
 std::string_view actress();
+
 }
 
 #endif

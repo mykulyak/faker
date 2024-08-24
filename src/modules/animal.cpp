@@ -3,6 +3,7 @@
 #include <faker/animal.h>
 
 namespace faker::animal {
+
 std::string_view bear() { return random::element(data::bears); }
 
 std::string_view bird() { return random::element(data::birds); }
@@ -32,4 +33,5 @@ std::string_view rodent() { return random::element(data::rodents); }
 std::string_view snake() { return random::element(data::snakes); }
 
 std::string_view type() { return random::element(data::types); }
+
 }

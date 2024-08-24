@@ -2,6 +2,7 @@
 #define FAKER_COMMON_CONVERSIONS_H
 
 namespace faker::utils {
+
 /**
  * @brief Converts celsius to fahrenheit
  *
@@ -40,6 +41,7 @@ double kpa_to_psi(double kPa);
  * @endcode
  */
 double mile_to_km(double miles);
+
 }
 
 #endif

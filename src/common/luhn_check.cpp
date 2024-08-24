@@ -2,6 +2,7 @@
 #include <algorithm>
 
 namespace faker::utils {
+
 int luhn_check_sum(const std::string& inputString)
 {
     std::string modifiedStr = inputString;
@@ -38,4 +39,5 @@ int luhn_check_value(const std::string& inputString)
 
     return checksum == 0 ? 0 : 10 - checksum;
 }
+
 }

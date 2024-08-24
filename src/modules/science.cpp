@@ -5,6 +5,7 @@
 
 namespace faker::science {
 namespace {
+
     std::vector<unit_info> merge_all_units()
     {
         std::vector<unit_info> result;
@@ -22,6 +23,7 @@ namespace {
     }
 
     const std::vector<unit_info> all_units = merge_all_units();
+
 }
 
 chemical_element_info chemical_element() { return random::element(data::chemical_elements); }

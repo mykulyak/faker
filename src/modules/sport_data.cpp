@@ -1,6 +1,7 @@
 #include "sport_data.h"
 
 namespace faker::sport::data {
+
 const std::array<std::string_view, 10> female_athletes = {
     "Serena Williams",
     "Simone Biles",
@@ -65,4 +66,5 @@ const std::array<std::string_view, 10> sport_names = {
     "American Football",
     "Rugby",
 };
+
 }

@@ -13,6 +13,7 @@
 #endif
 
 namespace faker::utils {
+
 #ifdef USE_STD_FORMAT
 template <typename... Args> std::string format(std::format_string<Args...> fmt, Args&&... args)
 {

@@ -1,6 +1,7 @@
 #include "video_game_data.h"
 
 namespace faker::video_game::data {
+
 const std::array<std::string_view, 3152> video_game_names = { "1552: Tenka Tairan",
     "1941: Counter Attack", "1943 Kai", "Addams Family, The", "Advanced V.G.", "Aero Blasters",
     "After Burner II", "Aldynes", "Alien Crush", "Alshark", "Alzadick", "Ane-san", "Aoi Blink",
@@ -1030,4 +1031,5 @@ const std::array<std::string_view, 392> studio_names = { "0verflow", "1st Playab
     "Wahoo Studios", "Wanako Games", "Wangame Studios", "WB Games", "Webfoot Technologies",
     "Wideload Games", "Wildfire Studios", "Wolfire Games", "World Forge", "Xseed Games",
     "YoYo Games", "ZapSpot", "ZeniMax Online Studios", "Zipper Interactive", "Zylom", "Zynga" };
+
 }

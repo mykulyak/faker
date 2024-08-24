@@ -1,6 +1,7 @@
 #include "computer_data.h"
 
 namespace faker::computer::data {
+
 const std::array<std::string_view, 4> types = { "Desktop", "Laptop", "Mainframe", "Supercomputer" };
 
 const std::array<std::string_view, 20> manufacturers = { "Apple", "Dell", "HP", "Lenovo", "Acer",

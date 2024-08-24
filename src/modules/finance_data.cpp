@@ -1,6 +1,7 @@
 #include "finance_data.h"
 
 namespace faker::finance::data {
+
 const std::array<bic_country, 10> bic_countries { bic_country::poland, bic_country::usa,
     bic_country::england, bic_country::germany, bic_country::romania, bic_country::france,
     bic_country::italy, bic_country::spain, bic_country::netherlands, bic_country::india };
@@ -892,4 +893,5 @@ const std::unordered_map<iban_country, std::vector<std::string_view>> iban_forma
     { iban_country::spain, { "ES", "2n", "4n", "4n", "2n", "10n" } },
     { iban_country::sweden, { "SE", "2n", "3n", "16n", "1n" } },
 };
+
 }

@@ -7,6 +7,7 @@
 #include <string>
 
 namespace faker::internet {
+
 enum class emoji_type {
     smiley,
     body,
@@ -322,6 +323,7 @@ std::string domain_word();
  * @endcode
  */
 std::string_view domain_suffix();
+
 }
 
 #endif

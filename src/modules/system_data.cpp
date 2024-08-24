@@ -1,6 +1,7 @@
 #include "system_data.h"
 
 namespace faker::system::data {
+
 const std::array<std::string_view, 3> common_interface_types = { "en", "wl", "ww" };
 
 const std::unordered_map<std::string_view, std::string_view> common_interface_schemas

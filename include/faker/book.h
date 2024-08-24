@@ -4,6 +4,7 @@
 #include <string>
 
 namespace faker::book {
+
 /**
  * @brief Returns a random book title.
  *
@@ -113,6 +114,7 @@ unsigned page();
  * @endcode
  */
 std::string_view series();
+
 }
 
 #endif

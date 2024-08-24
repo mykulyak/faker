@@ -5,6 +5,7 @@
 #include <string>
 
 namespace faker::image {
+
 enum class image_category {
     animals,
     business,
@@ -71,6 +72,7 @@ std::string dimensions();
  * @endcode
  */
 std::string_view type();
+
 }
 
 #endif

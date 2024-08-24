@@ -133,4 +133,5 @@ const std::array<std::string_view, 147> company_industries = { "Defense & Space"
     "Industrial Automation", "Government Relations" };
 
 const std::array<std::string_view, 3> company_suffixes = { "Inc", "LLC", "Group" };
+
 }

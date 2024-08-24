@@ -4,6 +4,7 @@
 #include <string>
 
 namespace faker::vehicle {
+
 /**
  * @brief Returns a random bicycle type.
  *
@@ -102,6 +103,7 @@ std::string vin();
  * @endcode
  */
 std::string vrm();
+
 }
 
 #endif

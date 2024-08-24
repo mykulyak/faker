@@ -5,6 +5,7 @@
 #include <string>
 
 namespace faker::system {
+
 enum class file_type_t { video, audio, image, text, application };
 
 std::string_view to_string(file_type_t type);

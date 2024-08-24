@@ -1,6 +1,7 @@
 #include "internet_data.h"
 
 namespace faker::internet::data {
+
 const std::array<std::string_view, 6> domain_suffixes
     = { "com", "biz", "info", "name", "net", "org" };
 
@@ -566,4 +567,5 @@ const std::array<std::string_view, 44> http_response_headers = { "Accept-CH",
     "Location", "P3P", "Pragma", "Preference-Applied", "Proxy-Authenticate", "Public-Key-Pins",
     "Retry-After", "Server", "Set-Cookie", "Strict-Transport-Security", "Transfer-Encoding", "Tk",
     "Upgrade", "Vary", "Warning", "WWW-Authenticate" };
+
 }

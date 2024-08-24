@@ -8,6 +8,7 @@
 #include <vector>
 
 namespace faker::finance::data {
+
 extern const std::array<bic_country, 10> bic_countries;
 extern const std::array<iban_country, 27> iban_countries;
 extern const std::array<std::string_view, 8> account_types;
@@ -19,6 +20,7 @@ extern const std::array<std::string_view, 2> mastercard_cc_formats;
 extern const std::array<std::string_view, 2> visa_cc_formats;
 extern const std::array<currency_info, 154> currencies;
 extern const std::unordered_map<iban_country, std::vector<std::string_view>> iban_formats;
+
 }
 
 #endif

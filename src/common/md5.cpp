@@ -4,6 +4,7 @@
 #include <cstdint>
 
 namespace faker::utils {
+
 namespace {
     uint32_t uint32_from_4_bytes(std::array<uint8_t, 4> bytes)
     {

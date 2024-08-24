@@ -1,6 +1,7 @@
 #include "lorem_data.h"
 
 namespace faker::lorem::data {
+
 const std::array<std::string_view, 182> lorem_words = {
     "alias",
     "consequatur",
@@ -185,4 +186,5 @@ const std::array<std::string_view, 182> lorem_words = {
     "asperiores",
     "repellat",
 };
+
 }

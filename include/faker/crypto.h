@@ -5,6 +5,7 @@
 #include <string>
 
 namespace faker::crypto {
+
 /**
  * @brief Returns a random SHA256 hash or hash of provided data.
  *
@@ -33,6 +34,7 @@ std::string sha256(std::optional<std::string> data = std::nullopt);
  * @endcode
  */
 std::string md5(std::optional<std::string> data = std::nullopt);
+
 }
 
 #endif

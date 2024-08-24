@@ -2,6 +2,7 @@
 #define FAKER_DATATYPE_H
 
 namespace faker::datatype {
+
 /**
  * @brief Returns a random boolean.
  *
@@ -31,6 +32,7 @@ bool boolean();
  * @endcode
  */
 bool boolean(double probability);
+
 }
 
 #endif

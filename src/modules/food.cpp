@@ -31,4 +31,5 @@ std::string_view seed() { return random::element(data::seeds); }
 std::string_view sugar_product() { return random::element(data::sugar_products); }
 
 std::string_view vegetable() { return random::element(data::vegetables); }
+
 }

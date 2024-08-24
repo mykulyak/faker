@@ -4,6 +4,7 @@
 #include <string>
 
 namespace faker::commerce {
+
 /**
  * @brief Returns a random commerce department.
  *
@@ -247,6 +248,7 @@ double discount_amount();
  * @endcode
  */
 double discount_percentage();
+
 }
 
 #endif

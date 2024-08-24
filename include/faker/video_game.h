@@ -4,6 +4,7 @@
 #include <string_view>
 
 namespace faker::video_game {
+
 /**
  * @brief Returns a random video game name.
  *
@@ -47,6 +48,7 @@ std::string_view platform();
  * @endcode
  */
 std::string_view studio_name();
+
 }
 
 #endif

@@ -5,6 +5,7 @@
 #include <string>
 
 namespace faker::word {
+
 /**
  * @brief Returns a random word.
  *
@@ -138,6 +139,7 @@ std::string_view preposition(std::optional<unsigned> length = std::nullopt);
  * @endcode
  */
 std::string_view verb(std::optional<unsigned> length = std::nullopt);
+
 }
 
 #endif

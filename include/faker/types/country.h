@@ -2,6 +2,7 @@
 #define FAKER_TYPES_COUNTRY_H
 
 namespace faker {
+
 enum class country_t {
     usa,
     poland,

@@ -1,6 +1,7 @@
 #include "word_data.h"
 
 namespace faker::word::data {
+
 const std::array<std::string_view, 1328> adjectives = { "abandoned", "able", "absolute", "adorable",
     "adventurous", "academic", "acceptable", "acclaimed", "accomplished", "accurate", "aching",
     "acidic", "acrobatic", "active", "actual", "adept", "admirable", "admired", "adolescent",
@@ -2149,4 +2150,5 @@ const std::array<std::string_view, 5910> verbs = { "abandon", "abase", "abate", 
     "wrought", "xerox", "yack", "yak", "yap", "yaw", "yawn", "yearn", "yell", "yellow", "yelp",
     "yield", "yodel", "yoke", "yomp", "yowl", "yuppify", "zap", "zero", "zigzag", "zing", "zip",
     "zone", "zoom" };
+
 }

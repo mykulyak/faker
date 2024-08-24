@@ -4,6 +4,7 @@
 #include <string_view>
 
 namespace faker::food {
+
 /**
  * @brief Returns a random alcoholic beverage name.
  *
@@ -157,6 +158,7 @@ std::string_view dish_name();
  * @endcode
  */
 std::string_view category();
+
 }
 
 #endif

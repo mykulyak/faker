@@ -4,6 +4,7 @@
 #include <faker/hacker.h>
 
 namespace faker::hacker {
+
 std::string_view abbreviation() { return random::element(data::abbreviations); }
 
 std::string_view adjective() { return random::element(data::adjectives); }
@@ -37,4 +38,5 @@ std::string phrase()
 
     return result;
 }
+
 }

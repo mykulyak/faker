@@ -11,6 +11,7 @@
 #include <vector>
 
 namespace faker::random {
+
 extern std::mt19937_64 random_engine;
 
 bool boolean(double probab);
@@ -279,6 +280,7 @@ inline std::string regexp_style_string_parse(const std::string_view& input)
 {
     return regexp_style_string_parse(std::string(input));
 }
+
 }
 
 #endif

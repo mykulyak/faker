@@ -7,6 +7,7 @@
 #include <faker/string.h>
 
 namespace faker::book {
+
 std::string_view title() { return random::element(data::titles); }
 
 std::string_view genre() { return random::element(data::genres); }
@@ -30,4 +31,5 @@ std::string_view format() { return random::element(data::book_formats); }
 unsigned page() { return number::integer(50U, 999U); }
 
 std::string_view series() { return random::element(data::book_series); }
+
 }

@@ -21,4 +21,5 @@ std::string_view gpu_manufacturer() { return random::element(data::gpu_manufactu
 std::string_view gpu_type() { return random::element(data::gpu_types); }
 
 std::string_view gpu_model() { return random::element(data::gpu_models); }
+
 }

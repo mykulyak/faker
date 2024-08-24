@@ -5,6 +5,7 @@
 #include <regex>
 
 namespace faker::random {
+
 std::random_device randomDevice;
 std::mt19937_64 random_engine(randomDevice());
 
@@ -216,4 +217,5 @@ std::string regexp_style_string_parse(const std::string& input)
 
     return string;
 }
+
 }

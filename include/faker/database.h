@@ -4,6 +4,7 @@
 #include <string>
 
 namespace faker::database {
+
 /**
  * @brief Returns a random database column name.
  *
@@ -58,6 +59,7 @@ std::string_view engine();
  * @endcode
  */
 std::string mongodb_object_id();
+
 }
 
 #endif

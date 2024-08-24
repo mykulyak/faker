@@ -4,7 +4,9 @@
 #include <string>
 
 namespace faker::utils {
+
 std::string md5(std::string_view message);
+
 }
 
 #endif

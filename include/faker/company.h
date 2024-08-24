@@ -4,6 +4,7 @@
 #include <string>
 
 namespace faker::company {
+
 /**
  * @brief Returns a random company name.
  *
@@ -124,6 +125,7 @@ std::string_view catch_phrase_descriptor();
  * @endcode
  */
 std::string_view catch_phrase_noun();
+
 }
 
 #endif

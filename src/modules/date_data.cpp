@@ -1,6 +1,7 @@
 #include "date_data.h"
 
 namespace faker::date::data {
+
 const std::array<std::string_view, 12> month_names = {
     "January",
     "February",
@@ -24,4 +25,5 @@ const std::array<std::string_view, 7> weekday_names
 
 const std::array<std::string_view, 7> weekday_abbr_names
     = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+
 }

@@ -4,6 +4,7 @@
 #include <string_view>
 
 namespace faker::music {
+
 /**
  * @brief Returns a random artist.
  *
@@ -36,6 +37,7 @@ std::string_view genre();
  * @endcode
  */
 std::string_view song_name();
+
 }
 
 #endif

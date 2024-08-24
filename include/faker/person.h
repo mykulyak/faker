@@ -6,6 +6,7 @@
 #include <string>
 
 namespace faker::person {
+
 enum class sex_t {
     male,
     female,
@@ -294,6 +295,7 @@ std::string_view western_zodiac();
  * @endcode
  */
 std::string_view chinese_zodiac();
+
 }
 
 #endif

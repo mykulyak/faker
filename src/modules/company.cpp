@@ -62,4 +62,5 @@ std::string_view catch_phrase_descriptor()
 }
 
 std::string_view catch_phrase_noun() { return random::element(data::catch_phrase_nouns); }
+
 }

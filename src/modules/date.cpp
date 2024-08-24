@@ -7,6 +7,7 @@
 #include <faker/number.h>
 
 namespace faker::date {
+
 namespace {
     constexpr unsigned hours_per_day = 24;
     constexpr unsigned days_per_year = 365;

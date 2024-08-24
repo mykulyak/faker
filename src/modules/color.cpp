@@ -6,6 +6,7 @@
 #include <faker/string.h>
 
 namespace faker::color {
+
 std::string_view name() { return random::element(data::colors); }
 
 std::string rgb(bool include_alpha)

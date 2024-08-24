@@ -6,6 +6,7 @@
 #include <vector>
 
 namespace faker::structure {
+
 enum class structure_token_t {
     // Airline module
     airline_aircraft_type,
@@ -355,6 +356,7 @@ std::string json(const std::vector<structure_token_spec>& spec);
  * @endcode
  */
 std::string csv(const std::vector<structure_token_spec>& items, unsigned rows);
+
 }
 
 #endif

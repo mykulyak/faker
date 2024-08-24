@@ -1,6 +1,7 @@
 #include "movie_data.h"
 
 namespace faker::movie::data {
+
 const std::array<std::string_view, 299> actors = { "Marlon Brando", "Charles Chaplin",
     "Laurence Olivier",
     "Robert De Niro"
@@ -286,4 +287,5 @@ const std::array<std::string_view, 122> tv_shows = { "Planet Earth II", "Breakin
     "Gomorrah", "Mindhunter", "Dopesick", "Boardwalk Empire", "Battlestar Galactica", "Westworld",
     "The IT Crowd", "Skam", "Sons of Anarchy", "Spartacus: Gods of the Arena", "Silicon Valley",
     "Twin Peaks", "Hannibal", "Community" };
+
 }

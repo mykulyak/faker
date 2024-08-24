@@ -6,6 +6,7 @@
 #include <string>
 
 namespace faker::git {
+
 struct author_info {
     std::string name;
     std::string email;
@@ -90,6 +91,7 @@ std::string commit_sha(unsigned length = 40);
  * @endcode
  */
 author_info author();
+
 }
 
 #endif

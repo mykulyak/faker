@@ -4,6 +4,7 @@
 #include <string_view>
 
 namespace faker::medicine {
+
 /**
  * @brief Returns a random medical condition.
  *
@@ -37,6 +38,7 @@ std::string_view medical_test();
  */
 
 std::string_view specialty();
+
 }
 
 #endif

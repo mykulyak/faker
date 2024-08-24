@@ -68,4 +68,5 @@ std::string dimensions()
 }
 
 std::string_view type() { return random::element(data::image_types); }
+
 }

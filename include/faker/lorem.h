@@ -4,6 +4,7 @@
 #include <string>
 
 namespace faker::lorem {
+
 /**
  * @brief Returns a random lorem word.
  *
@@ -102,6 +103,7 @@ std::string paragraph(unsigned min_sentence_count = 2, unsigned max_sentence_cou
  * @endcode
  */
 std::string paragraphs(unsigned min_count = 2, unsigned max_count = 4);
+
 }
 
 #endif

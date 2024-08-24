@@ -787,4 +787,5 @@ const std::array<std::string_view, 576> snakes = { "Viper Adder", "Common adder"
 
 const std::array<std::string_view, 13> types = { "dog", "cat", "snake", "bear", "lion", "cetacean",
     "insect", "crocodilia", "cow", "bird", "fish", "rabbit", "horse" };
+
 }

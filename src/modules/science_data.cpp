@@ -1,6 +1,7 @@
 #include "science_data.h"
 
 namespace faker::science::data {
+
 const std::array<chemical_element_info, 118> chemical_elements = { { { "Hydrogen", "H", 1 },
     { "Helium", "He", 2 }, { "Lithium", "Li", 3 }, { "Beryllium", "Be", 4 }, { "Boron", "B", 5 },
     { "Carbon", "C", 6 }, { "Nitrogen", "N", 7 }, { "Oxygen", "O", 8 }, { "Fluorine", "F", 9 },
@@ -84,4 +85,5 @@ const std::array<unit_info, 3> temperature_units = { {
     { "Fahrenheit", "°F", "Temperature" },
     { "Kelvin", "K", "Temperature" },
 } };
+
 }
